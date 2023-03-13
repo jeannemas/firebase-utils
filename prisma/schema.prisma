@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+/// A Firebase service account used to authenticate with the admin SDK
+model ServiceAccount {
+  /// The datetime when the record was created
+  createdAt DateTime  @default(now())
+  /// The datetime when the record was last updated
+  updatedAt DateTime  @updatedAt
+  /// The datetime when the record was deleted, if it was deleted
+  deletedAt DateTime?
+
+  /// The unique identifier for the record
+  id    Int    @id @unique @default(autoincrement())
+  /// The label for the service account
+  label String @unique
+  /// The JSON string for the service account
+  json  String
+}
