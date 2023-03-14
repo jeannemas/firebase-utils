@@ -1,4 +1,4 @@
-<script lang="ts">
+<script context="module" lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
 </script>
 
@@ -6,11 +6,7 @@
 	<div class="hero-content text-center">
 		<div class="flex max-w-md flex-row">
 			<div class="basis-1/3">
-				<Icon
-					icon="circle-exclamation"
-					style="solid"
-					modifiers="{['2xl']}"
-				/>
+				<Icon icon="circle-exclamation" modifiers="{['2xl']}" style="solid" />
 			</div>
 
 			<div class="basis-2/3">This feature is not yet implemented.</div>

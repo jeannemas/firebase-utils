@@ -1,9 +1,12 @@
-<script lang="ts">
+<script context="module" lang="ts">
 	import { onMount } from 'svelte';
 
 	import Icon from '../Icon.svelte';
+</script>
 
-	export let closable = false;
+<script lang="ts">
+	/** Whether or not the alert can be dismissed */
+	export let dismissible = false;
 	export let style: string;
 	export let text: string;
 	export let timeout: number | null = null;
@@ -26,7 +29,7 @@
 </script>
 
 <div
-	class="alert z-50 opacity-0 shadow-lg transition-opacity duration-500 ease-in-out md:w-fit alert-{style}"
+	class="alert z-50 opacity-0 shadow-lg transition-opacity duration-500 ease-in-out lg:w-fit alert-{style}"
 	bind:this="{component}"
 >
 	<div class="flex flex-row justify-between">
@@ -34,16 +37,9 @@
 			{text}
 		</span>
 
-		{#if closable}
-			<button
-				class="btn-ghost btn-sm btn"
-				on:click="{remove}"
-			>
-				<Icon
-					icon="circle-xmark"
-					modifiers="{['lg']}"
-					style="regular"
-				/>
+		{#if dismissible}
+			<button class="btn-ghost btn-sm btn" on:click="{remove}">
+				<Icon icon="circle-xmark" modifiers="{['lg']}" style="regular" />
 			</button>
 		{/if}
 	</div>

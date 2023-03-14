@@ -8,21 +8,10 @@
 	}
 </script>
 
-<input
-	type="checkbox"
-	id="{id}"
-	class="modal-toggle"
-	bind:this="{toggle}"
-/>
+<input class="modal-toggle" id="{id}" type="checkbox" bind:this="{toggle}" />
 
-<label
-	for="{id}"
-	class="modal cursor-pointer"
->
-	<label
-		class="modal-box relative"
-		for=""
-	>
+<label class="modal cursor-pointer" for="{id}">
+	<label class="modal-box relative" for="">
 		<slot />
 	</label>
 </label>

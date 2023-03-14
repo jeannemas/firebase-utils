@@ -6,13 +6,16 @@ import { create, readAll } from '$lib/server/services/service-account.service';
 
 import type { RequestHandler } from './$types';
 
-const createSchema = z.object({
+const postPayload = z.object({
 	json: z.string(),
-	label: z.string(),
+	label: z.string().trim().min(1),
 });
 
+export type POSTPayload = z.infer<typeof postPayload>;
+
+// Create a service account
 export const POST = (async ({ request }) => {
-	const result = createSchema.safeParse(await request.json());
+	const result = postPayload.safeParse(await request.json());
 
 	if (!result.success) {
 		throw error(400, fromZodError(result.error));
@@ -20,11 +23,16 @@ export const POST = (async ({ request }) => {
 
 	const serviceAccount = await create(result.data);
 
-	return json(serviceAccount, { status: 201 });
+	return json(serviceAccount, {
+		status: 201,
+	});
 }) satisfies RequestHandler;
 
+// Get all service accounts
 export const GET = (async () => {
 	const serviceAccounts = await readAll();
 
-	return json(serviceAccounts, { status: 200 });
+	return json(serviceAccounts, {
+		status: 200,
+	});
 }) satisfies RequestHandler;

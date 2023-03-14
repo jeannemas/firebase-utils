@@ -1,29 +1,44 @@
-<script lang="ts">
-	import type { ListUsersResult, UserRecord } from 'firebase-admin/auth';
-	import { derived } from 'svelte/store';
+<script context="module" lang="ts">
+	import type { ListUsersResult } from 'firebase-admin/auth';
+	import { derived, type Writable } from 'svelte/store';
 
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { getContext } from 'svelte';
+</script>
 
-	const serviceAccountIdString = derived(page, ({ url }) =>
-		url.searchParams.get('serviceAccountId'),
-	);
-	const rowsPerPage = derived(page, ({ url }) => url.searchParams.get('rowsPerPage'));
-	const users = derived(
-		[serviceAccountIdString, rowsPerPage],
-		([id], set) => {
-			fetch(`/api/v1/firebase/service-accounts/${id}/auth/listUsers?rowsPerPage=${rowsPerPage}`)
+<script lang="ts">
+	const selectedServiceAccountId = getContext<Writable<string | null>>('selectedServiceAccountId');
+	const rowsPerPage = derived(page, ({ url }) => url.searchParams.get('rowsPerPage') ?? '10');
+	const fetchUrl = derived([rowsPerPage], ([$rowsPerPage]) => {
+		const url = new URL($page.url.origin);
+
+		url.pathname = '/api/v1/firebase/auth/listUsers';
+
+		if ($rowsPerPage) {
+			url.searchParams.set('maxResults', $rowsPerPage);
+		}
+
+		return url;
+	});
+	const result = derived(
+		[fetchUrl, selectedServiceAccountId],
+		([$url], set) => {
+			fetch($url)
 				.then((response) => response.json() as Promise<ListUsersResult>)
-				.then(({ users }) => set(users));
+				.then(set);
 		},
-		[] as UserRecord[],
+		{ users: [] } as ListUsersResult,
 	);
+	const users = derived(result, ({ users }) => users);
+	// TODO handle error + loading state + pagination
 </script>
 
 <div class="my-2 flex flex-row items-center justify-start gap-x-2">
 	<input
-		type="text"
+		class="input-bordered input w-full lg:max-w-xs"
 		placeholder="Search for users..."
-		class="input-bordered input w-full md:max-w-xs"
+		type="text"
 	/>
 	<!-- TODO -->
 </div>
@@ -64,6 +79,7 @@
 	</table>
 </div>
 
+<!-- TODO -->
 <div class="my-2 flex flex-row items-center justify-end gap-x-2">
 	<label for="rowsPerPage"> Rows per page </label>
 
@@ -71,6 +87,16 @@
 		class="select-bordered select"
 		id="rowsPerPage"
 		name="rowsPerPage"
+		value="{$rowsPerPage}"
+		on:change="{(event) => {
+			const url = new URL($page.url);
+
+			if (event.currentTarget.value) {
+				url.searchParams.set('rowsPerPage', event.currentTarget.value);
+			}
+
+			goto(url);
+		}}"
 	>
 		<option value="10"> 10 </option>
 

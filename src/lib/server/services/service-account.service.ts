@@ -7,11 +7,11 @@ const baseOrderBy = {
 } satisfies Partial<Prisma.ServiceAccountOrderByWithRelationInput>;
 const baseSelect = {
 	createdAt: true,
+	updatedAt: true,
 	deletedAt: true,
 	id: true,
 	json: true,
 	label: true,
-	updatedAt: true,
 } satisfies Partial<Prisma.ServiceAccountSelect>;
 const baseWhere = {
 	deletedAt: null,

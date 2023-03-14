@@ -5,7 +5,11 @@
 	export let icon: string;
 	export let modifiers: string[] = [];
 
-	const classes = [style, icon, ...modifiers].map((modifier) => `fa-${modifier}`).join(' ');
+	let className = '';
+
+	$: classes = [style, icon, ...modifiers].map((modifier) => `fa-${modifier}`).join(' ');
+
+	export { className as class };
 </script>
 
-<i class="{classes}"></i>
+<i class="{classes} {className}"></i>

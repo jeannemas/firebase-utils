@@ -1,9 +1,12 @@
+<script context="module" lang="ts">
+</script>
+
 <script lang="ts">
 </script>
 
 <!-- TODO -->
 
-<div class="hero min-h-[32rem]">
+<div class="hero min-h-16">
 	<div class="hero-content text-center">
 		<div class="max-w-md">
 			<h1 class="text-5xl font-bold">Hello there</h1>

@@ -1,12 +1,19 @@
-import { json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 
-import { getServiceAccountFromId } from '$lib/server/utils/getServiceAccountFromId';
+import { readOne } from '$lib/server/services/service-account.service';
 
 import type { RequestHandler } from './$types';
 
 export const GET = (async ({ params }) => {
-	const serviceAccountId = Number.parseInt(params.serviceAccountId, 10);
-	const serviceAccount = await getServiceAccountFromId(serviceAccountId);
+	const serviceAccount = await readOne(params.serviceAccountId);
 
-	return json(serviceAccount, { status: 200 });
+	if (!serviceAccount) {
+		throw error(404, {
+			message: 'Service account not found',
+		});
+	}
+
+	return json(serviceAccount, {
+		status: 200,
+	});
 }) satisfies RequestHandler;

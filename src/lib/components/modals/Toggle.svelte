@@ -1,11 +1,11 @@
 <script lang="ts">
-	export let className: string | null = null;
+	let className: string | null = null;
+
 	export let id: string;
+
+	export { className as class };
 </script>
 
-<label
-	for="{id}"
-	class="{className}"
->
+<label class="{className}" for="{id}">
 	<slot />
 </label>

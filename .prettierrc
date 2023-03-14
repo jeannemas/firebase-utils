@@ -12,12 +12,11 @@
 		}
 	],
 	"plugins": ["prettier-plugin-svelte"],
-	"pluginSearchDirs": ["."],
 	"printWidth": 100,
 	"proseWrap": "preserve",
 	"quoteProps": "as-needed",
 	"semi": true,
-	"singleAttributePerLine": true,
+	"singleAttributePerLine": false,
 	"singleQuote": true,
 	"svelteSortOrder": "scripts-styles-options-markup",
 	"svelteStrictMode": true,

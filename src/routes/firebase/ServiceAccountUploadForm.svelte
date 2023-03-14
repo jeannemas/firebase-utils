@@ -1,9 +1,13 @@
-<script lang="ts">
+<script context="module" lang="ts">
 	import type { ServiceAccount } from '@prisma/client';
 	import { createEventDispatcher } from 'svelte';
 	import { field, form } from 'svelte-forms';
 	import { required } from 'svelte-forms/validators';
 
+	import type { POSTPayload } from '../api/v1/firebase/service-accounts/+server';
+</script>
+
+<script lang="ts">
 	const dispatch = createEventDispatcher();
 	const filelist = field<FileList | null>('serviceAccountFile', null, [required()], {
 		checkOnInit: true,
@@ -21,13 +25,13 @@
 		}
 
 		try {
-			const serviceAccount = await fetch('/api/v1/firebase/service-accounts', {
-				method: 'POST',
+			const serviceAccount: ServiceAccount = await fetch('/api/v1/firebase/service-accounts', {
 				body: JSON.stringify({
 					json: await $filelist.value![0].text(),
 					label: $label.value,
-				} satisfies Pick<ServiceAccount, 'json' | 'label'>),
-			}).then((response) => response.json() as Promise<ServiceAccount>);
+				} satisfies POSTPayload),
+				method: 'POST',
+			}).then((response) => response.json());
 
 			dispatch('uploaded', serviceAccount);
 		} catch (error) {
@@ -37,8 +41,8 @@
 </script>
 
 <form
-	method="post"
 	class="prose flex flex-col items-center justify-center gap-4"
+	method="post"
 	on:submit="{handleSubmit}"
 >
 	<h3>Select a service account file to upload</h3>
@@ -46,19 +50,16 @@
 	<p>Use the Firebase's project settings page to download the service account file.</p>
 
 	<div class="form-control w-full max-w-xs">
-		<label
-			class="label"
-			for="serviceAccountFile"
-		>
-			<span class="label-text">Service Account</span>
+		<label class="label" for="serviceAccountFile">
+			<span class="label-text"> Service Account </span>
 		</label>
 
 		<input
 			accept=".json,application/json"
-			type="file"
+			class="file-input-bordered file-input-ghost file-input w-full max-w-xs"
 			id="serviceAccountFile"
 			name="serviceAccountFile"
-			class="file-input-bordered file-input-ghost file-input w-full max-w-xs"
+			type="file"
 			bind:files="{$filelist.value}"
 			on:change="{(event) => {
 				const { name = null } = event.currentTarget.files?.[0] ?? {};
@@ -71,26 +72,23 @@
 	</div>
 
 	<div class="form-control w-full max-w-xs">
-		<label
-			class="label"
-			for="serviceAccountLabel"
-		>
-			<span class="label-text">Service Account label</span>
+		<label class="label" for="serviceAccountLabel">
+			<span class="label-text"> Service Account label </span>
 		</label>
 
 		<input
-			type="text"
+			class="input-bordered input w-full max-w-xs"
 			id="serviceAccountLabel"
 			name="serviceAccountLabel"
-			class="input-bordered input w-full max-w-xs"
+			type="text"
 			bind:value="{$label.value}"
 		/>
 	</div>
 
 	<button
 		class="btn-primary btn w-full max-w-xs"
-		type="submit"
 		disabled="{!$serviceAccountForm.valid}"
+		type="submit"
 	>
 		Upload
 	</button>

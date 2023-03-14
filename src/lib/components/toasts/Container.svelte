@@ -1,10 +1,12 @@
-<script lang="ts">
+<script context="module" lang="ts">
 	import { writable } from 'svelte/store';
 
 	import Alert from '../alerts/Alert.svelte';
+</script>
 
+<script lang="ts">
 	type AlertPayload = {
-		closable?: boolean;
+		dismissible?: boolean;
 		style: string;
 		text: string;
 		timeout?: number;
@@ -22,12 +24,6 @@
 
 <div class="toast-end toast-bottom toast">
 	{#each $alerts as alert}
-		<svelte:component
-			this="{Alert}"
-			closable="{alert.closable}"
-			style="{alert.style}"
-			text="{alert.text}"
-			timeout="{alert.timeout}"
-		/>
+		<svelte:component this="{Alert}" {...alert} />
 	{/each}
 </div>
