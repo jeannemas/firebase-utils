@@ -48,7 +48,7 @@
 	<Navbar />
 
 	<div class="flex grow flex-col">
-		<main class="mx-8 my-2 grow lg:my-8 lg:mx-24">
+		<main class="mx-4 my-2 grow lg:my-8 lg:mx-24">
 			<slot />
 		</main>
 

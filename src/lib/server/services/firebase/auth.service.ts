@@ -1,5 +1,5 @@
 import type { ServiceAccount } from '@prisma/client';
-import { getAuth } from 'firebase-admin/auth';
+import { getAuth, type ListUsersResult, type UserRecord } from 'firebase-admin/auth';
 
 import { getFirebaseApp } from './app.service';
 
@@ -10,17 +10,17 @@ function getFirebaseAuth(serviceAccount: ServiceAccount) {
 	return auth;
 }
 
-const DEFAULT_MAX_RESULTS = 10;
-
-export async function listUsers(
-	serviceAccount: ServiceAccount,
-	maxResults = DEFAULT_MAX_RESULTS,
-	pageToken?: string,
-) {
+export async function listUsers(serviceAccount: ServiceAccount) {
 	const auth = getFirebaseAuth(serviceAccount);
+	const records: UserRecord[] = [];
 
-	return await auth.listUsers(
-		Number.isNaN(maxResults) ? DEFAULT_MAX_RESULTS : maxResults,
-		pageToken,
-	);
+	let result: ListUsersResult | undefined;
+
+	do {
+		result = await auth.listUsers(1000, result?.pageToken);
+
+		records.push(...result.users);
+	} while (result.pageToken);
+
+	return records;
 }

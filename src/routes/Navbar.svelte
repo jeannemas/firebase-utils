@@ -90,7 +90,7 @@
 				<a
 					class="rounded-none lg:rounded-md"
 					class:active="{$page.url.pathname.startsWith(link.pathname)}"
-					href="{link.pathname}{$page.url.search}"
+					href="{link.pathname}"
 					on:click="{() => (mobileNavbarIsOpen = false)}"
 				>
 					{link.label}
