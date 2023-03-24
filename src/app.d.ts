@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
-import '$lib/utils/typed-http';
+import '$utils/typed-http';
 
 declare global {
 	namespace App {

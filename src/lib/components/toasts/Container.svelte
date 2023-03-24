@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
 	import { writable } from 'svelte/store';
 
-	import Alert from '../alerts/Alert.svelte';
+	import Alert from '$components/alerts/Alert.svelte';
 </script>
 
 <script lang="ts">

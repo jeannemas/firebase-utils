@@ -1,27 +1,12 @@
-import { error, json } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
 
 import { listUsers } from '$lib/server/services/firebase/auth.service';
-import { readOne } from '$lib/server/services/service-account.service';
+import { getServiceAccountFromCookies } from '$utils/service-account';
 
 import type { RequestHandler } from './$types';
 
 export const GET = (async ({ cookies, url }) => {
-	const serviceAccountId = cookies.get('serviceAccountId') ?? null;
-
-	if (!serviceAccountId) {
-		throw error(401, {
-			message: 'Unauthorized',
-		});
-	}
-
-	const serviceAccount = await readOne(serviceAccountId);
-
-	if (!serviceAccount) {
-		throw error(404, {
-			message: 'Service account not found',
-		});
-	}
-
+	const serviceAccount = await getServiceAccountFromCookies(cookies);
 	const maxResultsString = url.searchParams.get('maxResults');
 	const search = url.searchParams.get('search')?.toLowerCase();
 	const pageString = url.searchParams.get('page');

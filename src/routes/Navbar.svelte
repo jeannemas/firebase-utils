@@ -4,26 +4,31 @@
 	import { getContext } from 'svelte';
 	import type { Writable } from 'svelte/store';
 
+	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
-	import Icon from '$lib/components/Icon.svelte';
-	import Logo from '$lib/components/Logo.svelte';
-	import type { Link } from '$lib/models/Link';
+	import Icon from '$components/Icon.svelte';
+	import Logo from '$components/Logo.svelte';
+	import type { Link } from '$models/Link';
 </script>
 
 <script lang="ts">
 	const serviceAccounts = getContext<Writable<ServiceAccount[]>>('serviceAccounts');
 	const selectedServiceAccountId = getContext<Writable<string | null>>('selectedServiceAccountId');
 	const links = getContext<Writable<Link[]>>('links');
-	const yearInMs = 1000 * 60 * 60 * 24 * 365;
 
 	let mobileNavbarIsOpen = false;
 
-	function handleServiceAccountIdSelect(id: string | null) {
-		document.cookie = serialize('serviceAccountId', id ?? '', {
+	async function handleServiceAccountIdSelect(id: string | null) {
+		const yearInMs = 1000 * 60 * 60 * 24 * 365;
+		const cookie = serialize('serviceAccountId', id ?? '', {
 			path: '/',
 			expires: new Date(id ? Date.now() + yearInMs : 0),
 			maxAge: id ? yearInMs : 0,
 		});
+
+		document.cookie = cookie;
+
+		await invalidateAll();
 	}
 </script>
 

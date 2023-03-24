@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	import type { Tab } from '$lib/models/Tab';
+	import type { Tab } from '$models/Tab';
 
 	import TabComponent from './Tab.svelte';
 </script>

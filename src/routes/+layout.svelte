@@ -3,7 +3,7 @@
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 
-	import type { Link } from '$lib/models/Link';
+	import type { Link } from '$models/Link';
 
 	import '../app.postcss';
 	import type { LayoutServerData } from './$types';

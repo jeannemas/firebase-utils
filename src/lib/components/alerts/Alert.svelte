@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
 	import { onMount } from 'svelte';
 
-	import Icon from '../Icon.svelte';
+	import Icon from '$components/Icon.svelte';
 </script>
 
 <script lang="ts">

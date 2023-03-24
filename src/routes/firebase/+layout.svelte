@@ -3,7 +3,7 @@
 	import { getContext } from 'svelte';
 	import type { Writable } from 'svelte/store';
 
-	import Alert from '$lib/components/alerts/Alert.svelte';
+	import Alert from '$components/alerts/Alert.svelte';
 
 	import ServiceAccountHeader from './ServiceAccountHeader.svelte';
 </script>

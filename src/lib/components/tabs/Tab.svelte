@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import { page } from '$app/stores';
-	import type { Tab } from '$lib/models/Tab';
+	import type { Tab } from '$models/Tab';
 </script>
 
 <script lang="ts">

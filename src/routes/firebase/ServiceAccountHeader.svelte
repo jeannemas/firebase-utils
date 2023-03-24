@@ -3,9 +3,9 @@
 	import { getContext } from 'svelte';
 	import type { Writable } from 'svelte/store';
 
-	import Modal from '$lib/components/modals/Modal.svelte';
-	import Toggle from '$lib/components/modals/Toggle.svelte';
-	import Container from '$lib/components/toasts/Container.svelte';
+	import Modal from '$components/modals/Modal.svelte';
+	import Toggle from '$components/modals/Toggle.svelte';
+	import Container from '$components/toasts/Container.svelte';
 
 	import ServiceAccountUploadForm from './ServiceAccountUploadForm.svelte';
 </script>

@@ -1,15 +1,34 @@
 <script context="module" lang="ts">
-	import Icon from '$lib/components/Icon.svelte';
+	import { derived } from 'svelte/store';
+
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+
+	import type { PageServerData } from './$types';
 </script>
 
-<div class="hero">
-	<div class="hero-content text-center">
-		<div class="flex max-w-md flex-row">
-			<div class="basis-1/3">
-				<Icon icon="circle-exclamation" modifiers="{['2xl']}" style="solid" />
-			</div>
+<script lang="ts">
+	export let data: PageServerData;
 
-			<div class="basis-2/3">This feature is not yet implemented.</div>
-		</div>
-	</div>
-</div>
+	const bucket = derived([page], ([$page]) => $page.url.searchParams.get('bucket'));
+</script>
+
+<select
+	class="select select-bordered"
+	value="{$bucket}"
+	on:change="{({ currentTarget }) => {
+		const url = new URL($page.url);
+
+		url.searchParams.set('bucket', currentTarget.value);
+
+		goto(url);
+	}}"
+>
+	<option disabled value="{null}"> Select a bucket </option>
+
+	{#each data.buckets as bucket}
+		<option value="{bucket}">{bucket}</option>
+	{/each}
+</select>
+
+<pre class="overflow-scroll"><code>{JSON.stringify(data.files, null, 2)}</code></pre>

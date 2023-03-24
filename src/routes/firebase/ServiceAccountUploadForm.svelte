@@ -4,7 +4,8 @@
 	import { field, form } from 'svelte-forms';
 	import { required } from 'svelte-forms/validators';
 
-	import type { POSTPayload } from '../api/v1/firebase/service-accounts/+server';
+	import type { POSTPayload } from '$routes/api/v1/firebase/service-accounts/+server';
+	import type { JSONTypedResponse } from '$utils/typed-http';
 </script>
 
 <script lang="ts">
@@ -25,13 +26,16 @@
 		}
 
 		try {
-			const serviceAccount: ServiceAccount = await fetch('/api/v1/firebase/service-accounts', {
-				body: JSON.stringify({
-					json: await $filelist.value![0].text(),
-					label: $label.value,
-				} satisfies POSTPayload),
-				method: 'POST',
-			}).then((response) => response.json());
+			const serviceAccount = await fetch<JSONTypedResponse<ServiceAccount>>(
+				'/api/v1/firebase/service-accounts',
+				{
+					body: JSON.stringify({
+						json: await $filelist.value![0].text(),
+						label: $label.value,
+					} satisfies POSTPayload),
+					method: 'POST',
+				},
+			).then((response) => response.json());
 
 			dispatch('uploaded', serviceAccount);
 		} catch (error) {
@@ -61,8 +65,8 @@
 			name="serviceAccountFile"
 			type="file"
 			bind:files="{$filelist.value}"
-			on:change="{(event) => {
-				const { name = null } = event.currentTarget.files?.[0] ?? {};
+			on:change="{({ currentTarget }) => {
+				const { name = null } = currentTarget.files?.[0] ?? {};
 
 				if (name && !$label.value) {
 					$label.value = name;
