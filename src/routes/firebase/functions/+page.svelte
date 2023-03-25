@@ -1,15 +1,9 @@
 <script context="module" lang="ts">
-	import Icon from '$components/Icon.svelte';
+	import type { PageServerData } from './$types';
 </script>
 
-<div class="hero">
-	<div class="hero-content text-center">
-		<div class="flex max-w-md flex-row">
-			<div class="basis-1/3">
-				<Icon icon="circle-exclamation" modifiers="{['2xl']}" style="solid" />
-			</div>
+<script lang="ts">
+	export let data: PageServerData;
+</script>
 
-			<div class="basis-2/3">This feature is not yet implemented.</div>
-		</div>
-	</div>
-</div>
+<pre class="overflow-scroll"><code>{JSON.stringify(data.functions, null, 2)}</code></pre>

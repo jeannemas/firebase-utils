@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 
-import { listUsers } from '$lib/server/services/firebase/auth.service';
+import { listUsers } from '$server/services/firebase/auth.service';
 import { getServiceAccountFromCookies } from '$utils/service-account';
 
 import type { RequestHandler } from './$types';

@@ -1,6 +1,8 @@
 import { error, type Cookies } from '@sveltejs/kit';
 
-import { readOne } from '$lib/server/services/service-account.service';
+import { readOne } from '$server/services/service-account.service';
+
+// TODO: this file should be migrated under the $server folder
 
 export async function getServiceAccountFromCookies(cookies: Cookies) {
 	const serviceAccountId = cookies.get('serviceAccountId') ?? null;

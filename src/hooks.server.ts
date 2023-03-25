@@ -1,5 +1,7 @@
 import type { Handle } from '@sveltejs/kit';
 
+// TODO Add auth
+
 export const handle = (async ({ event, resolve }) => {
 	const response = await resolve(event);
 

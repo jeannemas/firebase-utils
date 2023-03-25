@@ -1,17 +1,17 @@
 import { json } from '@sveltejs/kit';
 
-import { getBuckets } from '$server/services/google-cloud/storage.service';
+import { listFunctions } from '$server/services/google-cloud/functions.service';
 import { getServiceAccountFromCookies } from '$utils/service-account';
 
 import type { RequestHandler } from './$types';
 
 export const GET = (async ({ cookies }) => {
 	const serviceAccount = await getServiceAccountFromCookies(cookies);
-	const buckets = await getBuckets(serviceAccount).then((buckets) =>
-		buckets.map(({ name }) => name),
+	const functions = await listFunctions(serviceAccount).then((functions) =>
+		functions.map(({ name }) => name),
 	);
 
-	return json(buckets, {
+	return json(functions, {
 		status: 200,
 	});
 }) satisfies RequestHandler;

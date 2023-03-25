@@ -3,16 +3,12 @@
 	import { getContext } from 'svelte';
 	import type { Writable } from 'svelte/store';
 
-	import Alert from '$components/alerts/Alert.svelte';
-
-	import ServiceAccountHeader from './ServiceAccountHeader.svelte';
+	import Alert from '$components/Alert.svelte';
 </script>
 
 <script lang="ts">
 	const serviceAccounts = getContext<Writable<ServiceAccount[]>>('serviceAccounts');
 </script>
-
-<ServiceAccountHeader />
 
 {#if $serviceAccounts.length}
 	<slot />

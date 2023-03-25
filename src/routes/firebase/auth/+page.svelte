@@ -3,7 +3,7 @@
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import Pagination from '$components/pagination/Pagination.svelte';
+	import Pagination from '$components/Pagination.svelte';
 	import { debounce } from '$utils/debounce';
 
 	import type { PageServerData } from './$types';
@@ -40,7 +40,7 @@
 
 <div class="my-2 flex flex-row items-center justify-start gap-x-2">
 	<input
-		class="input-bordered input w-full lg:max-w-xs"
+		class="input-bordered input w-full md:max-w-xs"
 		placeholder="Search for users..."
 		type="text"
 		value="{$search}"
@@ -54,13 +54,13 @@
 		{#each data.queryResult.records as record}
 			<div class="collapse collapse-arrow border-y border-base-300 border-collapse" tabindex="-1">
 				<div
-					class="collapse-title items-center min-h-fit py-3 flex justify-between text-sm lg:text-base"
+					class="collapse-title items-center min-h-fit py-3 flex justify-between text-sm md:text-base"
 				>
 					<div>
 						{record.email ?? ''}
 					</div>
 
-					<div class="hidden lg:block">
+					<div class="hidden md:block">
 						{record.uid}
 					</div>
 				</div>

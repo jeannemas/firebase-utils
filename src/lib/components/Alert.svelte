@@ -29,7 +29,7 @@
 </script>
 
 <div
-	class="alert z-50 opacity-0 shadow-lg transition-opacity duration-500 ease-in-out lg:w-fit alert-{style}"
+	class="alert z-50 opacity-0 shadow-lg transition-opacity duration-500 ease-in-out md:w-fit alert-{style}"
 	bind:this="{component}"
 >
 	<div class="flex flex-row justify-between">

@@ -14,9 +14,11 @@ const config = {
 		adapter: adapter(),
 
 		alias: {
+			$client: './src/lib/client',
 			$components: './src/lib/components',
 			$models: './src/lib/models',
 			$routes: './src/routes',
+			$server: './src/lib/server',
 			$utils: './src/lib/utils',
 		},
 	},

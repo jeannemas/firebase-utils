@@ -41,3 +41,23 @@ export async function readOne(id: ServiceAccount['id']) {
 		},
 	});
 }
+
+export async function update(id: ServiceAccount['id'], data: Prisma.ServiceAccountUpdateInput) {
+	// We do this to ensure the record still exists
+	await prisma.serviceAccount.findFirstOrThrow({
+		where: {
+			...where,
+			id,
+		},
+	});
+
+	return await prisma.serviceAccount.update({
+		data,
+		select,
+		where: { id },
+	});
+}
+
+export async function del(id: ServiceAccount['id']) {
+	return await update(id, { deletedAt: new Date() });
+}

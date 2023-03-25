@@ -1,6 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 
-import { getFiles } from '$lib/server/services/google-cloud/storage.service';
+import { getFiles } from '$server/services/google-cloud/storage.service';
 import { getServiceAccountFromCookies } from '$utils/service-account';
 
 import type { RequestHandler } from './$types';

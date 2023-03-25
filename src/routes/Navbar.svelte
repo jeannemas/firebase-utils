@@ -8,13 +8,33 @@
 	import { page } from '$app/stores';
 	import Icon from '$components/Icon.svelte';
 	import Logo from '$components/Logo.svelte';
-	import type { Link } from '$models/Link';
 </script>
 
 <script lang="ts">
 	const serviceAccounts = getContext<Writable<ServiceAccount[]>>('serviceAccounts');
 	const selectedServiceAccountId = getContext<Writable<string | null>>('selectedServiceAccountId');
-	const links = getContext<Writable<Link[]>>('links');
+	const links = [
+		{
+			pathname: '/service-accounts',
+			label: 'Service Accounts',
+		},
+		{
+			pathname: '/firebase/auth',
+			label: 'Authentication',
+		},
+		{
+			pathname: '/firebase/firestore',
+			label: 'Firestore',
+		},
+		{
+			pathname: '/firebase/storage',
+			label: 'Storage',
+		},
+		{
+			pathname: '/firebase/functions',
+			label: 'Functions',
+		},
+	];
 
 	let mobileNavbarIsOpen = false;
 
@@ -33,9 +53,9 @@
 </script>
 
 <div
-	class="navbar min-h-fit flex-col justify-between bg-base-200 p-0 lg:min-h-16 lg:flex-row lg:py-2 lg:px-4"
+	class="navbar min-h-fit flex-col justify-between items-stretch gap-2 bg-base-200 p-0 lg:min-h-16 lg:flex-row lg:py-2 lg:px-4"
 >
-	<div class="w-full flex-col lg:w-auto lg:flex-row">
+	<div class="flex-col lg:w-auto lg:flex-row">
 		<div class="flex w-full grow flex-row items-center justify-between">
 			<a href="/">
 				<Logo />
@@ -85,12 +105,12 @@
 	</div>
 
 	<ul
-		class="menu menu-vertical w-full gap-x-2 overflow-y-hidden transition-[max-height] delay-[0] duration-300 lg:menu-horizontal lg:w-auto"
+		class="menu menu-compact menu-vertical lg:gap-2 overflow-y-hidden transition-[max-height] lg:menu-normal lg:menu-horizontal"
 		class:max-h-0="{!mobileNavbarIsOpen}"
 		class:max-h-screen="{mobileNavbarIsOpen}"
 		class:lg:max-h-screen="{!mobileNavbarIsOpen}"
 	>
-		{#each $links as link}
+		{#each links as link}
 			<li class="w-full lg:w-auto">
 				<a
 					class="rounded-none lg:rounded-md"

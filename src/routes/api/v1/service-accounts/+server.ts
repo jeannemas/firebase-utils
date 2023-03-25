@@ -2,7 +2,7 @@ import { error, json } from '@sveltejs/kit';
 import { z } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 
-import { create, readAll } from '$lib/server/services/service-account.service';
+import { create, readAll } from '$server/services/service-account.service';
 
 import type { RequestHandler } from './$types';
 
@@ -10,8 +10,6 @@ const postPayload = z.object({
 	json: z.string(),
 	label: z.string().trim().min(1),
 });
-
-export type POSTPayload = z.infer<typeof postPayload>;
 
 // Create a service account
 export const POST = (async ({ request }) => {
@@ -36,3 +34,7 @@ export const GET = (async () => {
 		status: 200,
 	});
 }) satisfies RequestHandler;
+
+export type POSTPayload = z.infer<typeof postPayload>;
+export type POST = Awaited<ReturnType<typeof POST>>;
+export type GET = Awaited<ReturnType<typeof GET>>;
