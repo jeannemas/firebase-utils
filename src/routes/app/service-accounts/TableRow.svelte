@@ -1,10 +1,10 @@
 <script context="module" lang="ts">
 	import type { ServiceAccount } from '@prisma/client';
+	import { createEventDispatcher } from 'svelte';
 	import { field } from 'svelte-forms';
 	import { required } from 'svelte-forms/validators';
 
-	import { invalidateAll } from '$app/navigation';
-	import { del, update } from '$client/services/service-account.service';
+	import type { UpdatePayload } from '$client/services/service-account.service';
 	import Icon from '$components/Icon.svelte';
 	import Modal from '$components/Modal.svelte';
 </script>
@@ -12,27 +12,31 @@
 <script lang="ts">
 	export let serviceAccount: ServiceAccount;
 
+	const dispatch = createEventDispatcher<{
+		update: UpdatePayload;
+		delete: void;
+	}>();
+
 	$: label = field('label', serviceAccount.label, [required()], { checkOnInit: true });
 
 	let editMode = false;
 	let deleteModal: Modal;
 
-	function edit() {
-		editMode = true;
+	function del() {
+		dispatch('delete');
+
+		deleteModal.close();
 	}
-	async function remove() {
-		return await del(fetch, serviceAccount.id).then(() => invalidateAll());
-	}
-	async function save() {
+	function update() {
 		if (!$label.valid) {
 			return;
 		}
 
 		editMode = false;
 
-		return await update(fetch, serviceAccount.id, {
+		dispatch('update', {
 			label: $label.value,
-		}).then(() => invalidateAll());
+		});
 	}
 	function cancel() {
 		editMode = false;
@@ -45,40 +49,50 @@
 	<td>
 		<!-- TODO wrap inside a form to add autosubmit -->
 		{#if editMode}
-			<input class="input input-sm input-bordered w-full" type="text" bind:value="{$label.value}" />
+			<input
+				class="input input-sm input-bordered w-full max-w-full"
+				type="text"
+				bind:value="{$label.value}"
+			/>
 		{:else}
-			{serviceAccount.label}
+			<span class="px-3">
+				{serviceAccount.label}
+			</span>
 		{/if}
 	</td>
 
-	<td class="hidden md:table-cell">
+	<td class="overflow-scroll hidden md:table-cell">
 		{new Date(serviceAccount.createdAt).toLocaleString()}
 	</td>
 
-	<td class="hidden md:table-cell">
+	<td class="overflow-scroll hidden md:table-cell">
 		{new Date(serviceAccount.updatedAt).toLocaleString()}
 	</td>
 
 	<td>
 		{#if editMode}
-			<button class="btn btn-sm" title="Cancel" on:click="{cancel}">
+			<button class="btn btn-sm btn-info btn-outline" title="Cancel" on:click="{cancel}">
 				<span class="hidden md:inline-block"> Cancel </span>
 
 				<Icon class="md:hidden" icon="ban" style="solid" />
 			</button>
 
 			<button
-				class="btn btn-sm btn-success"
+				class="btn btn-sm btn-success btn-outline"
 				disabled="{!$label.valid}"
 				title="Save"
-				on:click="{save}"
+				on:click="{update}"
 			>
 				<span class="hidden md:inline-block"> Save </span>
 
 				<Icon class="md:hidden" icon="floppy-disk" style="solid" />
 			</button>
 		{:else}
-			<button class="btn btn-sm btn-info btn-outline" title="Edit" on:click="{edit}">
+			<button
+				class="btn btn-sm btn-warning btn-outline"
+				title="Edit"
+				on:click="{() => (editMode = true)}"
+			>
 				<span class="hidden md:inline-block"> Edit </span>
 
 				<Icon class="md:hidden" icon="pen" style="solid" />
@@ -107,8 +121,6 @@
 	<div class="modal-action">
 		<button class="btn btn-ghost" on:click="{() => deleteModal.close()}"> Cancel </button>
 
-		<button class="btn btn-error" on:click="{() => remove().then(deleteModal.close)}">
-			Delete
-		</button>
+		<button class="btn btn-error" on:click="{del}"> Delete </button>
 	</div>
 </Modal>

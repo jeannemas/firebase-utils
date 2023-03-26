@@ -15,29 +15,67 @@ import type {
 type Fetch = typeof globalThis.fetch;
 
 export async function create(fetch: Fetch, data: CreatePayload) {
-	return await fetch<Create>('/api/v1/service-accounts', {
+	const response = await fetch<Create>('/api/v1/service-accounts', {
 		body: JSON.stringify(data),
 		method: 'POST',
-	}).then((response) => response.json());
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	if (!response.ok) {
+		throw response;
+	}
+
+	return await response.json();
 }
 
 export async function readOne(fetch: Fetch, id: ServiceAccount['id']) {
-	return await fetch<ReadOne>(`/api/v1/service-accounts/${id}`).then((response) => response.json());
+	const response = await fetch<ReadOne>(`/api/v1/service-accounts/${id}`);
+
+	if (!response.ok) {
+		throw response;
+	}
+
+	return await response.json();
 }
 
 export async function readAll(fetch: Fetch) {
-	return await fetch<ReadAll>('/api/v1/service-accounts').then((response) => response.json());
+	const response = await fetch<ReadAll>('/api/v1/service-accounts');
+
+	if (!response.ok) {
+		throw response;
+	}
+
+	return await response.json();
 }
 
 export async function update(fetch: Fetch, id: ServiceAccount['id'], data: UpdatePayload) {
-	return await fetch<Update>(`/api/v1/service-accounts/${id}`, {
+	const response = await fetch<Update>(`/api/v1/service-accounts/${id}`, {
 		body: JSON.stringify(data),
 		method: 'PATCH',
-	}).then((response) => response.json());
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	if (!response.ok) {
+		throw response;
+	}
+
+	return await response.json();
 }
 
 export async function del(fetch: Fetch, id: ServiceAccount['id']) {
-	return await fetch<Delete>(`/api/v1/service-accounts/${id}`, {
+	const response = await fetch<Delete>(`/api/v1/service-accounts/${id}`, {
 		method: 'DELETE',
-	}).then((response) => response.json());
+	});
+
+	if (!response.ok) {
+		throw response;
+	}
+
+	return await response.json();
 }
+
+export { CreatePayload, UpdatePayload };

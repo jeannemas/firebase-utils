@@ -2,6 +2,14 @@
 	import type { ServiceAccount } from '@prisma/client';
 
 	import { invalidateAll } from '$app/navigation';
+	import {
+		create,
+		del,
+		update,
+		type CreatePayload,
+		type UpdatePayload,
+	} from '$client/services/service-account.service';
+	import { toastError, toastSuccess } from '$client/utils/toasts';
 	import Alert from '$components/Alert.svelte';
 	import Icon from '$components/Icon.svelte';
 	import Modal from '$components/Modal.svelte';
@@ -15,30 +23,52 @@
 <script lang="ts">
 	export let data: PageServerData;
 
-	let container: Container;
+	let toasts: Container;
 	let newServiceAccountModal: Modal;
 
-	function handleUploadSuccess({ label }: ServiceAccount) {
-		newServiceAccountModal.close();
+	async function handleCreate(data: CreatePayload) {
+		try {
+			const { label } = await create(fetch, data);
 
-		container.push({
-			class: 'alert-success',
-			dismissible: true,
-			text: `Service account "${label}" uploaded successfully.`,
-			timeout: 10000,
-		});
+			newServiceAccountModal.close();
 
-		invalidateAll();
+			toasts.push(toastSuccess(`Service account "${label}" uploaded successfully.`));
+
+			invalidateAll();
+		} catch (error) {
+			handleError(error as Error);
+		}
 	}
-	function handleUploadError() {
-		container.push({
-			class: 'alert-error',
-			dismissible: true,
-			text: `
-				An error occurred while uploading the service account file.
-				Check the console for more details.
-			`.trim(),
-		});
+	async function handleUpdate(id: ServiceAccount['id'], data: UpdatePayload) {
+		try {
+			const { label } = await update(fetch, id, data);
+
+			toasts.push(toastSuccess(`Service account "${label}" updated successfully.`));
+
+			invalidateAll();
+		} catch (error) {
+			handleError(error as Error);
+		}
+	}
+	async function handleDelete(id: ServiceAccount['id']) {
+		try {
+			const { label } = await del(fetch, id);
+
+			toasts.push(toastSuccess(`Service account "${label}" deleted successfully.`));
+
+			invalidateAll();
+		} catch (error) {
+			handleError(error as Error);
+		}
+	}
+	function handleError(error: Error) {
+		console.error(error);
+
+		toasts.push(
+			toastError(
+				'An error occurred while deleting the service account.\nCheck the console for more details.',
+			),
+		);
 	}
 </script>
 
@@ -61,7 +91,7 @@
 </div>
 
 {#if data.serviceAccounts.length}
-	<table class="table table-compact w-full">
+	<table class="table table-compact w-full shadow-md rounded-md overflow-hidden">
 		<thead>
 			<tr>
 				<th class="w-2/3 md:w-1/4">Label</th>
@@ -76,7 +106,11 @@
 
 		<tbody>
 			{#each data.serviceAccounts as serviceAccount}
-				<TableRow serviceAccount="{serviceAccount}" />
+				<TableRow
+					serviceAccount="{serviceAccount}"
+					on:update="{({ detail }) => handleUpdate(serviceAccount.id, detail)}"
+					on:delete="{() => handleDelete(serviceAccount.id)}"
+				/>
 			{/each}
 		</tbody>
 	</table>
@@ -87,10 +121,7 @@
 {/if}
 
 <Modal bind:this="{newServiceAccountModal}">
-	<UploadForm
-		on:error="{handleUploadError}"
-		on:uploaded="{(event) => handleUploadSuccess(event.detail)}"
-	/>
+	<UploadForm on:submit="{({ detail }) => handleCreate(detail)}" />
 </Modal>
 
-<Container bind:this="{container}" />
+<Container bind:this="{toasts}" />

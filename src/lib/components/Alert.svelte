@@ -27,10 +27,7 @@
 	export { classes as class };
 </script>
 
-<div
-	class="z-50 opacity-0 shadow-lg transition-opacity duration-500 ease-in-out"
-	bind:this="{wrapper}"
->
+<div class="z-50 opacity-0 transition-opacity duration-500 ease-in-out" bind:this="{wrapper}">
 	<div class="alert md:w-fit {classes}">
 		<div class="flex flex-row items-center justify-between">
 			<span>

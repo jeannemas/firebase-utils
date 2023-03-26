@@ -2,22 +2,16 @@
 	import { writable } from 'svelte/store';
 
 	import Alert from '$components/Alert.svelte';
+	import type { Toast } from '$models/Toast.model';
 </script>
 
 <script lang="ts">
-	type AlertPayload = {
-		class?: string;
-		dismissible?: boolean;
-		text: string;
-		timeout?: number;
-	};
+	const alerts = writable<Toast[]>([]);
 
-	const alerts = writable<AlertPayload[]>([]);
-
-	export function unshift(payload: AlertPayload) {
+	export function unshift(payload: Toast) {
 		alerts.update((alerts) => [payload, ...alerts]);
 	}
-	export function push(payload: AlertPayload) {
+	export function push(payload: Toast) {
 		alerts.update((alerts) => [...alerts, payload]);
 	}
 </script>
