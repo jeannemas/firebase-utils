@@ -55,8 +55,8 @@
 <div
 	class="navbar min-h-fit flex-col justify-between items-stretch gap-2 bg-base-200 p-0 lg:min-h-16 lg:flex-row lg:py-2 lg:px-4"
 >
-	<div class="flex-col lg:w-auto lg:flex-row">
-		<div class="flex w-full grow flex-row items-center justify-between">
+	<div class="flex flex-col lg:flex-row items-stretch">
+		<div class="flex grow flex-row items-center justify-between">
 			<a href="/">
 				<Logo />
 			</a>
@@ -84,9 +84,9 @@
 			</button>
 		</div>
 
-		<div class="w-full p-2 pt-0 lg:p-0">
+		<div class="flex items-center p-2 pt-0 lg:p-0">
 			<select
-				class="select w-full focus:border-transparent focus:outline-none lg:w-auto"
+				class="select w-full lg:max-w-[16rem] focus:border-transparent focus:outline-none"
 				id="serviceAccount"
 				name="serviceAccount"
 				placeholder="Select a service account"
@@ -105,13 +105,13 @@
 	</div>
 
 	<ul
-		class="menu menu-compact menu-vertical lg:gap-2 overflow-y-hidden transition-[max-height] lg:menu-normal lg:menu-horizontal"
+		class="menu menu-compact menu-vertical items-stretch lg:gap-2 overflow-y-hidden transition-[max-height] lg:menu-normal lg:menu-horizontal"
 		class:max-h-0="{!mobileNavbarIsOpen}"
 		class:max-h-screen="{mobileNavbarIsOpen}"
 		class:lg:max-h-screen="{!mobileNavbarIsOpen}"
 	>
 		{#each links as link}
-			<li class="w-full lg:w-auto">
+			<li>
 				<a
 					class="rounded-none lg:rounded-md"
 					class:active="{$page.url.pathname.startsWith(link.pathname)}"
