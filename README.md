@@ -5,6 +5,7 @@ TODO:
 - Complete README
 - Add history support
 - Deploy?
+- Add docs
 
 # create-svelte
 

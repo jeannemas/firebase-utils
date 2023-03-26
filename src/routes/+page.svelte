@@ -18,7 +18,11 @@
 				gaps in the Firebase Console.
 			</p>
 
-			<button class="btn-primary btn"> Get Started </button>
+			<div class="flex flex-col justify-center items-center gap-4">
+				<a class="btn-primary btn" href="/app"> Go to app </a>
+
+				<a class="btn-secondary btn" href="/docs"> Read the documentation </a>
+			</div>
 		</div>
 	</div>
 </div>
@@ -48,3 +52,16 @@
 		and effectively.
 	</p>
 </section>
+
+<footer class="sticky top-full footer footer-center bg-base-300 p-8 text-base-content">
+	<div>
+		<p>
+			Copyright &copy; 2023 - {new Date().getFullYear()}
+			| All right reserved by
+
+			<a href="https://jeannemas.me/?reference=firebase-utils" rel="noreferrer" target="_blank">
+				Jeanne Mas
+			</a>
+		</p>
+	</div>
+</footer>

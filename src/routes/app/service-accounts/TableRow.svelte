@@ -43,15 +43,12 @@
 
 <tr>
 	<td>
-		<input
-			class="input w-full disabled:cursor-text disabled:bg-transparent disabled:border-transparent"
-			class:input-bordered="{editMode}"
-			class:input-ghost="{!editMode}"
-			disabled="{!editMode}"
-			readonly="{!editMode}"
-			type="text"
-			bind:value="{$label.value}"
-		/>
+		<!-- TODO wrap inside a form to add autosubmit -->
+		{#if editMode}
+			<input class="input input-sm input-bordered w-full" type="text" bind:value="{$label.value}" />
+		{:else}
+			{serviceAccount.label}
+		{/if}
 	</td>
 
 	<td class="hidden md:table-cell">
@@ -63,33 +60,40 @@
 	</td>
 
 	<td>
-		<div class="btn-group">
-			{#if editMode}
-				<button class="btn" title="Cancel" on:click="{cancel}">
-					<span class="hidden md:inline-block"> Cancel </span>
+		{#if editMode}
+			<button class="btn btn-sm" title="Cancel" on:click="{cancel}">
+				<span class="hidden md:inline-block"> Cancel </span>
 
-					<Icon class="md:hidden" icon="ban" style="solid" />
-				</button>
+				<Icon class="md:hidden" icon="ban" style="solid" />
+			</button>
 
-				<button class="btn btn-success" disabled="{!$label.valid}" title="Save" on:click="{save}">
-					<span class="hidden md:inline-block"> Save </span>
+			<button
+				class="btn btn-sm btn-success"
+				disabled="{!$label.valid}"
+				title="Save"
+				on:click="{save}"
+			>
+				<span class="hidden md:inline-block"> Save </span>
 
-					<Icon class="md:hidden" icon="floppy-disk" style="solid" />
-				</button>
-			{:else}
-				<button class="btn btn-info" title="Edit" on:click="{edit}">
-					<span class="hidden md:inline-block"> Edit </span>
+				<Icon class="md:hidden" icon="floppy-disk" style="solid" />
+			</button>
+		{:else}
+			<button class="btn btn-sm btn-info btn-outline" title="Edit" on:click="{edit}">
+				<span class="hidden md:inline-block"> Edit </span>
 
-					<Icon class="md:hidden" icon="pen" style="solid" />
-				</button>
+				<Icon class="md:hidden" icon="pen" style="solid" />
+			</button>
 
-				<button class="btn btn-error" title="Delete" on:click="{() => deleteModal.open()}">
-					<span class="hidden md:inline-block"> Delete </span>
+			<button
+				class="btn btn-sm btn-error btn-outline"
+				title="Delete"
+				on:click="{() => deleteModal.open()}"
+			>
+				<span class="hidden md:inline-block"> Delete </span>
 
-					<Icon class="md:hidden" icon="trash" style="solid" />
-				</button>
-			{/if}
-		</div>
+				<Icon class="md:hidden" icon="trash" style="solid" />
+			</button>
+		{/if}
 	</td>
 </tr>
 

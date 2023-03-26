@@ -3,6 +3,7 @@
 
 	import { invalidateAll } from '$app/navigation';
 	import Alert from '$components/Alert.svelte';
+	import Icon from '$components/Icon.svelte';
 	import Modal from '$components/Modal.svelte';
 	import Container from '$components/toasts/Container.svelte';
 
@@ -41,14 +42,21 @@
 	}
 </script>
 
-<div class="flex flex-col md:flex-row items-center justify-between my-4">
-	<h1 class="font-bold text-2xl">Service Accounts</h1>
+<svelte:head>
+	<title>Firebase Utils | Service Accounts</title>
+</svelte:head>
+
+<div class="flex flex-row items-center justify-between my-4">
+	<h1 class="font-bold text-xl">Service Accounts</h1>
 
 	<button
 		class="btn-outline btn-primary btn btn-sm"
+		title="Upload a service account"
 		on:click="{() => newServiceAccountModal.open()}"
 	>
-		Upload a service account
+		<span class="hidden md:inline-block">Upload a service account</span>
+
+		<Icon class="md:hidden" icon="plus" style="solid" />
 	</button>
 </div>
 
@@ -56,13 +64,13 @@
 	<table class="table table-compact w-full">
 		<thead>
 			<tr>
-				<th>Label</th>
+				<th class="w-2/3 md:w-1/4">Label</th>
 
-				<th class="hidden md:table-cell">Created</th>
+				<th class="hidden md:table-cell md:w-1/4">Created</th>
 
-				<th class="hidden md:table-cell">Updated</th>
+				<th class="hidden md:table-cell md:w-1/4">Updated</th>
 
-				<th>Actions</th>
+				<th class="w-1/3 md:w-1/4">Actions</th>
 			</tr>
 		</thead>
 

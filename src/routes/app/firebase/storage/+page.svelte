@@ -31,4 +31,8 @@
 	{/each}
 </select>
 
+<!-- TODO add pagination -->
+<!-- TODO complete -->
+<!-- TODO add suport for automatic default bucket -->
+
 <pre class="overflow-scroll"><code>{JSON.stringify(data.files, null, 2)}</code></pre>

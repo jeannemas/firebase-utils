@@ -14,6 +14,8 @@
 
 	let searchInput: HTMLInputElement;
 
+	$: records = data.queryResult.records ?? [];
+
 	const maxResults = derived(page, ({ url }) => url.searchParams.get('maxResults') ?? '10');
 	const search = derived(page, ({ url }) => url.searchParams.get('search') ?? '');
 	// TODO handle error
@@ -39,6 +41,7 @@
 </svelte:head>
 
 <div class="my-2 flex flex-row items-center justify-start gap-x-2">
+	<!-- TODO fix the input loosing focus on navigation -->
 	<input
 		class="input-bordered input w-full md:max-w-xs"
 		placeholder="Search for users..."
@@ -50,9 +53,11 @@
 </div>
 
 <div class="relative">
-	<div class="flex flex-col rounded-box border-2 border-base-300">
-		{#each data.queryResult.records as record}
-			<div class="collapse collapse-arrow border-y border-base-300 border-collapse" tabindex="-1">
+	<!-- TODO use js -->
+	<!-- TODO fix the weird top and bottom double borders (more easy to see in light mode) -->
+	<div class="flex flex-col rounded-box shadow-lg">
+		{#each records as record}
+			<div class="collapse collapse-arrow" tabindex="-1">
 				<div
 					class="collapse-title items-center min-h-fit py-3 flex justify-between text-sm md:text-base"
 				>
