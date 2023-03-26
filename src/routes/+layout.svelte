@@ -14,9 +14,9 @@
 		selectedServiceAccountId="{data.selectedServiceAccountId}"
 	/>
 
-	<main class="m-4 lg:mx-24">
+	<div class="m-4 lg:mx-24">
 		<slot />
-	</main>
+	</div>
 
 	<footer class="sticky top-full footer footer-center bg-base-300 p-8 text-base-content">
 		<div>

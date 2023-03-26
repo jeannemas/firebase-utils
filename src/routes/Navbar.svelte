@@ -37,7 +37,7 @@
 >
 	<div class="flex flex-col lg:flex-row items-stretch">
 		<div class="flex grow flex-row items-center justify-between">
-			<a href="/">
+			<a class="text-xl" href="/">
 				<Logo />
 			</a>
 
