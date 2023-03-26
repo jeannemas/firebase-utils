@@ -10,11 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// TODO - drop the unique constraint on the label field
-// TODO - add an active readonly history
-// TODO - add auth
-
-/// A Firebase service account used to authenticate with the Firebase admin SDK
+/// A service account used to authenticate with both the Firebase and Google Cloud admin SDKs
 model ServiceAccount {
   /// The datetime when the record was created
   createdAt DateTime  @default(now())

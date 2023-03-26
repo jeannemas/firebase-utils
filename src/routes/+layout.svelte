@@ -1,8 +1,4 @@
 <script context="module" lang="ts">
-	import type { ServiceAccount } from '@prisma/client';
-	import { setContext } from 'svelte';
-	import { writable } from 'svelte/store';
-
 	import '../app.postcss';
 	import type { LayoutServerData } from './$types';
 	import Navbar from './Navbar.svelte';
@@ -10,31 +6,28 @@
 
 <script lang="ts">
 	export let data: LayoutServerData;
-
-	const serviceAccounts = writable<Pick<ServiceAccount, 'id' | 'label'>[]>([]);
-	const selectedServiceAccountId = writable<string | null>(null);
-
-	$: serviceAccounts.set(data.serviceAccounts);
-	$: selectedServiceAccountId.set(data.selectedServiceAccountId);
-
-	setContext('serviceAccounts', serviceAccounts);
-	setContext('selectedServiceAccountId', selectedServiceAccountId);
 </script>
 
 <div class="flex min-h-screen flex-col">
-	<Navbar />
+	<Navbar
+		availableServiceAccounts="{data.serviceAccounts}"
+		selectedServiceAccountId="{data.selectedServiceAccountId}"
+	/>
 
-	<div class="flex grow flex-col">
-		<main class="mx-4 grow lg:mx-24">
-			<slot />
-		</main>
+	<main class="m-4 lg:mx-24">
+		<slot />
+	</main>
 
-		<footer class="footer footer-center bg-base-300 p-4 py-8 text-base-content">
-			<div>
-				<p>
-					Copyright &copy; {new Date().getFullYear()} - All right reserved by Jeanne Mas
-				</p>
-			</div>
-		</footer>
-	</div>
+	<footer class="sticky top-full footer footer-center bg-base-300 p-8 text-base-content">
+		<div>
+			<p>
+				Copyright &copy; 2023 - {new Date().getFullYear()}
+				| All right reserved by
+
+				<a href="https://jeannemas.me/?reference=firebase-utils" rel="noreferrer" target="_blank">
+					Jeanne Mas
+				</a>
+			</p>
+		</div>
+	</footer>
 </div>

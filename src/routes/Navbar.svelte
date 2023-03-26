@@ -1,40 +1,18 @@
 <script context="module" lang="ts">
 	import type { ServiceAccount } from '@prisma/client';
 	import { serialize } from 'cookie';
-	import { getContext } from 'svelte';
-	import type { Writable } from 'svelte/store';
 
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Icon from '$components/Icon.svelte';
 	import Logo from '$components/Logo.svelte';
+
+	import NavbarLink from './NavbarLink.svelte';
 </script>
 
 <script lang="ts">
-	const serviceAccounts = getContext<Writable<ServiceAccount[]>>('serviceAccounts');
-	const selectedServiceAccountId = getContext<Writable<string | null>>('selectedServiceAccountId');
-	const links = [
-		{
-			pathname: '/service-accounts',
-			label: 'Service Accounts',
-		},
-		{
-			pathname: '/firebase/auth',
-			label: 'Authentication',
-		},
-		{
-			pathname: '/firebase/firestore',
-			label: 'Firestore',
-		},
-		{
-			pathname: '/firebase/storage',
-			label: 'Storage',
-		},
-		{
-			pathname: '/firebase/functions',
-			label: 'Functions',
-		},
-	];
+	export let availableServiceAccounts: Pick<ServiceAccount, 'id' | 'label'>[];
+	export let selectedServiceAccountId: string | null;
 
 	let mobileNavbarIsOpen = false;
 
@@ -50,6 +28,8 @@
 
 		await invalidateAll();
 	}
+
+	page.subscribe(() => (mobileNavbarIsOpen = false));
 </script>
 
 <div
@@ -84,24 +64,26 @@
 			</button>
 		</div>
 
-		<div class="flex items-center p-2 pt-0 lg:p-0">
-			<select
-				class="select w-full lg:max-w-[16rem] focus:border-transparent focus:outline-none"
-				id="serviceAccount"
-				name="serviceAccount"
-				placeholder="Select a service account"
-				bind:value="{$selectedServiceAccountId}"
-				on:change="{(event) => handleServiceAccountIdSelect(event.currentTarget.value)}"
-			>
-				<option disabled value="{null}"> Select a service account </option>
+		{#if availableServiceAccounts.length > 0}
+			<div class="flex items-center p-2 pt-0 lg:p-0">
+				<select
+					class="select w-full lg:max-w-[16rem] focus:border-transparent focus:outline-none"
+					id="serviceAccount"
+					name="serviceAccount"
+					placeholder="Select a service account"
+					bind:value="{selectedServiceAccountId}"
+					on:change="{(event) => handleServiceAccountIdSelect(event.currentTarget.value)}"
+				>
+					<option disabled value="{null}"> Select a service account </option>
 
-				{#each $serviceAccounts as serviceAccount}
-					<option value="{serviceAccount.id}">
-						{serviceAccount.label}
-					</option>
-				{/each}
-			</select>
-		</div>
+					{#each availableServiceAccounts as serviceAccount}
+						<option value="{serviceAccount.id}">
+							{serviceAccount.label}
+						</option>
+					{/each}
+				</select>
+			</div>
+		{/if}
 	</div>
 
 	<ul
@@ -110,17 +92,26 @@
 		class:max-h-screen="{mobileNavbarIsOpen}"
 		class:lg:max-h-screen="{!mobileNavbarIsOpen}"
 	>
-		{#each links as link}
+		<li>
+			<NavbarLink label="Service Accounts" href="/service-accounts" />
+		</li>
+
+		{#if selectedServiceAccountId}
 			<li>
-				<a
-					class="rounded-none lg:rounded-md"
-					class:active="{$page.url.pathname.startsWith(link.pathname)}"
-					href="{link.pathname}"
-					on:click="{() => (mobileNavbarIsOpen = false)}"
-				>
-					{link.label}
-				</a>
+				<NavbarLink label="Authentication" href="/firebase/auth" />
 			</li>
-		{/each}
+
+			<li>
+				<NavbarLink label="Firestore" href="/firebase/firestore" />
+			</li>
+
+			<li>
+				<NavbarLink label="Storage" href="/firebase/storage" />
+			</li>
+
+			<li>
+				<NavbarLink label="Functions" href="/firebase/functions" />
+			</li>
+		{/if}
 	</ul>
 </div>

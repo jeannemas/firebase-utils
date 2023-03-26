@@ -6,8 +6,8 @@
 
 <script lang="ts">
 	type AlertPayload = {
+		class?: string;
 		dismissible?: boolean;
-		style: string;
 		text: string;
 		timeout?: number;
 	};
@@ -24,6 +24,8 @@
 
 <div class="toast-end toast-bottom toast">
 	{#each $alerts as alert}
-		<svelte:component this="{Alert}" {...alert} />
+		<Alert class="{alert.class}" dismissible="{alert.dismissible}" timeout="{alert.timeout}">
+			{alert.text}
+		</Alert>
 	{/each}
 </div>
