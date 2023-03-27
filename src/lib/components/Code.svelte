@@ -27,7 +27,6 @@
 </script>
 
 <style lang="postcss">
-	/* load one or multiple themes */
 	@import 'svelte-jsoneditor/themes/jse-theme-dark.css';
 </style>
 

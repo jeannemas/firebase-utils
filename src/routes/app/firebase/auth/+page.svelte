@@ -5,7 +5,6 @@
 	import { z } from 'zod';
 
 	import { page } from '$app/stores';
-	import Code from '$components/Code.svelte';
 	import Icon from '$components/Icon.svelte';
 	import Pagination from '$components/Pagination.svelte';
 	import {
@@ -20,6 +19,8 @@
 </script>
 
 <script lang="ts">
+	import Row from './Row.svelte';
+
 	export let data: PageServerData;
 
 	let searchInput: HTMLInputElement;
@@ -79,29 +80,10 @@
 	</div>
 </div>
 
-<div class="relative">
-	<!-- TODO use js -->
-	<div class="flex flex-col rounded-box shadow-lg">
-		{#each records as record}
-			<div class="collapse collapse-arrow" tabindex="-1">
-				<div
-					class="collapse-title items-center min-h-fit py-3 flex justify-between text-sm md:text-base"
-				>
-					<div>
-						{record.email}
-					</div>
-
-					<div class="hidden md:block">
-						{record.uid}
-					</div>
-				</div>
-
-				<div class="collapse-content">
-					<Code value="{record}" />
-				</div>
-			</div>
-		{/each}
-	</div>
+<div class="flex flex-col gap-y-2">
+	{#each records as record}
+		<Row record="{record}" />
+	{/each}
 </div>
 
 <Pagination
