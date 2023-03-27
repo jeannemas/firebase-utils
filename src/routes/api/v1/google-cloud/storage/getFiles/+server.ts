@@ -1,16 +1,18 @@
 import { error, json } from '@sveltejs/kit';
+import { z } from 'zod';
 
 import { STORAGE_BUCKET_QUERY_PARAM } from '$lib/constants';
 import { getFiles } from '$server/services/google-cloud/storage.service';
 import { getServiceAccountFromCookies } from '$server/utils/getServiceAccountFromCookies';
+import { getSearchParam } from '$utils/search-params-utils';
 
 import type { RequestHandler } from './$types';
 
 export const GET = (async ({ cookies, url }) => {
 	const serviceAccount = await getServiceAccountFromCookies(cookies);
-	const bucket = url.searchParams.get(STORAGE_BUCKET_QUERY_PARAM);
+	const bucket = getSearchParam(url.searchParams, STORAGE_BUCKET_QUERY_PARAM, z.string());
 
-	if (!bucket) {
+	if (bucket === null) {
 		throw error(400, 'Missing bucket parameter');
 	}
 

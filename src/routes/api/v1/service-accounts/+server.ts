@@ -1,9 +1,11 @@
-import { error, json } from '@sveltejs/kit';
-import type { z } from 'zod';
-import { fromZodError } from 'zod-validation-error';
+import { json } from '@sveltejs/kit';
 
-import { schema as postPayload } from '$schemas/service-account-create.schema';
+import {
+	schema as postPayload,
+	type Schema as POSTPayload,
+} from '$schemas/service-account-create.schema';
 import { create, readAll } from '$server/services/service-account.service';
+import { validateIncomingBody } from '$server/utils/validate-incoming-body';
 
 import type { RequestHandler } from './$types';
 
@@ -11,13 +13,8 @@ import type { RequestHandler } from './$types';
 
 // Create a service account
 export const POST = (async ({ request }) => {
-	const result = postPayload.safeParse(await request.json());
-
-	if (!result.success) {
-		throw error(400, fromZodError(result.error));
-	}
-
-	const serviceAccount = await create(result.data);
+	const payload = await validateIncomingBody(request, postPayload);
+	const serviceAccount = await create(payload);
 
 	return json(serviceAccount, {
 		status: 201,
@@ -33,6 +30,7 @@ export const GET = (async () => {
 	});
 }) satisfies RequestHandler;
 
-export type POSTPayload = z.infer<typeof postPayload>;
 export type POST = Awaited<ReturnType<typeof POST>>;
 export type GET = Awaited<ReturnType<typeof GET>>;
+
+export { POSTPayload };

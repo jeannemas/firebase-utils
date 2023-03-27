@@ -1,14 +1,13 @@
-import { error, json } from '@sveltejs/kit';
-import { z } from 'zod';
-import { fromZodError } from 'zod-validation-error';
+import { json } from '@sveltejs/kit';
 
+import {
+	schema as patchPayload,
+	type Schema as PATCHPayload,
+} from '$schemas/service-account-update.schema';
 import { del, readOne, update } from '$server/services/service-account.service';
+import { validateIncomingBody } from '$server/utils/validate-incoming-body';
 
 import type { RequestHandler } from './$types';
-
-const PATCHPayload = z.object({
-	label: z.string().optional(),
-});
 
 // Get a service account by id
 export const GET = (async ({ params }) => {
@@ -20,13 +19,8 @@ export const GET = (async ({ params }) => {
 }) satisfies RequestHandler;
 // Update a service account by id
 export const PATCH = (async ({ params, request }) => {
-	const result = PATCHPayload.safeParse(await request.json());
-
-	if (!result.success) {
-		throw error(400, fromZodError(result.error));
-	}
-
-	const serviceAccount = await update(params.serviceAccountId, result.data);
+	const payload = await validateIncomingBody(request, patchPayload);
+	const serviceAccount = await update(params.serviceAccountId, payload);
 
 	return json(serviceAccount, {
 		status: 200,
@@ -41,7 +35,8 @@ export const DELETE = (async ({ params }) => {
 	});
 }) satisfies RequestHandler;
 
-export type PATCHPayload = z.infer<typeof PATCHPayload>;
 export type GET = Awaited<ReturnType<typeof GET>>;
 export type PATCH = Awaited<ReturnType<typeof PATCH>>;
 export type DELETE = Awaited<ReturnType<typeof DELETE>>;
+
+export { PATCHPayload };
