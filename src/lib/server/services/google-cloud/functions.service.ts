@@ -1,9 +1,11 @@
 import { CloudFunctionsServiceClient } from '@google-cloud/functions';
 import type { ServiceAccount } from '@prisma/client';
 
+import { getServiceAccountJSON } from '$server/utils/getServiceAccountJSON';
+
 function getGoogleCloudFunctions(serviceAccount: ServiceAccount) {
 	const functions = new CloudFunctionsServiceClient({
-		credentials: JSON.parse(serviceAccount.json),
+		credentials: getServiceAccountJSON(serviceAccount),
 	});
 
 	return functions;
@@ -12,7 +14,7 @@ function getGoogleCloudFunctions(serviceAccount: ServiceAccount) {
 export async function listFunctions(serviceAccount: ServiceAccount) {
 	const functions = getGoogleCloudFunctions(serviceAccount);
 	const [funcs] = await functions.listFunctions({
-		parent: `projects/${JSON.parse(serviceAccount.json).project_id}/locations/-`,
+		parent: `projects/${getServiceAccountJSON(serviceAccount).project_id}/locations/-`,
 	});
 
 	return funcs;

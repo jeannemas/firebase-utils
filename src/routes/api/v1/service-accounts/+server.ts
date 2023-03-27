@@ -1,15 +1,13 @@
 import { error, json } from '@sveltejs/kit';
-import { z } from 'zod';
+import type { z } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 
+import { schema as postPayload } from '$schemas/service-account-create.schema';
 import { create, readAll } from '$server/services/service-account.service';
 
 import type { RequestHandler } from './$types';
 
-const postPayload = z.object({
-	json: z.string(),
-	label: z.string().trim().min(1),
-});
+// TODO validate the structure of the JSON
 
 // Create a service account
 export const POST = (async ({ request }) => {

@@ -47,12 +47,18 @@
 
 <tr>
 	<td>
-		<!-- TODO wrap inside a form to add autosubmit -->
 		{#if editMode}
 			<input
 				class="input input-sm input-bordered w-full max-w-full"
 				type="text"
 				bind:value="{$label.value}"
+				on:keydown="{({ key }) => {
+					if (key === 'Enter') {
+						update();
+					} else if (key === 'Escape') {
+						cancel();
+					}
+				}}"
 			/>
 		{:else}
 			<span class="px-3">

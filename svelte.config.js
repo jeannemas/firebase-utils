@@ -18,6 +18,7 @@ const config = {
 			$components: './src/lib/components',
 			$models: './src/lib/models',
 			$routes: './src/routes',
+			$schemas: './src/lib/schemas',
 			$server: './src/lib/server',
 			$utils: './src/lib/utils',
 		},
