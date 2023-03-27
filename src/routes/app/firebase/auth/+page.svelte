@@ -1,4 +1,6 @@
 <script context="module" lang="ts">
+	import type { UserRecord } from 'firebase-admin/auth';
+	import type { JSONValue } from 'svelte-jsoneditor';
 	import { derived } from 'svelte/store';
 	import { z } from 'zod';
 
@@ -22,7 +24,7 @@
 
 	let searchInput: HTMLInputElement;
 
-	$: records = data.queryResult.records ?? [];
+	$: records = (data.queryResult.records as (UserRecord & JSONValue)[]) ?? [];
 
 	const maxResults = derived(page, ({ url }) =>
 		getSearchParam(

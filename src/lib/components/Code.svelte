@@ -1,13 +1,13 @@
 <script context="module" lang="ts">
 	import { onMount } from 'svelte';
-	import { JSONEditor, Mode, type JSONValue } from 'svelte-jsoneditor';
+	import type { JSONEditor, JSONValue } from 'svelte-jsoneditor';
 </script>
 
 <script lang="ts">
 	export let value: JSONValue;
 
 	let wrapper: HTMLDivElement;
-	let editor: JSONEditor;
+	let editor: JSONEditor | null = null;
 
 	onMount(() => {
 		handleThemeChange();
@@ -22,7 +22,7 @@
 			wrapper.classList.remove('jse-theme-dark');
 		}
 
-		editor.refresh();
+		editor?.refresh();
 	}
 </script>
 
@@ -32,16 +32,18 @@
 </style>
 
 <div class="jse-theme-dark" style="--jse-main-border: none;" bind:this="{wrapper}">
-	<JSONEditor
-		content="{{
-			text: undefined,
-			json: value,
-		}}"
-		mainMenuBar="{false}"
-		mode="{Mode.tree}"
-		readOnly="{true}"
-		bind:this="{editor}"
-	/>
+	{#await import('svelte-jsoneditor').then( ({ JSONEditor, Mode }) => ({ JSONEditor, Mode }), ) then { JSONEditor, Mode }}
+		<JSONEditor
+			content="{{
+				text: undefined,
+				json: value,
+			}}"
+			mainMenuBar="{false}"
+			mode="{Mode.tree}"
+			readOnly="{true}"
+			bind:this="{editor}"
+		/>
+	{/await}
 </div>
 
 <!-- <pre class="overflow-scroll text-sm"><code>{JSON.stringify(value, null, 2)}</code></pre> -->
