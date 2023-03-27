@@ -86,35 +86,39 @@
 	{/each}
 </div>
 
-<Pagination
-	min="{data.queryResult.minPage}"
-	current="{data.queryResult.currentPage}"
-	max="{data.queryResult.maxPage}"
-	maxAdjacentPages="{1}"
-/>
+<div class="flex flex-col lg:flex-row items-center justify-between gap-2 m-2">
+	<Pagination
+		min="{data.queryResult.minPage}"
+		current="{data.queryResult.currentPage}"
+		max="{data.queryResult.maxPage}"
+		desktopMaxAdjacentPages="{5}"
+		mobileMaxAdjacentPages="{3}"
+		showFirstAndLast="{false}"
+	/>
 
-<div class="my-2 flex flex-row items-center justify-end gap-x-2">
-	<label for="maxResults"> Rows per page </label>
+	<div class="my-2 flex flex-row items-center justify-end gap-x-2">
+		<label for="maxResults"> Rows per page </label>
 
-	<select
-		class="select select-bordered select-sm"
-		id="maxResults"
-		name="maxResults"
-		value="{$maxResults}"
-		on:change="{handleMaxResultsInput}"
-	>
-		<option value="{10}"> 10 </option>
+		<select
+			class="select select-bordered select-sm"
+			id="maxResults"
+			name="maxResults"
+			value="{$maxResults}"
+			on:change="{handleMaxResultsInput}"
+		>
+			<option value="{10}"> 10 </option>
 
-		<option value="{25}"> 25 </option>
+			<option value="{25}"> 25 </option>
 
-		<option value="{50}"> 50 </option>
+			<option value="{50}"> 50 </option>
 
-		<option value="{100}"> 100 </option>
+			<option value="{100}"> 100 </option>
 
-		<option value="{250}"> 250 </option>
+			<option value="{250}"> 250 </option>
 
-		<option value="{500}"> 500 </option>
+			<option value="{500}"> 500 </option>
 
-		<option value="{1000}"> 1000 </option>
-	</select>
+			<option value="{1000}"> 1000 </option>
+		</select>
+	</div>
 </div>

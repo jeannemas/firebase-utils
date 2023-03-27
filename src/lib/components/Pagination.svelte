@@ -5,15 +5,18 @@
 
 <script lang="ts">
 	export let showFirstAndLast = true;
-	export let maxAdjacentPages = 3;
+	export let desktopMaxAdjacentPages = 3;
+	export let mobileMaxAdjacentPages = 1;
 	export let min: number;
 	export let current: number | null;
 	export let max: number;
 
 	let previousPages: number[] = [];
 	let nextPages: number[] = [];
-	let previousAdjacentPages: number[] = [];
-	let nextAdjacentPages: number[] = [];
+	let previousAdjacentPagesDesktop: number[] = [];
+	let previousAdjacentPagesMobile: number[] = [];
+	let nextAdjacentPagesDesktop: number[] = [];
+	let nextAdjacentPagesMobile: number[] = [];
 
 	$: {
 		previousPages = [];
@@ -29,8 +32,10 @@
 			}
 		}
 
-		previousAdjacentPages = previousPages.slice(-maxAdjacentPages);
-		nextAdjacentPages = nextPages.slice(0, maxAdjacentPages);
+		previousAdjacentPagesDesktop = previousPages.slice(-desktopMaxAdjacentPages);
+		previousAdjacentPagesMobile = previousPages.slice(-mobileMaxAdjacentPages);
+		nextAdjacentPagesDesktop = nextPages.slice(0, desktopMaxAdjacentPages);
+		nextAdjacentPagesMobile = nextPages.slice(0, mobileMaxAdjacentPages);
 	}
 
 	if (current) {
@@ -52,38 +57,52 @@
 	}
 </script>
 
-{#if current && (previousAdjacentPages.length || nextAdjacentPages.length)}
-	<div class="btn-group flex flex-row justify-center items-center m-4">
-		{#if showFirstAndLast && !previousAdjacentPages.includes(min) && min !== current}
-			<a class="btn btn-sm" href="{handlePageChange(min)}">
+<style lang="postcss">
+	.button {
+		@apply btn-outline btn-sm btn shadow-md;
+	}
+</style>
+
+<div class="flex flex-row items-center justify-center gap-2">
+	{#if current}
+		{#if showFirstAndLast && !previousAdjacentPagesDesktop.includes(min) && !previousAdjacentPagesMobile.includes(min) && min !== current}
+			<a class="button" href="{handlePageChange(min)}">
 				{min}
 			</a>
-
-			<button class="btn btn-sm btn-disabled"> ... </button>
 		{/if}
 
-		{#each previousAdjacentPages as page}
-			<a class="btn btn-sm" href="{handlePageChange(page)}">
+		{#each previousAdjacentPagesDesktop as page}
+			<a class="button !hidden lg:!inline-flex" href="{handlePageChange(page)}">
 				{page}
 			</a>
 		{/each}
 
-		<button class="btn btn-sm btn-active">
+		{#each previousAdjacentPagesMobile as page}
+			<a class="button lg:!hidden" href="{handlePageChange(page)}">
+				{page}
+			</a>
+		{/each}
+
+		<button class="button btn-active">
 			{current}
 		</button>
 
-		{#each nextAdjacentPages as page}
-			<a class="btn btn-sm" href="{handlePageChange(page)}">
+		{#each nextAdjacentPagesMobile as page}
+			<a class="button lg:!hidden" href="{handlePageChange(page)}">
 				{page}
 			</a>
 		{/each}
 
-		{#if showFirstAndLast && !nextAdjacentPages.includes(max) && max !== current}
-			<button class="btn btn-sm btn-disabled"> ... </button>
+		{#each nextAdjacentPagesDesktop as page}
+			<a class="button !hidden lg:!inline-flex" href="{handlePageChange(page)}">
+				{page}
+			</a>
+		{/each}
 
-			<a class="btn btn-sm" href="{handlePageChange(max)}">
+		{#if showFirstAndLast && !nextAdjacentPagesDesktop.includes(max) && !nextAdjacentPagesMobile.includes(max) && max !== current}
+			<a class="button" href="{handlePageChange(max)}">
 				{max}
 			</a>
 		{/if}
-	</div>
-{/if}
+	{/if}
+</div>
