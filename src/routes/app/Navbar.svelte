@@ -31,7 +31,7 @@
 		{#if availableServiceAccounts.length > 0}
 			<div class="flex items-center p-2 pt-0 lg:p-0">
 				<select
-					class="select w-full lg:max-w-[16rem] focus:border-transparent focus:outline-none"
+					class="select select-sm lg:select-md w-full lg:max-w-[16rem] focus:border-transparent focus:outline-none"
 					id="serviceAccount"
 					name="serviceAccount"
 					placeholder="Select a service account"

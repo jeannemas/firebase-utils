@@ -22,7 +22,7 @@ export const GET = (async ({ cookies, url }) => {
 		AUTH_MAX_RESULTS_QUERY_PARAM,
 		z
 			.string()
-			.regex(/^[0-9]+$/)
+			.regex(/^\d+$/)
 			.transform((str) => Number.parseInt(str, 10)),
 		AUTH_MAX_RESULTS_DEFAULT_VALUE,
 	);
@@ -31,7 +31,7 @@ export const GET = (async ({ cookies, url }) => {
 		PAGINATION_PAGE_QUERY_PARAM,
 		z
 			.string()
-			.regex(/^[0-9]+$/)
+			.regex(/^\d+$/)
 			.transform((str) => Number.parseInt(str, 10)),
 		PAGINATION_PAGE_DEFAULT_VALUE,
 	);

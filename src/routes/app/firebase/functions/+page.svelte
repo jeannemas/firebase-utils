@@ -1,4 +1,6 @@
 <script context="module" lang="ts">
+	import Code from '$components/Code.svelte';
+
 	import type { PageServerData } from './$types';
 </script>
 
@@ -8,4 +10,4 @@
 
 <!-- TODO complete -->
 
-<pre class="overflow-scroll"><code>{JSON.stringify(data.functions, null, 2)}</code></pre>
+<Code value="{data.functions}" />

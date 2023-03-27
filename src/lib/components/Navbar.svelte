@@ -13,7 +13,9 @@
 	page.subscribe(() => (mobileNavbarIsOpen = false));
 </script>
 
-<div class="navbar flex-col justify-between items-stretch gap-2 bg-base-200 p-0 lg:flex-row lg:p-2">
+<div
+	class="navbar min-h-fit flex-col justify-between items-stretch gap-2 bg-base-200 p-0 lg:flex-row lg:p-2"
+>
 	<div class="flex flex-col lg:flex-row items-stretch">
 		<div class="flex grow flex-row items-center justify-between">
 			<a class="text-xl" href="{root}">

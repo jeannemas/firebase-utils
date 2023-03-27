@@ -1,16 +1,18 @@
 <script context="module" lang="ts">
 	import { derived } from 'svelte/store';
+	import { z } from 'zod';
 
 	import { page } from '$app/stores';
+	import Code from '$components/Code.svelte';
 	import Icon from '$components/Icon.svelte';
 	import Pagination from '$components/Pagination.svelte';
 	import {
 		AUTH_MAX_RESULTS_DEFAULT_VALUE,
 		AUTH_MAX_RESULTS_QUERY_PARAM,
-		AUTH_SEARCH_DEFAULT_VALUE,
 		AUTH_SEARCH_QUERY_PARAM,
 	} from '$lib/constants';
 	import { navigateQueryParams } from '$utils/navigate-query-params';
+	import { getSearchParam } from '$utils/search-params-utils';
 
 	import type { PageServerData } from './$types';
 </script>
@@ -22,14 +24,19 @@
 
 	$: records = data.queryResult.records ?? [];
 
-	const maxResults = derived(
-		page,
-		({ url }) =>
-			url.searchParams.get(AUTH_MAX_RESULTS_QUERY_PARAM) ?? AUTH_MAX_RESULTS_DEFAULT_VALUE,
+	const maxResults = derived(page, ({ url }) =>
+		getSearchParam(
+			url.searchParams,
+			AUTH_MAX_RESULTS_QUERY_PARAM,
+			z
+				.string()
+				.regex(/^\d+$/)
+				.transform((str) => Number.parseInt(str, 10)),
+			AUTH_MAX_RESULTS_DEFAULT_VALUE,
+		),
 	);
-	const search = derived(
-		page,
-		({ url }) => url.searchParams.get(AUTH_SEARCH_QUERY_PARAM) ?? AUTH_SEARCH_DEFAULT_VALUE,
+	const search = derived(page, ({ url }) =>
+		getSearchParam(url.searchParams, AUTH_SEARCH_QUERY_PARAM, z.string(), ''),
 	);
 
 	function handleSearchKeyDown(event: KeyboardEvent) {
@@ -64,7 +71,7 @@
 			on:keydown="{handleSearchKeyDown}"
 		/>
 
-		<button class="btn btn-sm" on:click="{handleSearch}">
+		<button class="btn btn-sm btn-secondary" on:click="{handleSearch}">
 			<Icon icon="magnifying-glass" style="solid" />
 		</button>
 	</div>
@@ -87,8 +94,8 @@
 					</div>
 				</div>
 
-				<div class="collapse-content overflow-x-auto">
-					<pre><code>{JSON.stringify(record, null, 2)}</code></pre>
+				<div class="collapse-content">
+					<Code value="{record}" />
 				</div>
 			</div>
 		{/each}
@@ -112,18 +119,18 @@
 		value="{$maxResults}"
 		on:change="{handleMaxResultsInput}"
 	>
-		<option value="10"> 10 </option>
+		<option value="{10}"> 10 </option>
 
-		<option value="25"> 25 </option>
+		<option value="{25}"> 25 </option>
 
-		<option value="50"> 50 </option>
+		<option value="{50}"> 50 </option>
 
-		<option value="100"> 100 </option>
+		<option value="{100}"> 100 </option>
 
-		<option value="250"> 250 </option>
+		<option value="{250}"> 250 </option>
 
-		<option value="500"> 500 </option>
+		<option value="{500}"> 500 </option>
 
-		<option value="1000"> 1000 </option>
+		<option value="{1000}"> 1000 </option>
 	</select>
 </div>

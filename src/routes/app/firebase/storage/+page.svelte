@@ -3,6 +3,7 @@
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Code from '$components/Code.svelte';
 	import { STORAGE_BUCKET_QUERY_PARAM } from '$lib/constants';
 
 	import type { PageServerData } from './$types';
@@ -18,7 +19,7 @@
 </script>
 
 <select
-	class="select select-bordered"
+	class="select select-sm select-bordered"
 	value="{$bucket}"
 	on:change="{({ currentTarget }) => {
 		const url = new URL($page.url);
@@ -38,4 +39,4 @@
 <!-- TODO add pagination -->
 <!-- TODO complete -->
 
-<pre class="overflow-scroll"><code>{JSON.stringify(data.files, null, 2)}</code></pre>
+<Code value="{data.files}" />

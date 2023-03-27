@@ -2,6 +2,7 @@
 	import { derived } from 'svelte/store';
 
 	import { page } from '$app/stores';
+	import Code from '$components/Code.svelte';
 	import { FIRESTORE_PATH_DEFAULT_VALUE, FIRESTORE_PATH_QUERY_PARAM } from '$lib/constants';
 
 	import type { PageServerData } from './$types';
@@ -37,7 +38,9 @@
 
 		{#each $pathParts as part, index (index)}
 			<li>
-				<a href="{getUpdatedPathURL($pathParts.slice(0, index + 1).join('/'))}"> {part} </a>
+				<a href="{getUpdatedPathURL($pathParts.slice(0, index + 1).join('/'))}">
+					{part}
+				</a>
 			</li>
 		{/each}
 	</ul>
@@ -47,7 +50,9 @@
 	<ul>
 		{#each data.result.collections as collection}
 			<li>
-				<a class="link link-hover" href="{getUpdatedPathURL(collection.path)}"> {collection.id} </a>
+				<a class="link link-hover" href="{getUpdatedPathURL(collection.path)}">
+					{collection.id}
+				</a>
 			</li>
 		{/each}
 	</ul>
@@ -57,12 +62,14 @@
 	<ul>
 		{#each data.result.documents as document}
 			<li>
-				<a class="link link-hover" href="{getUpdatedPathURL(document.path)}"> {document.id} </a>
+				<a class="link link-hover" href="{getUpdatedPathURL(document.path)}">
+					{document.id}
+				</a>
 			</li>
 		{/each}
 	</ul>
 {/if}
 
 {#if data.result.document}
-	<pre class="overflow-scroll"><code>{JSON.stringify(data.result.document, null, 2)}</code></pre>
+	<Code value="{data.result.document}" />
 {/if}
