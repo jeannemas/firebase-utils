@@ -63,62 +63,64 @@
 	<title>FirebaseUtils | Authentication</title>
 </svelte:head>
 
-<div class="my-2 flex flex-row items-center justify-start gap-x-2">
-	<div class="input-group">
-		<input
-			class="input input-sm input-bordered w-full md:max-w-xs"
-			placeholder="Search for users..."
-			type="text"
-			value="{$search}"
-			bind:this="{searchInput}"
-			on:keydown="{handleSearchKeyDown}"
+<div class="flex flex-col gap-2">
+	<div class="flex flex-row items-center justify-start gap-x-2">
+		<div class="input-group">
+			<input
+				class="input input-sm input-bordered w-full md:max-w-xs"
+				placeholder="Search for users..."
+				type="text"
+				value="{$search}"
+				bind:this="{searchInput}"
+				on:keydown="{handleSearchKeyDown}"
+			/>
+
+			<button class="btn btn-sm btn-secondary" on:click="{handleSearch}">
+				<Icon icon="magnifying-glass" style="solid" />
+			</button>
+		</div>
+	</div>
+
+	<div class="flex flex-col gap-y-2">
+		{#each records as record}
+			<Row record="{record}" />
+		{/each}
+	</div>
+
+	<div class="flex flex-col lg:flex-row items-center justify-between gap-2">
+		<Pagination
+			min="{data.queryResult.minPage}"
+			current="{data.queryResult.currentPage}"
+			max="{data.queryResult.maxPage}"
+			desktopMaxAdjacentPages="{5}"
+			mobileMaxAdjacentPages="{3}"
+			showFirstAndLast="{false}"
 		/>
 
-		<button class="btn btn-sm btn-secondary" on:click="{handleSearch}">
-			<Icon icon="magnifying-glass" style="solid" />
-		</button>
-	</div>
-</div>
+		<div class="my-2 flex flex-row items-center justify-end gap-x-2">
+			<label for="maxResults"> Rows per page </label>
 
-<div class="flex flex-col gap-y-2">
-	{#each records as record}
-		<Row record="{record}" />
-	{/each}
-</div>
+			<select
+				class="select select-bordered select-sm"
+				id="maxResults"
+				name="maxResults"
+				value="{$maxResults}"
+				on:change="{handleMaxResultsInput}"
+			>
+				<option value="{10}"> 10 </option>
 
-<div class="flex flex-col lg:flex-row items-center justify-between gap-2 m-2">
-	<Pagination
-		min="{data.queryResult.minPage}"
-		current="{data.queryResult.currentPage}"
-		max="{data.queryResult.maxPage}"
-		desktopMaxAdjacentPages="{5}"
-		mobileMaxAdjacentPages="{3}"
-		showFirstAndLast="{false}"
-	/>
+				<option value="{25}"> 25 </option>
 
-	<div class="my-2 flex flex-row items-center justify-end gap-x-2">
-		<label for="maxResults"> Rows per page </label>
+				<option value="{50}"> 50 </option>
 
-		<select
-			class="select select-bordered select-sm"
-			id="maxResults"
-			name="maxResults"
-			value="{$maxResults}"
-			on:change="{handleMaxResultsInput}"
-		>
-			<option value="{10}"> 10 </option>
+				<option value="{100}"> 100 </option>
 
-			<option value="{25}"> 25 </option>
+				<option value="{250}"> 250 </option>
 
-			<option value="{50}"> 50 </option>
+				<option value="{500}"> 500 </option>
 
-			<option value="{100}"> 100 </option>
-
-			<option value="{250}"> 250 </option>
-
-			<option value="{500}"> 500 </option>
-
-			<option value="{1000}"> 1000 </option>
-		</select>
+				<option value="{1000}"> 1000 </option>
+			</select>
+		</div>
 	</div>
 </div>
