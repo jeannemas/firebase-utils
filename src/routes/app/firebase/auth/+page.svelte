@@ -64,7 +64,7 @@
 </svelte:head>
 
 <div class="flex flex-col gap-2">
-	<div class="flex flex-row items-center justify-start gap-x-2">
+	<div class="flex flex-row items-center justify-between gap-2">
 		<div class="input-group">
 			<input
 				class="input input-sm input-bordered w-full md:max-w-xs"
@@ -79,6 +79,18 @@
 				<Icon icon="magnifying-glass" style="solid" />
 			</button>
 		</div>
+
+		<a
+			class="btn btn-sm btn-secondary flex-row gap-2"
+			href="/api/v1/firebase/auth/listUsers?{$page.url.searchParams.toString()}"
+			rel="noreferrer"
+			target="_blank"
+			title="Get data"
+		>
+			<span> Get data </span>
+
+			<Icon icon="file-export" style="solid" />
+		</a>
 	</div>
 
 	<div class="flex flex-col gap-y-2">

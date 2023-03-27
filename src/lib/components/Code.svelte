@@ -6,7 +6,7 @@
 <script lang="ts">
 	export let value: JSONValue;
 
-	let wrapper: HTMLDivElement;
+	let wrapper: HTMLDivElement | null = null;
 	let editor: JSONEditor | null = null;
 
 	onMount(() => {
@@ -17,9 +17,9 @@
 
 	function handleThemeChange() {
 		if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-			wrapper.classList.add('jse-theme-dark');
+			wrapper?.classList.add('jse-theme-dark');
 		} else {
-			wrapper.classList.remove('jse-theme-dark');
+			wrapper?.classList.remove('jse-theme-dark');
 		}
 
 		editor?.refresh();

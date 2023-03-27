@@ -83,7 +83,7 @@
 			</a>
 		{/each}
 
-		<button class="button btn-primary btn-active">
+		<button class="button btn-secondary btn-active">
 			{current}
 		</button>
 
