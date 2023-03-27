@@ -1,0 +1,11 @@
+export const AUTH_MAX_RESULTS_DEFAULT_VALUE = '10';
+export const AUTH_MAX_RESULTS_QUERY_PARAM = 'maxResults';
+export const AUTH_SEARCH_DEFAULT_VALUE = '';
+export const AUTH_SEARCH_QUERY_PARAM = 'search';
+export const FIRESTORE_PATH_DEFAULT_VALUE = '';
+export const FIRESTORE_PATH_QUERY_PARAM = 'path';
+export const PAGINATION_MIN_PAGE = 1;
+export const PAGINATION_PAGE_DEFAULT_VALUE = '1';
+export const PAGINATION_PAGE_QUERY_PARAM = 'page';
+export const SERVICE_ACCOUNT_ID_COOKIE = 'serviceAccountId';
+export const STORAGE_BUCKET_QUERY_PARAM = 'bucket';

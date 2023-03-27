@@ -2,6 +2,7 @@
 	import { derived } from 'svelte/store';
 
 	import { page } from '$app/stores';
+	import { FIRESTORE_PATH_DEFAULT_VALUE, FIRESTORE_PATH_QUERY_PARAM } from '$lib/constants';
 
 	import type { PageServerData } from './$types';
 </script>
@@ -9,13 +10,16 @@
 <script lang="ts">
 	export let data: PageServerData;
 
-	const path = derived(page, ($page) => $page.url.searchParams.get('path') ?? '');
+	const path = derived(
+		page,
+		({ url }) => url.searchParams.get(FIRESTORE_PATH_QUERY_PARAM) ?? FIRESTORE_PATH_DEFAULT_VALUE,
+	);
 	const pathParts = derived(path, ($path) => $path.split('/').filter(Boolean));
 
 	function getUpdatedPathURL(path: string) {
 		const url = new URL($page.url);
 
-		url.searchParams.set('path', path);
+		url.searchParams.set(FIRESTORE_PATH_QUERY_PARAM, path);
 
 		return url.toString();
 	}
@@ -28,7 +32,7 @@
 <div class="breadcrumbs my-2">
 	<ul>
 		<li>
-			<a href="{getUpdatedPathURL('')}"> Home </a>
+			<a href="{getUpdatedPathURL(FIRESTORE_PATH_DEFAULT_VALUE)}"> Home </a>
 		</li>
 
 		{#each $pathParts as part, index (index)}

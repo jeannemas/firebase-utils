@@ -7,23 +7,31 @@
 	import type { UpdatePayload } from '$client/services/service-account.service';
 	import Icon from '$components/Icon.svelte';
 	import Modal from '$components/Modal.svelte';
+
+	export type EventMap = {
+		update: [id: ServiceAccount['id'], data: UpdatePayload];
+		delete: ServiceAccount['id'];
+	};
 </script>
 
 <script lang="ts">
 	export let serviceAccount: ServiceAccount;
 
-	const dispatch = createEventDispatcher<{
-		update: UpdatePayload;
-		delete: void;
-	}>();
+	const dispatch = createEventDispatcher<EventMap>();
 
 	$: label = field('label', serviceAccount.label, [required()], { checkOnInit: true });
 
 	let editMode = false;
 	let deleteModal: Modal;
+	let labelInput: HTMLInputElement;
 
+	function edit() {
+		editMode = true;
+
+		requestAnimationFrame(() => labelInput.focus());
+	}
 	function del() {
-		dispatch('delete');
+		dispatch('delete', serviceAccount.id);
 
 		deleteModal.close();
 	}
@@ -34,9 +42,7 @@
 
 		editMode = false;
 
-		dispatch('update', {
-			label: $label.value,
-		});
+		dispatch('update', [serviceAccount.id, { label: $label.value }]);
 	}
 	function cancel() {
 		editMode = false;
@@ -47,24 +53,24 @@
 
 <tr>
 	<td>
-		{#if editMode}
-			<input
-				class="input input-sm input-bordered w-full max-w-full"
-				type="text"
-				bind:value="{$label.value}"
-				on:keydown="{({ key }) => {
-					if (key === 'Enter') {
-						update();
-					} else if (key === 'Escape') {
-						cancel();
-					}
-				}}"
-			/>
-		{:else}
-			<span class="px-3">
-				{serviceAccount.label}
-			</span>
-		{/if}
+		<input
+			class="input input-sm input-bordered w-full max-w-full"
+			class:hidden="{!editMode}"
+			type="text"
+			bind:this="{labelInput}"
+			bind:value="{$label.value}"
+			on:keydown="{({ key }) => {
+				if (key === 'Enter') {
+					update();
+				} else if (key === 'Escape') {
+					cancel();
+				}
+			}}"
+		/>
+
+		<span class="px-3" class:hidden="{editMode}">
+			{serviceAccount.label}
+		</span>
 	</td>
 
 	<td class="overflow-scroll hidden md:table-cell">
@@ -94,11 +100,7 @@
 				<Icon class="md:hidden" icon="floppy-disk" style="solid" />
 			</button>
 		{:else}
-			<button
-				class="btn btn-sm btn-warning btn-outline"
-				title="Edit"
-				on:click="{() => (editMode = true)}"
-			>
+			<button class="btn btn-sm btn-warning btn-outline" title="Edit" on:click="{edit}">
 				<span class="hidden md:inline-block"> Edit </span>
 
 				<Icon class="md:hidden" icon="pen" style="solid" />

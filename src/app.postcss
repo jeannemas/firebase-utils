@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Fix for the DaisyUI select size small to prevent overflow */
+select.select.select-sm {
+	@apply py-0;
+}

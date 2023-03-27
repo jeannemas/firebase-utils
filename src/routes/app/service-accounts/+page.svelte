@@ -1,14 +1,6 @@
 <script context="module" lang="ts">
-	import type { ServiceAccount } from '@prisma/client';
-
 	import { invalidateAll } from '$app/navigation';
-	import {
-		create,
-		del,
-		update,
-		type CreatePayload,
-		type UpdatePayload,
-	} from '$client/services/service-account.service';
+	import { create, del, update } from '$client/services/service-account.service';
 	import { toastError, toastSuccess } from '$client/utils/toasts';
 	import Alert from '$components/Alert.svelte';
 	import Icon from '$components/Icon.svelte';
@@ -16,8 +8,8 @@
 	import Container from '$components/toasts/Container.svelte';
 
 	import type { PageServerData } from './$types';
-	import TableRow from './TableRow.svelte';
-	import UploadForm from './UploadForm.svelte';
+	import TableRow, { type EventMap as TableRowEventMap } from './TableRow.svelte';
+	import UploadForm, { type EventMap as UploadFormEventMap } from './UploadForm.svelte';
 </script>
 
 <script lang="ts">
@@ -26,9 +18,9 @@
 	let toasts: Container;
 	let newServiceAccountModal: Modal;
 
-	async function handleCreate(data: CreatePayload) {
+	async function handleCreate(event: CustomEvent<UploadFormEventMap['submit']>) {
 		try {
-			const { label } = await create(fetch, data);
+			const { label } = await create(fetch, event.detail);
 
 			newServiceAccountModal.close();
 
@@ -39,8 +31,9 @@
 			handleError(error as Error);
 		}
 	}
-	async function handleUpdate(id: ServiceAccount['id'], data: UpdatePayload) {
+	async function handleUpdate(event: CustomEvent<TableRowEventMap['update']>) {
 		try {
+			const [id, data] = event.detail;
 			const { label } = await update(fetch, id, data);
 
 			toasts.push(toastSuccess(`Service account "${label}" updated successfully.`));
@@ -50,9 +43,9 @@
 			handleError(error as Error);
 		}
 	}
-	async function handleDelete(id: ServiceAccount['id']) {
+	async function handleDelete(event: CustomEvent<TableRowEventMap['delete']>) {
 		try {
-			const { label } = await del(fetch, id);
+			const { label } = await del(fetch, event.detail);
 
 			toasts.push(toastSuccess(`Service account "${label}" deleted successfully.`));
 
@@ -108,8 +101,8 @@
 			{#each data.serviceAccounts as serviceAccount}
 				<TableRow
 					serviceAccount="{serviceAccount}"
-					on:update="{({ detail }) => handleUpdate(serviceAccount.id, detail)}"
-					on:delete="{() => handleDelete(serviceAccount.id)}"
+					on:update="{handleUpdate}"
+					on:delete="{handleDelete}"
 				/>
 			{/each}
 		</tbody>
@@ -121,7 +114,7 @@
 {/if}
 
 <Modal bind:this="{newServiceAccountModal}">
-	<UploadForm on:submit="{({ detail }) => handleCreate(detail)}" />
+	<UploadForm on:submit="{handleCreate}" />
 </Modal>
 
 <Container bind:this="{toasts}" />

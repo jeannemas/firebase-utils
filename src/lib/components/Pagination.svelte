@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
 	import { page } from '$app/stores';
+	import { PAGINATION_PAGE_QUERY_PARAM } from '$lib/constants';
 </script>
 
 <script lang="ts">
@@ -45,7 +46,7 @@
 	function handlePageChange(pageNumber: number) {
 		const url = new URL($page.url);
 
-		url.searchParams.set('page', pageNumber.toString());
+		url.searchParams.set(PAGINATION_PAGE_QUERY_PARAM, pageNumber.toString());
 
 		return url.toString();
 	}
@@ -54,33 +55,33 @@
 {#if current && (previousAdjacentPages.length || nextAdjacentPages.length)}
 	<div class="btn-group flex flex-row justify-center items-center m-4">
 		{#if showFirstAndLast && !previousAdjacentPages.includes(min) && min !== current}
-			<a class="btn" href="{handlePageChange(min)}">
+			<a class="btn btn-sm" href="{handlePageChange(min)}">
 				{min}
 			</a>
 
-			<button class="btn btn-disabled"> ... </button>
+			<button class="btn btn-sm btn-disabled"> ... </button>
 		{/if}
 
 		{#each previousAdjacentPages as page}
-			<a class="btn" href="{handlePageChange(page)}">
+			<a class="btn btn-sm" href="{handlePageChange(page)}">
 				{page}
 			</a>
 		{/each}
 
-		<button class="btn btn-active">
+		<button class="btn btn-sm btn-active">
 			{current}
 		</button>
 
 		{#each nextAdjacentPages as page}
-			<a class="btn" href="{handlePageChange(page)}">
+			<a class="btn btn-sm" href="{handlePageChange(page)}">
 				{page}
 			</a>
 		{/each}
 
 		{#if showFirstAndLast && !nextAdjacentPages.includes(max) && max !== current}
-			<button class="btn btn-disabled"> ... </button>
+			<button class="btn btn-sm btn-disabled"> ... </button>
 
-			<a class="btn" href="{handlePageChange(max)}">
+			<a class="btn btn-sm" href="{handlePageChange(max)}">
 				{max}
 			</a>
 		{/if}

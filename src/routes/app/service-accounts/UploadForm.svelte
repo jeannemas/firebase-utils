@@ -4,12 +4,14 @@
 	import { required } from 'svelte-forms/validators';
 
 	import type { CreatePayload } from '$client/services/service-account.service';
+
+	export type EventMap = {
+		submit: CreatePayload;
+	};
 </script>
 
 <script lang="ts">
-	const dispatch = createEventDispatcher<{
-		submit: CreatePayload;
-	}>();
+	const dispatch = createEventDispatcher<EventMap>();
 	const filelist = field<FileList | null>('filelist', null, [required()], {
 		checkOnInit: true,
 	});

@@ -1,3 +1,4 @@
+import { STORAGE_BUCKET_QUERY_PARAM } from '$lib/constants';
 import type { GET as APIv1GoogleCloudStorageGetBucketsResponse } from '$routes/api/v1/google-cloud/storage/getBuckets/+server';
 import type { GET as APIv1GoogleCloudStorageGetDefaultBucketResponse } from '$routes/api/v1/google-cloud/storage/getDefaultBucket/+server';
 import type { GET as APIv1GoogleCloudStorageGetFilesResponse } from '$routes/api/v1/google-cloud/storage/getFiles/+server';
@@ -13,8 +14,8 @@ export const load = (async ({ fetch, url }) => {
 		'/api/v1/google-cloud/storage/getDefaultBucket',
 	).then((response) => response.json());
 
-	if (!params.has('bucket') && defaultBucket) {
-		params.set('bucket', defaultBucket);
+	if (!params.has(STORAGE_BUCKET_QUERY_PARAM) && defaultBucket) {
+		params.set(STORAGE_BUCKET_QUERY_PARAM, defaultBucket);
 	}
 
 	const files = await fetch<APIv1GoogleCloudStorageGetFilesResponse>(

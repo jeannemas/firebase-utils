@@ -4,6 +4,12 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Pagination from '$components/Pagination.svelte';
+	import {
+		AUTH_MAX_RESULTS_DEFAULT_VALUE,
+		AUTH_MAX_RESULTS_QUERY_PARAM,
+		AUTH_SEARCH_DEFAULT_VALUE,
+		AUTH_SEARCH_QUERY_PARAM,
+	} from '$lib/constants';
 	import { debounce } from '$utils/debounce';
 
 	import type { PageServerData } from './$types';
@@ -16,16 +22,22 @@
 
 	$: records = data.queryResult.records ?? [];
 
-	const maxResults = derived(page, ({ url }) => url.searchParams.get('maxResults') ?? '10');
-	const search = derived(page, ({ url }) => url.searchParams.get('search') ?? '');
-	// TODO handle error
+	const maxResults = derived(
+		page,
+		({ url }) =>
+			url.searchParams.get(AUTH_MAX_RESULTS_QUERY_PARAM) ?? AUTH_MAX_RESULTS_DEFAULT_VALUE,
+	);
+	const search = derived(
+		page,
+		({ url }) => url.searchParams.get(AUTH_SEARCH_QUERY_PARAM) ?? AUTH_SEARCH_DEFAULT_VALUE,
+	);
 
 	const handleSearchInput = debounce(500, (value: string) =>
-		handleSearchParamsChange('search', value).then(() => searchInput.focus()),
+		handleSearchParamsChange(AUTH_SEARCH_QUERY_PARAM, value).then(() => searchInput.focus()),
 	);
 
 	function handleMaxResultsInput(value: string) {
-		handleSearchParamsChange('maxResults', value);
+		handleSearchParamsChange(AUTH_MAX_RESULTS_QUERY_PARAM, value);
 	}
 	function handleSearchParamsChange(key: string, value: string) {
 		const url = new URL($page.url);
@@ -43,7 +55,7 @@
 <div class="my-2 flex flex-row items-center justify-start gap-x-2">
 	<!-- TODO fix the input loosing focus on navigation -->
 	<input
-		class="input-bordered input w-full md:max-w-xs"
+		class="input input-sm input-bordered w-full md:max-w-xs"
 		placeholder="Search for users..."
 		type="text"
 		value="{$search}"
@@ -54,7 +66,6 @@
 
 <div class="relative">
 	<!-- TODO use js -->
-	<!-- TODO fix the weird top and bottom double borders (more easy to see in light mode) -->
 	<div class="flex flex-col rounded-box shadow-lg">
 		{#each records as record}
 			<div class="collapse collapse-arrow" tabindex="-1">
@@ -89,7 +100,7 @@
 	<label for="maxResults"> Rows per page </label>
 
 	<select
-		class="select-bordered select"
+		class="select select-bordered select-sm"
 		id="maxResults"
 		name="maxResults"
 		value="{$maxResults}"

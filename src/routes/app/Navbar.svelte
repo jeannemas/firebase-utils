@@ -5,6 +5,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import Navbar from '$components/Navbar.svelte';
 	import NavbarLink from '$components/NavbarLink.svelte';
+	import { SERVICE_ACCOUNT_ID_COOKIE } from '$lib/constants';
 </script>
 
 <script lang="ts">
@@ -13,7 +14,7 @@
 
 	async function handleServiceAccountIdSelect(id: string | null) {
 		const yearInMs = 1000 * 60 * 60 * 24 * 365;
-		const cookie = serialize('serviceAccountId', id ?? '', {
+		const cookie = serialize(SERVICE_ACCOUNT_ID_COOKIE, id ?? '', {
 			path: '/',
 			expires: new Date(id ? Date.now() + yearInMs : 0),
 			maxAge: id ? yearInMs : 0,

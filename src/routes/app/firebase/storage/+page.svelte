@@ -3,6 +3,7 @@
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { STORAGE_BUCKET_QUERY_PARAM } from '$lib/constants';
 
 	import type { PageServerData } from './$types';
 </script>
@@ -10,16 +11,19 @@
 <script lang="ts">
 	export let data: PageServerData;
 
-	const bucket = derived([page], ([$page]) => $page.url.searchParams.get('bucket'));
+	const bucket = derived(
+		[page],
+		([$page]) => $page.url.searchParams.get(STORAGE_BUCKET_QUERY_PARAM) ?? data.defaultBucket,
+	);
 </script>
 
 <select
 	class="select select-bordered"
-	value="{$bucket ?? data.defaultBucket}"
+	value="{$bucket}"
 	on:change="{({ currentTarget }) => {
 		const url = new URL($page.url);
 
-		url.searchParams.set('bucket', currentTarget.value);
+		url.searchParams.set(STORAGE_BUCKET_QUERY_PARAM, currentTarget.value);
 
 		goto(url);
 	}}"

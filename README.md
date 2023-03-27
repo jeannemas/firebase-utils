@@ -6,6 +6,7 @@ TODO:
 - Add history support
 - Deploy?
 - Add docs
+- Cut the pages into smaller components
 
 # create-svelte
 

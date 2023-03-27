@@ -1,18 +1,16 @@
 import { readAll } from '$client/services/service-account.service';
+import { getServiceAccountFromCookies } from '$server/utils/getServiceAccountFromCookies';
 
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ cookies, fetch }) => {
-	const serviceAccounts = await readAll(fetch);
-	const serviceAccountId = cookies.get('serviceAccountId') ?? null;
-	const selectedServiceAccountId =
-		serviceAccounts.find(({ id }) => id === serviceAccountId)?.id ?? null;
+	const serviceAccounts = await readAll(fetch).then((serviceAccounts) =>
+		serviceAccounts.map(({ id, label }) => ({ id, label })),
+	);
+	const serviceAccount = await getServiceAccountFromCookies(cookies).catch(() => null);
 
 	return {
-		serviceAccounts: serviceAccounts.map(({ id, label }) => ({
-			id,
-			label,
-		})),
-		selectedServiceAccountId,
+		serviceAccounts,
+		selectedServiceAccountId: serviceAccount?.id ?? null,
 	};
 }) satisfies LayoutServerLoad;

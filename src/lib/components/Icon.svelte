@@ -9,6 +9,8 @@
 
 	$: classes = [style, icon, ...modifiers].map((modifier) => `fa-${modifier}`).join(' ');
 
+	// TODO rework
+
 	export { className as class };
 </script>
 

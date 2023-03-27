@@ -1,9 +1,10 @@
 import { error, type Cookies } from '@sveltejs/kit';
 
+import { SERVICE_ACCOUNT_ID_COOKIE } from '$lib/constants';
 import { readOne } from '$server/services/service-account.service';
 
 export async function getServiceAccountFromCookies(cookies: Cookies) {
-	const serviceAccountId = cookies.get('serviceAccountId') ?? null;
+	const serviceAccountId = cookies.get(SERVICE_ACCOUNT_ID_COOKIE) ?? null;
 
 	if (!serviceAccountId) {
 		throw error(401, {
