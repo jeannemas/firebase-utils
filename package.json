@@ -45,6 +45,7 @@
 		"firebase-admin": "^11.5.0",
 		"postcss": "^8.4.21",
 		"svelte-forms": "^2.3.1",
+		"svelte-jsoneditor": "^0.16.1",
 		"tailwindcss": "^3.2.7",
 		"zod": "^3.21.4",
 		"zod-validation-error": "^1.0.1"

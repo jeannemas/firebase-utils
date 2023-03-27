@@ -10,4 +10,4 @@
 
 <!-- TODO complete -->
 
-<Code value="{data.functions}" />
+<Code value="{data.functions.map((func) => func ?? null)}" />

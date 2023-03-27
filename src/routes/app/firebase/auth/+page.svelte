@@ -86,7 +86,7 @@
 					class="collapse-title items-center min-h-fit py-3 flex justify-between text-sm md:text-base"
 				>
 					<div>
-						{record.email ?? ''}
+						{record.email}
 					</div>
 
 					<div class="hidden md:block">
