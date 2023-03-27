@@ -49,6 +49,13 @@
 
 		label.reset();
 	}
+	function handleLabelInputKeyDown(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			update();
+		} else if (event.key === 'Escape') {
+			cancel();
+		}
+	}
 </script>
 
 <tr>
@@ -59,13 +66,7 @@
 			type="text"
 			bind:this="{labelInput}"
 			bind:value="{$label.value}"
-			on:keydown="{({ key }) => {
-				if (key === 'Enter') {
-					update();
-				} else if (key === 'Escape') {
-					cancel();
-				}
-			}}"
+			on:keydown="{handleLabelInputKeyDown}"
 		/>
 
 		<span class="px-3" class:hidden="{editMode}">

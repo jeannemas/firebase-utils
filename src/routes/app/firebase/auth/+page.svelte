@@ -1,8 +1,8 @@
 <script context="module" lang="ts">
 	import { derived } from 'svelte/store';
 
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Icon from '$components/Icon.svelte';
 	import Pagination from '$components/Pagination.svelte';
 	import {
 		AUTH_MAX_RESULTS_DEFAULT_VALUE,
@@ -10,7 +10,7 @@
 		AUTH_SEARCH_DEFAULT_VALUE,
 		AUTH_SEARCH_QUERY_PARAM,
 	} from '$lib/constants';
-	import { debounce } from '$utils/debounce';
+	import { navigateQueryParams } from '$utils/navigate-query-params';
 
 	import type { PageServerData } from './$types';
 </script>
@@ -32,19 +32,20 @@
 		({ url }) => url.searchParams.get(AUTH_SEARCH_QUERY_PARAM) ?? AUTH_SEARCH_DEFAULT_VALUE,
 	);
 
-	const handleSearchInput = debounce(500, (value: string) =>
-		handleSearchParamsChange(AUTH_SEARCH_QUERY_PARAM, value).then(() => searchInput.focus()),
-	);
-
-	function handleMaxResultsInput(value: string) {
-		handleSearchParamsChange(AUTH_MAX_RESULTS_QUERY_PARAM, value);
+	function handleSearchKeyDown(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			handleSearch();
+		}
 	}
-	function handleSearchParamsChange(key: string, value: string) {
-		const url = new URL($page.url);
-
-		url.searchParams.set(key, value);
-
-		return goto(url);
+	function handleSearch() {
+		navigateQueryParams({ [AUTH_SEARCH_QUERY_PARAM]: searchInput.value });
+	}
+	function handleMaxResultsInput(
+		event: Event & {
+			currentTarget: EventTarget & HTMLSelectElement;
+		},
+	) {
+		navigateQueryParams({ [AUTH_MAX_RESULTS_QUERY_PARAM]: event.currentTarget.value });
 	}
 </script>
 
@@ -53,15 +54,20 @@
 </svelte:head>
 
 <div class="my-2 flex flex-row items-center justify-start gap-x-2">
-	<!-- TODO fix the input loosing focus on navigation -->
-	<input
-		class="input input-sm input-bordered w-full md:max-w-xs"
-		placeholder="Search for users..."
-		type="text"
-		value="{$search}"
-		bind:this="{searchInput}"
-		on:input="{({ currentTarget }) => handleSearchInput(currentTarget.value)}"
-	/>
+	<div class="input-group">
+		<input
+			class="input input-sm input-bordered w-full md:max-w-xs"
+			placeholder="Search for users..."
+			type="text"
+			value="{$search}"
+			bind:this="{searchInput}"
+			on:keydown="{handleSearchKeyDown}"
+		/>
+
+		<button class="btn btn-sm" on:click="{handleSearch}">
+			<Icon icon="magnifying-glass" style="solid" />
+		</button>
+	</div>
 </div>
 
 <div class="relative">
@@ -104,7 +110,7 @@
 		id="maxResults"
 		name="maxResults"
 		value="{$maxResults}"
-		on:change="{(event) => handleMaxResultsInput(event.currentTarget.value)}"
+		on:change="{handleMaxResultsInput}"
 	>
 		<option value="10"> 10 </option>
 
