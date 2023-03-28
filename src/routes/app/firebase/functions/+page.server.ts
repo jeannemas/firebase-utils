@@ -8,6 +8,6 @@ export const load = (async ({ fetch }) => {
 	).then((response) => response.json());
 
 	return {
-		functions,
+		functions, // TODO return as streamed response
 	};
 }) satisfies PageServerLoad;

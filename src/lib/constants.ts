@@ -9,3 +9,4 @@ export const PAGINATION_PAGE_DEFAULT_VALUE = 1;
 export const PAGINATION_PAGE_QUERY_PARAM = 'page';
 export const SERVICE_ACCOUNT_ID_COOKIE = 'serviceAccountId';
 export const STORAGE_BUCKET_QUERY_PARAM = 'bucket';
+export const STORAGE_FILE_PATH_QUERY_PARAM = 'file';

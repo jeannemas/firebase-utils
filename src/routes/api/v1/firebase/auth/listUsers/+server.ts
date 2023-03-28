@@ -1,4 +1,6 @@
 import { json } from '@sveltejs/kit';
+import type { UserRecord } from 'firebase-admin/auth';
+import type { JSONValue } from 'svelte-jsoneditor';
 import { z } from 'zod';
 
 import {
@@ -41,7 +43,7 @@ export const GET = (async ({ cookies, url }) => {
 		z.string(),
 		'',
 	).toLowerCase();
-	const records = await listUsers(serviceAccount);
+	const records = (await listUsers(serviceAccount)) as (UserRecord & JSONValue)[];
 	const filteredRecords = search
 		? records.filter(
 				({ uid, email, displayName }) =>

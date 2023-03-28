@@ -1,10 +1,11 @@
 <script context="module" lang="ts">
 	import { onMount } from 'svelte';
-	import type { JSONEditor, JSONValue } from 'svelte-jsoneditor';
+	import { Mode, type JSONEditor, type JSONValue } from 'svelte-jsoneditor';
 </script>
 
 <script lang="ts">
 	export let value: JSONValue;
+	export let mode: Mode = Mode.tree;
 
 	let wrapper: HTMLDivElement | null = null;
 	let editor: JSONEditor | null = null;
@@ -31,14 +32,14 @@
 </style>
 
 <div class="jse-theme-dark" style="--jse-main-border: none;" bind:this="{wrapper}">
-	{#await import('svelte-jsoneditor').then( ({ JSONEditor, Mode }) => ({ JSONEditor, Mode }), ) then { JSONEditor, Mode }}
+	{#await import('svelte-jsoneditor').then(({ JSONEditor, Mode }) => JSONEditor) then JSONEditor}
 		<JSONEditor
 			content="{{
 				text: undefined,
 				json: value,
 			}}"
 			mainMenuBar="{false}"
-			mode="{Mode.tree}"
+			mode="{mode}"
 			readOnly="{true}"
 			bind:this="{editor}"
 		/>

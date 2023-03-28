@@ -9,6 +9,10 @@
 	export let record: UserRecord & JSONValue;
 
 	let collapseIsOpen = false;
+
+	function handleToggleCollapse() {
+		collapseIsOpen = !collapseIsOpen;
+	}
 </script>
 
 <div
@@ -18,13 +22,13 @@
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
 		class="collapse-title items-center min-h-fit py-3 flex justify-between text-sm md:text-base cursor-pointer"
-		on:click="{() => (collapseIsOpen = !collapseIsOpen)}"
+		on:click|self="{handleToggleCollapse}"
 	>
 		<div>
 			{record.email}
 		</div>
 
-		<div class="hidden md:block">
+		<div class="hidden md:block font-mono">
 			{record.uid}
 		</div>
 	</div>

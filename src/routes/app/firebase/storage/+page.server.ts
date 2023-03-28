@@ -6,25 +6,29 @@ import type { GET as APIv1GoogleCloudStorageGetFilesResponse } from '$routes/api
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ fetch, url }) => {
-	const params = new URLSearchParams(url.searchParams);
-	const buckets = await fetch<APIv1GoogleCloudStorageGetBucketsResponse>(
+	const buckets = fetch<APIv1GoogleCloudStorageGetBucketsResponse>(
 		'/api/v1/google-cloud/storage/getBuckets',
 	).then((response) => response.json());
-	const defaultBucket = await fetch<APIv1GoogleCloudStorageGetDefaultBucketResponse>(
+	const defaultBucket = fetch<APIv1GoogleCloudStorageGetDefaultBucketResponse>(
 		'/api/v1/google-cloud/storage/getDefaultBucket',
 	).then((response) => response.json());
+	const files = defaultBucket.then((defaultBucket) => {
+		const params = new URLSearchParams(url.searchParams);
 
-	if (!params.has(STORAGE_BUCKET_QUERY_PARAM) && defaultBucket) {
-		params.set(STORAGE_BUCKET_QUERY_PARAM, defaultBucket);
-	}
+		if (!params.has(STORAGE_BUCKET_QUERY_PARAM) && defaultBucket) {
+			params.set(STORAGE_BUCKET_QUERY_PARAM, defaultBucket);
+		}
 
-	const files = await fetch<APIv1GoogleCloudStorageGetFilesResponse>(
-		`/api/v1/google-cloud/storage/getFiles?${params.toString()}`,
-	).then((response) => response.json());
+		return fetch<APIv1GoogleCloudStorageGetFilesResponse>(
+			`/api/v1/google-cloud/storage/getFiles?${params.toString()}`,
+		).then((response) => response.json());
+	});
 
 	return {
-		buckets,
-		defaultBucket,
-		files,
+		streamed: {
+			buckets,
+			defaultBucket,
+			files,
+		},
 	};
 }) satisfies PageServerLoad;
