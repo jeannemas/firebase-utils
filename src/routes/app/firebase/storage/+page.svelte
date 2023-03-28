@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
 	import { z } from 'zod';
 
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import LoadingMessage from '$components/LoadingMessage.svelte';
 	import { STORAGE_BUCKET_QUERY_PARAM, STORAGE_FILE_PATH_QUERY_PARAM } from '$lib/constants';
@@ -18,7 +18,7 @@
 
 		url.searchParams.set(STORAGE_BUCKET_QUERY_PARAM, event.currentTarget.value);
 
-		goto(url);
+		goto(url, { invalidateAll: true });
 	}
 	function getFileURL(path: string) {
 		const url = new URL($page.url);
@@ -57,20 +57,27 @@
 		</div>
 	{/await}
 
-	{#await data.streamed.files}
+	{#await Promise.all([data.streamed.files, data.streamed.signedUrl, data.streamed.fileMetadata])}
 		<LoadingMessage />
-	{:then files}
-		<ul>
-			{#each files as file}
-				<li>
-					<a class="link link-hover font-mono" href="{getFileURL(file)}">
-						{file}
-					</a>
-				</li>
-			{/each}
-		</ul>
+	{:then [files, signedUrl, fileMetadata]}
+		{#if $page.url.searchParams.has(STORAGE_FILE_PATH_QUERY_PARAM)}
+			<pre><code>{JSON.stringify({ signedUrl, fileMetadata }, null, 2)}</code></pre>
+		{:else}
+			<ul>
+				{#each files as file}
+					<li>
+						<a
+							class="link link-hover font-mono"
+							href="{getFileURL(file)}"
+							on:click="{() => invalidateAll()}"
+						>
+							{file}
+						</a>
+					</li>
+				{/each}
+			</ul>
+		{/if}
 	{/await}
 
 	<!-- TODO add pagination -->
-	<!-- TODO complete -->
 </div>

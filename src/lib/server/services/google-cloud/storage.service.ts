@@ -32,7 +32,7 @@ export async function getFiles(serviceAccount: ServiceAccount, bucket: string) {
 	return files;
 }
 
-export async function getFile(
+export async function getSignedUrl(
 	serviceAccount: ServiceAccount,
 	bucketName: string,
 	filePath: string,
