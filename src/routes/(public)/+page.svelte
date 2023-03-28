@@ -7,8 +7,8 @@
 
 <div class="hero min-h-[32rem]">
 	<div class="hero-content text-center">
-		<div class="max-w-md">
-			<h1 class="text-6xl font-bold">
+		<div class="">
+			<h1 class="text-5xl font-bold">
 				<Logo />
 			</h1>
 

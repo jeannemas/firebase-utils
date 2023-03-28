@@ -8,7 +8,7 @@
 </script>
 
 <a
-	class="rounded-none lg:rounded-md"
+	class="rounded-none lg:rounded-md flex flex-row items-center justify-between gap-2 w-full"
 	class:active="{$page.url.pathname.startsWith(href)}"
 	href="{href}"
 	title="{title}"

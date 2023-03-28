@@ -53,24 +53,44 @@
 
 	<svelte:fragment slot="right">
 		<li>
-			<NavbarLink href="/app/service-accounts">Service Accounts</NavbarLink>
+			<NavbarLink href="/app/service-accounts">
+				<span> Service Accounts </span>
+
+				<Icon class="lg:hidden" icon="file-code" style="solid" />
+			</NavbarLink>
 		</li>
 
 		{#if selectedServiceAccountId}
 			<li>
-				<NavbarLink href="/app/firebase/auth">Authentication</NavbarLink>
+				<NavbarLink href="/app/firebase/auth">
+					<span> Authentication </span>
+
+					<Icon class="lg:hidden" icon="user" style="solid" />
+				</NavbarLink>
 			</li>
 
 			<li>
-				<NavbarLink href="/app/firebase/firestore">Firestore</NavbarLink>
+				<NavbarLink href="/app/firebase/firestore">
+					<span> Firestore </span>
+
+					<Icon class="lg:hidden" icon="database" style="solid" />
+				</NavbarLink>
 			</li>
 
 			<li>
-				<NavbarLink href="/app/firebase/storage">Storage</NavbarLink>
+				<NavbarLink href="/app/firebase/storage">
+					<span> Storage </span>
+
+					<Icon class="lg:hidden" icon="folder" style="solid" />
+				</NavbarLink>
 			</li>
 
 			<li>
-				<NavbarLink href="/app/firebase/functions">Functions</NavbarLink>
+				<NavbarLink href="/app/firebase/functions">
+					<span> Functions </span>
+
+					<Icon class="lg:hidden" icon="code" style="solid" />
+				</NavbarLink>
 			</li>
 		{/if}
 
@@ -78,7 +98,7 @@
 			<NavbarLink href="/docs" title="Go to documentation">
 				<span> Documentation </span>
 
-				<Icon icon="book" style="solid" />
+				<Icon class="lg:hidden" icon="book" style="solid" />
 			</NavbarLink>
 		</li>
 	</svelte:fragment>
