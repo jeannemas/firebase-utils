@@ -4,13 +4,14 @@
 
 <script lang="ts">
 	export let href: string;
-	export let label: string;
+	export let title: string | null = null;
 </script>
 
 <a
 	class="rounded-none lg:rounded-md"
 	class:active="{$page.url.pathname.startsWith(href)}"
 	href="{href}"
+	title="{title}"
 >
-	{label}
+	<slot />
 </a>

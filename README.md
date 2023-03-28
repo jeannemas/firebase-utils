@@ -3,8 +3,7 @@ TODO:
 - Add auth
 - Document/comment project
 - Complete README
-- Add history support
-- Deploy?
+- Deploy? (requires auth)
 - Add docs
 - Cut the pages into smaller components
 

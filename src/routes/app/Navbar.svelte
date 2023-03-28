@@ -3,6 +3,7 @@
 	import { serialize } from 'cookie';
 
 	import { invalidateAll } from '$app/navigation';
+	import Icon from '$components/Icon.svelte';
 	import Navbar from '$components/Navbar.svelte';
 	import NavbarLink from '$components/NavbarLink.svelte';
 	import { SERVICE_ACCOUNT_ID_COOKIE } from '$lib/constants';
@@ -52,29 +53,33 @@
 
 	<svelte:fragment slot="right">
 		<li>
-			<NavbarLink label="Service Accounts" href="/app/service-accounts" />
+			<NavbarLink href="/app/service-accounts">Service Accounts</NavbarLink>
 		</li>
 
 		{#if selectedServiceAccountId}
 			<li>
-				<NavbarLink label="Authentication" href="/app/firebase/auth" />
+				<NavbarLink href="/app/firebase/auth">Authentication</NavbarLink>
 			</li>
 
 			<li>
-				<NavbarLink label="Firestore" href="/app/firebase/firestore" />
+				<NavbarLink href="/app/firebase/firestore">Firestore</NavbarLink>
 			</li>
 
 			<li>
-				<NavbarLink label="Storage" href="/app/firebase/storage" />
+				<NavbarLink href="/app/firebase/storage">Storage</NavbarLink>
 			</li>
 
 			<li>
-				<NavbarLink label="Functions" href="/app/firebase/functions" />
+				<NavbarLink href="/app/firebase/functions">Functions</NavbarLink>
 			</li>
 		{/if}
 
 		<li>
-			<NavbarLink label="Docs" href="/docs" />
+			<NavbarLink href="/docs" title="Go to documentation">
+				<span> Documentation </span>
+
+				<Icon icon="book" style="solid" />
+			</NavbarLink>
 		</li>
 	</svelte:fragment>
 </Navbar>
