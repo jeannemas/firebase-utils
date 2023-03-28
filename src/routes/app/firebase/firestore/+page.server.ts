@@ -2,7 +2,7 @@ import type { GET as APIv1FirebaseFirestoreQueryResponse } from '$routes/api/v1/
 
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({ fetch, url }) => {
+export const load = (({ fetch, url }) => {
 	const response = fetch<APIv1FirebaseFirestoreQueryResponse>(
 		`/api/v1/firebase/firestore/query?${url.searchParams.toString()}`,
 	).then((response) => response.json());

@@ -4,6 +4,7 @@
 	import { toastError, toastSuccess } from '$client/utils/toasts';
 	import Alert from '$components/Alert.svelte';
 	import Icon from '$components/Icon.svelte';
+	import LoadingMessage from '$components/LoadingMessage.svelte';
 	import Modal from '$components/Modal.svelte';
 	import Container from '$components/toasts/Container.svelte';
 
@@ -83,35 +84,41 @@
 	</button>
 </div>
 
-{#if data.serviceAccounts.length}
-	<table class="table table-compact w-full shadow-md rounded-md overflow-hidden">
-		<thead>
-			<tr>
-				<th class="w-2/3 md:w-1/4">Label</th>
+{#await data.streamed.serviceAccounts}
+	<LoadingMessage />
+{:then serviceAccounts}
+	{#if serviceAccounts.length}
+		<table class="table table-compact w-full shadow-md rounded-md overflow-hidden">
+			<thead>
+				<tr>
+					<th class="w-2/3 md:w-1/4">Label</th>
 
-				<th class="hidden md:table-cell md:w-1/4">Created</th>
+					<th class="hidden md:table-cell md:w-1/4">Created</th>
 
-				<th class="hidden md:table-cell md:w-1/4">Updated</th>
+					<th class="hidden md:table-cell md:w-1/4">Updated</th>
 
-				<th class="w-1/3 md:w-1/4">Actions</th>
-			</tr>
-		</thead>
+					<th class="w-1/3 md:w-1/4">Actions</th>
+				</tr>
+			</thead>
 
-		<tbody>
-			{#each data.serviceAccounts as serviceAccount}
-				<TableRow
-					serviceAccount="{serviceAccount}"
-					on:update="{handleUpdate}"
-					on:delete="{handleDelete}"
-				/>
-			{/each}
-		</tbody>
-	</table>
-{:else}
-	<div class="flex items-center flex-row justify-center">
-		<Alert class="alert-warning">You don't have any service account. Start by uploading one!</Alert>
-	</div>
-{/if}
+			<tbody>
+				{#each serviceAccounts as serviceAccount}
+					<TableRow
+						serviceAccount="{serviceAccount}"
+						on:update="{handleUpdate}"
+						on:delete="{handleDelete}"
+					/>
+				{/each}
+			</tbody>
+		</table>
+	{:else}
+		<div class="flex items-center flex-row justify-center">
+			<Alert class="alert-warning">
+				You don't have any service account. Start by uploading one!
+			</Alert>
+		</div>
+	{/if}
+{/await}
 
 <Modal bind:this="{newServiceAccountModal}">
 	<UploadForm on:submit="{handleCreate}" />

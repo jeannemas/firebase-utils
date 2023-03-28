@@ -3,6 +3,8 @@
 
 	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Code from '$components/Code.svelte';
+	import Icon from '$components/Icon.svelte';
 	import LoadingMessage from '$components/LoadingMessage.svelte';
 	import { STORAGE_BUCKET_QUERY_PARAM, STORAGE_FILE_PATH_QUERY_PARAM } from '$lib/constants';
 	import { getSearchParam } from '$utils/search-params-utils';
@@ -61,7 +63,19 @@
 		<LoadingMessage />
 	{:then [files, signedUrl, fileMetadata]}
 		{#if $page.url.searchParams.has(STORAGE_FILE_PATH_QUERY_PARAM)}
-			<pre><code>{JSON.stringify({ signedUrl, fileMetadata }, null, 2)}</code></pre>
+			<div class="rounded-box p-2 border border-base-200 before:content-['/']">
+				{$page.url.searchParams.get(STORAGE_FILE_PATH_QUERY_PARAM)}
+			</div>
+
+			<div class="flex items-center justify-center">
+				<a class="btn btn-primary gap-2" href="{signedUrl}" rel="noreferrer" target="_blank">
+					<span> Open externally </span>
+
+					<Icon icon="arrow-up-right-from-square" modifiers="{['xl']}" style="solid" />
+				</a>
+			</div>
+
+			<Code value="{fileMetadata}" />
 		{:else}
 			<ul>
 				{#each files as file}

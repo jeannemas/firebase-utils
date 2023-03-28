@@ -2,12 +2,14 @@ import type { GET as APIv1GoogleCloudFunctionsListFunctionsResponse } from '$rou
 
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({ fetch }) => {
-	const functions = await fetch<APIv1GoogleCloudFunctionsListFunctionsResponse>(
+export const load = (({ fetch }) => {
+	const functions = fetch<APIv1GoogleCloudFunctionsListFunctionsResponse>(
 		'/api/v1/google-cloud/functions/listFunctions',
 	).then((response) => response.json());
 
 	return {
-		functions, // TODO return as streamed response
+		streamed: {
+			functions,
+		},
 	};
 }) satisfies PageServerLoad;
