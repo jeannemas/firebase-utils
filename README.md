@@ -1,6 +1,6 @@
 TODO:
 
-- Add auth
+- Add auth w/ Google
 - Document/comment project
 - Complete README
 - Deploy? (requires auth)

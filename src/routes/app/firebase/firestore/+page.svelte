@@ -1,4 +1,5 @@
 <script context="module" lang="ts">
+	import { Mode } from 'svelte-jsoneditor';
 	import { derived } from 'svelte/store';
 	import { z } from 'zod';
 
@@ -127,7 +128,15 @@
 			</div>
 
 			{#if response.document}
-				<Code value="{response.document}" />
+				<Code
+					config="{{
+						mainMenuBar: false,
+						mode: Mode.tree,
+						readOnly: true,
+						statusBar: false,
+					}}"
+					value="{response.document}"
+				/>
 			{/if}
 		</div>
 	{/await}

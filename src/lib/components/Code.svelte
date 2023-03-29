@@ -1,14 +1,34 @@
 <script context="module" lang="ts">
 	import { onMount } from 'svelte';
-	import { Mode, type JSONEditor, type JSONValue } from 'svelte-jsoneditor';
+	import { JSONEditor, type Content, type JSONValue } from 'svelte-jsoneditor';
+	import type { JsonEditorProps } from 'svelte-jsoneditor/components/JSONEditor.svelte';
+
+	export type Props = Pick<
+		JsonEditorProps,
+		| 'escapeControlCharacters'
+		| 'flattenColumns'
+		| 'indentation'
+		| 'mainMenuBar'
+		| 'mode'
+		| 'navigationBar'
+		| 'readOnly'
+		| 'statusBar'
+		| 'tabSize'
+	>;
 </script>
 
 <script lang="ts">
 	export let value: JSONValue;
-	export let mode: Mode = Mode.tree;
+	export let config: Props = {};
 
 	let wrapper: HTMLDivElement | null = null;
 	let editor: JSONEditor | null = null;
+	let content: Content;
+
+	$: content = {
+		text: undefined,
+		json: value,
+	};
 
 	onMount(() => {
 		handleThemeChange();
@@ -32,18 +52,7 @@
 </style>
 
 <div class="jse-theme-dark" style="--jse-main-border: none;" bind:this="{wrapper}">
-	{#await import('svelte-jsoneditor').then(({ JSONEditor, Mode }) => JSONEditor) then JSONEditor}
-		<JSONEditor
-			content="{{
-				text: undefined,
-				json: value,
-			}}"
-			mainMenuBar="{false}"
-			mode="{mode}"
-			readOnly="{true}"
-			bind:this="{editor}"
-		/>
-	{/await}
+	<JSONEditor {...config} bind:content="{content}" bind:this="{editor}" />
 </div>
 
 <!-- <pre class="overflow-scroll text-sm"><code>{JSON.stringify(value, null, 2)}</code></pre> -->

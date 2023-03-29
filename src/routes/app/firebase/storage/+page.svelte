@@ -1,4 +1,5 @@
 <script context="module" lang="ts">
+	import { Mode } from 'svelte-jsoneditor';
 	import { z } from 'zod';
 
 	import { goto, invalidateAll } from '$app/navigation';
@@ -75,7 +76,15 @@
 				</a>
 			</div>
 
-			<Code value="{fileMetadata}" />
+			<Code
+				config="{{
+					mainMenuBar: false,
+					mode: Mode.tree,
+					readOnly: true,
+					statusBar: false,
+				}}"
+				value="{fileMetadata}"
+			/>
 		{:else}
 			<ul>
 				{#each files as file}

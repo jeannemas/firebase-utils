@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import type { UserRecord } from 'firebase-admin/auth';
-	import type { JSONValue } from 'svelte-jsoneditor';
+	import { Mode, type JSONValue } from 'svelte-jsoneditor';
 
 	import Code from '$components/Code.svelte';
 </script>
@@ -34,6 +34,15 @@
 	</div>
 
 	<div class="collapse-content duration-300">
-		<Code value="{record}" />
+		<Code
+			config="{{
+				mainMenuBar: false,
+				mode: Mode.tree,
+				navigationBar: false,
+				readOnly: true,
+				statusBar: false,
+			}}"
+			value="{record}"
+		/>
 	</div>
 </div>

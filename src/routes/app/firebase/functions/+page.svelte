@@ -1,4 +1,6 @@
 <script context="module" lang="ts">
+	import { Mode } from 'svelte-jsoneditor';
+
 	import Code from '$components/Code.svelte';
 	import LoadingMessage from '$components/LoadingMessage.svelte';
 
@@ -13,5 +15,14 @@
 {#await data.streamed.functions}
 	<LoadingMessage />
 {:then functions}
-	<Code value="{functions.map((func) => func ?? null)}" />
+	<Code
+		config="{{
+			mainMenuBar: false,
+			mode: Mode.tree,
+			navigationBar: false,
+			readOnly: true,
+			statusBar: false,
+		}}"
+		value="{functions.map((func) => func ?? null)}"
+	/>
 {/await}
