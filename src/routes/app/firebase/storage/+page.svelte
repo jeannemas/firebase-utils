@@ -69,7 +69,7 @@
 			</div>
 
 			<div class="flex items-center justify-center">
-				<a class="btn btn-primary gap-2" href="{signedUrl}" rel="noreferrer" target="_blank">
+				<a class="btn btn-sm btn-primary gap-2" href="{signedUrl}" rel="noreferrer" target="_blank">
 					<span> Open externally </span>
 
 					<Icon icon="arrow-up-right-from-square" modifiers="{['xl']}" style="solid" />
