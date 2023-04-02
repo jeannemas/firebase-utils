@@ -16,10 +16,7 @@
 	}
 </script>
 
-<div
-	class="collapse collapse-arrow rounded-box shadow dark:bg-base-200"
-	class:collapse-open="{collapseIsOpen}"
->
+<div class="collapse collapse-arrow" class:collapse-open="{collapseIsOpen}">
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
 		class="collapse-title items-center min-h-fit py-3 flex justify-between text-sm md:text-base cursor-pointer"
