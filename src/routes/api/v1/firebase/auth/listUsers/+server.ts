@@ -6,6 +6,7 @@ import { z } from 'zod';
 import {
 	AUTH_MAX_RESULTS_DEFAULT_VALUE,
 	AUTH_MAX_RESULTS_QUERY_PARAM,
+	AUTH_SEARCH_DEFAULT_VALUE,
 	AUTH_SEARCH_QUERY_PARAM,
 	PAGINATION_MIN_PAGE,
 	PAGINATION_PAGE_DEFAULT_VALUE,
@@ -41,7 +42,7 @@ export const GET = (async ({ cookies, url }) => {
 		url.searchParams,
 		AUTH_SEARCH_QUERY_PARAM,
 		z.string(),
-		'',
+		AUTH_SEARCH_DEFAULT_VALUE,
 	).toLowerCase();
 	const records = (await listUsers(serviceAccount)) as (UserRecord & JSONValue)[];
 	const filteredRecords = search

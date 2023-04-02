@@ -3,27 +3,15 @@
 	import { Mode, type JSONValue } from 'svelte-jsoneditor';
 
 	import Code from '$components/Code.svelte';
+	import Collapse from '$components/Collapse.svelte';
 </script>
 
 <script lang="ts">
 	export let record: UserRecord & JSONValue;
-
-	let collapseIsOpen = false;
-
-	function handleToggleCollapse() {
-		collapseIsOpen = !collapseIsOpen;
-	}
 </script>
 
-<div
-	class="collapse collapse-arrow rounded-box shadow dark:bg-base-200"
-	class:collapse-open="{collapseIsOpen}"
->
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div
-		class="collapse-title items-center min-h-fit py-3 flex justify-between text-sm md:text-base cursor-pointer"
-		on:click|self="{handleToggleCollapse}"
-	>
+<Collapse lazyload="{true}">
+	<svelte:fragment slot="title">
 		<div>
 			{record.email}
 		</div>
@@ -31,18 +19,17 @@
 		<div class="hidden md:block font-mono">
 			{record.uid}
 		</div>
-	</div>
+	</svelte:fragment>
 
-	<div class="collapse-content duration-300">
-		<Code
-			config="{{
-				mainMenuBar: false,
-				mode: Mode.tree,
-				navigationBar: false,
-				readOnly: true,
-				statusBar: false,
-			}}"
-			value="{record}"
-		/>
-	</div>
-</div>
+	<Code
+		config="{{
+			mainMenuBar: false,
+			mode: Mode.tree,
+			navigationBar: false,
+			readOnly: true,
+			statusBar: false,
+		}}"
+		slot="content"
+		value="{record}"
+	/>
+</Collapse>
