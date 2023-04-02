@@ -35,6 +35,8 @@
 					style="solid"
 				/>
 
+				<!-- TODO use swap https://daisyui.com/components/swap/ -->
+
 				<Icon
 					class="absolute top-0 left-0 w-full h-full -translate-x-1/2 translate-y-1/2 transition-opacity {mobileNavbarIsOpen &&
 						'opacity-0'}"
