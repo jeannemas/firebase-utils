@@ -1,6 +1,7 @@
 import type { Handle } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
 
-export const handle = (async ({ event, resolve }) => {
+const loggerHandle = (async ({ event, resolve }) => {
 	const startAt = process.hrtime();
 	const ip = event.getClientAddress();
 	const { method, url } = event.request;
@@ -14,3 +15,5 @@ export const handle = (async ({ event, resolve }) => {
 
 	return response;
 }) satisfies Handle;
+
+export const handle = sequence(loggerHandle);
