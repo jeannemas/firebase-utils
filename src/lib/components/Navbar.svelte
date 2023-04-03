@@ -36,6 +36,7 @@
 					<Icon name="xmark" style="solid" modifiers="{['xl']}" />
 				</span>
 
+				<!-- TODO fix burger on mobile -->
 				<!-- TODO use swap https://daisyui.com/components/swap/ -->
 
 				<span
