@@ -11,6 +11,8 @@
 	export let current: number | null;
 	export let max: number;
 
+	/* TODO rework the pagination to get the pages from the backend instead of manually calculating them inside the frontend */
+
 	let previousPages: number[] = [];
 	let nextPages: number[] = [];
 	let previousAdjacentPagesDesktop: number[] = [];
@@ -64,7 +66,7 @@
 </style>
 
 <div class="flex flex-row items-center justify-center gap-2">
-	{#if current}
+	{#if current && min !== max}
 		{#if showFirstAndLast && !previousAdjacentPagesDesktop.includes(min) && !previousAdjacentPagesMobile.includes(min) && min !== current}
 			<a class="button" href="{handlePageChange(min)}">
 				{min}
