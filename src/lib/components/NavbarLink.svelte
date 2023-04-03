@@ -4,7 +4,7 @@
 
 <script lang="ts">
 	export let href: string;
-	export let title: string | null = null;
+	export let title: string;
 </script>
 
 <!-- TODO comment -->
@@ -15,5 +15,11 @@
 	href="{href}"
 	title="{title}"
 >
-	<slot />
+	<span>
+		{title}
+	</span>
+
+	<span class="lg:hidden">
+		<slot />
+	</span>
 </a>

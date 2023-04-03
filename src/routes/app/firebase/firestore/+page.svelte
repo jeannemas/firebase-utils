@@ -79,7 +79,7 @@
 					<ul class="!min-h-6">
 						<li>
 							<a href="{getUpdatedPathURL(FIRESTORE_PATH_DEFAULT_VALUE)}">
-								<Icon icon="house" style="solid" />
+								<Icon name="house" style="solid" />
 							</a>
 						</li>
 
@@ -99,9 +99,13 @@
 				class:swap-active="{pathIsInEditMode}"
 				on:click="{handleTogglePathEditMode}"
 			>
-				<Icon class="swap-on duration-100" icon="times" style="solid" />
+				<span class="swap-on duration-100">
+					<Icon name="times" style="solid" />
+				</span>
 
-				<Icon class="swap-off duration-100" icon="pen" style="solid" />
+				<span class="swap-off duration-100">
+					<Icon name="pen" style="solid" />
+				</span>
 			</button>
 		</div>
 
@@ -114,7 +118,7 @@
 		>
 			<span class="hidden md:inline-block"> Get data </span>
 
-			<Icon icon="file-export" style="solid" />
+			<Icon name="file-export" style="solid" />
 		</a>
 	</div>
 
@@ -142,7 +146,7 @@
 										class="link link-hover"
 										href="{getUpdatedPathURL($pathParts.slice(0, -1).join('/'))}"
 									>
-										<Icon icon="turn-up" style="solid" />
+										<Icon name="turn-up" style="solid" />
 									</a>
 								</li>
 							{/if}
@@ -178,7 +182,7 @@
 										class="link link-hover"
 										href="{getUpdatedPathURL($pathParts.slice(0, -1).join('/'))}"
 									>
-										<Icon icon="turn-up" style="solid" />
+										<Icon name="turn-up" style="solid" />
 									</a>
 								</li>
 							{/if}
@@ -207,7 +211,7 @@
 							class="ml-4 link link-hover"
 							href="{getUpdatedPathURL($pathParts.slice(0, -1).join('/'))}"
 						>
-							<Icon icon="turn-up" style="solid" />
+							<Icon name="turn-up" style="solid" />
 						</a>
 					{/if}
 				</div>

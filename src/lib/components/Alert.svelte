@@ -37,7 +37,7 @@
 
 			{#if dismissible}
 				<button class="btn-ghost btn-sm btn" on:click="{remove}">
-					<Icon icon="circle-xmark" modifiers="{['lg']}" style="regular" />
+					<Icon name="circle-xmark" style="regular" modifiers="{['lg']}" />
 				</button>
 			{/if}
 		</div>

@@ -73,7 +73,7 @@
 			/>
 
 			<button class="btn btn-sm btn-secondary" on:click="{handleSearch}">
-				<Icon icon="magnifying-glass" style="solid" />
+				<Icon name="magnifying-glass" style="solid" />
 			</button>
 		</div>
 
@@ -86,7 +86,7 @@
 		>
 			<span class="hidden md:inline-block"> Get data </span>
 
-			<Icon icon="file-export" style="solid" />
+			<Icon name="file-export" style="solid" />
 		</a>
 	</div>
 

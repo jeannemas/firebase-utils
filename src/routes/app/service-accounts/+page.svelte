@@ -81,7 +81,9 @@
 	>
 		<span class="hidden md:inline-block">Upload a service account</span>
 
-		<Icon class="md:hidden" icon="plus" style="solid" />
+		<span class="md:hidden">
+			<Icon name="plus" style="solid" />
+		</span>
 	</button>
 </div>
 

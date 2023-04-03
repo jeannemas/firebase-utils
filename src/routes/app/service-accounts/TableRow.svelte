@@ -88,7 +88,9 @@
 			<button class="btn btn-sm btn-info btn-outline" title="Cancel" on:click="{cancel}">
 				<span class="hidden md:inline-block"> Cancel </span>
 
-				<Icon class="md:hidden" icon="ban" style="solid" />
+				<span class="md:hidden">
+					<Icon name="ban" style="solid" />
+				</span>
 			</button>
 
 			<button
@@ -99,13 +101,17 @@
 			>
 				<span class="hidden md:inline-block"> Save </span>
 
-				<Icon class="md:hidden" icon="floppy-disk" style="solid" />
+				<span class="md:hidden">
+					<Icon name="floppy-disk" style="solid" />
+				</span>
 			</button>
 		{:else}
 			<button class="btn btn-sm btn-warning btn-outline" title="Edit" on:click="{edit}">
 				<span class="hidden md:inline-block"> Edit </span>
 
-				<Icon class="md:hidden" icon="pen" style="solid" />
+				<span class="md:hidden">
+					<Icon name="pen" style="solid" />
+				</span>
 			</button>
 
 			<button
@@ -115,7 +121,9 @@
 			>
 				<span class="hidden md:inline-block"> Delete </span>
 
-				<Icon class="md:hidden" icon="trash" style="solid" />
+				<span class="md:hidden">
+					<Icon name="trash" style="solid" />
+				</span>
 			</button>
 		{/if}
 	</td>

@@ -29,23 +29,21 @@
 				type="button"
 				on:click="{() => (mobileNavbarIsOpen = !mobileNavbarIsOpen)}"
 			>
-				<Icon
+				<span
 					class="absolute top-0 left-0 w-full h-full -translate-x-1/2 translate-y-1/2 transition-opacity {!mobileNavbarIsOpen &&
 						'opacity-0'}"
-					icon="xmark"
-					modifiers="{['xl']}"
-					style="solid"
-				/>
+				>
+					<Icon name="xmark" style="solid" modifiers="{['xl']}" />
+				</span>
 
 				<!-- TODO use swap https://daisyui.com/components/swap/ -->
 
-				<Icon
+				<span
 					class="absolute top-0 left-0 w-full h-full -translate-x-1/2 translate-y-1/2 transition-opacity {mobileNavbarIsOpen &&
 						'opacity-0'}"
-					icon="bars"
-					modifiers="{['xl']}"
-					style="solid"
-				/>
+				>
+					<Icon name="bars" style="solid" modifiers="{['xl']}" />
+				</span>
 			</button>
 		</div>
 

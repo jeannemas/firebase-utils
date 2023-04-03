@@ -33,6 +33,8 @@
 	}
 </script>
 
+<!-- TODO fix page not working -->
+
 <div class="flex flex-col gap-4">
 	{#await Promise.all([data.streamed.buckets, data.streamed.defaultBucket])}
 		<LoadingMessage />
@@ -73,7 +75,7 @@
 				<a class="btn btn-sm btn-primary gap-2" href="{signedUrl}" rel="noreferrer" target="_blank">
 					<span> Open externally </span>
 
-					<Icon icon="arrow-up-right-from-square" modifiers="{['xl']}" style="solid" />
+					<Icon name="arrow-up-right-from-square" style="solid" modifiers="{['xl']}" />
 				</a>
 			</div>
 
