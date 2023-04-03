@@ -13,6 +13,7 @@
 	import UploadForm, { type EventMap as UploadFormEventMap } from './UploadForm.svelte';
 </script>
 
+<!-- TODO comment -->
 <script lang="ts">
 	export let data: PageServerData;
 

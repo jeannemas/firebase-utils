@@ -1,6 +1,8 @@
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
+// TODO comment
+
 const loggerHandle = (async ({ event, resolve }) => {
 	const startAt = process.hrtime();
 	const ip = event.getClientAddress();

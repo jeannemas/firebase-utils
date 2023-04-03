@@ -10,6 +10,8 @@
 	export let record: UserRecord & JSONValue;
 </script>
 
+<!-- TODO comment -->
+
 <div class="rounded-box shadow dark:bg-base-200">
 	<Collapse lazyload="{true}">
 		<svelte:fragment slot="title">

@@ -2,6 +2,8 @@ import type { GET as APIv1GoogleCloudFunctionsListFunctionsResponse } from '$rou
 
 import type { PageServerLoad } from './$types';
 
+// TODO comment
+
 export const load = (({ fetch }) => {
 	const functions = fetch<APIv1GoogleCloudFunctionsListFunctionsResponse>(
 		'/api/v1/google-cloud/functions/listFunctions',

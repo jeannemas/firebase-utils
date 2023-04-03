@@ -13,6 +13,8 @@
 	page.subscribe(() => (mobileNavbarIsOpen = false));
 </script>
 
+<!-- TODO comment -->
+
 <div
 	class="navbar min-h-fit flex-col justify-between items-stretch gap-x-2 bg-base-200 p-0 lg:flex-row lg:p-2"
 >

@@ -8,6 +8,8 @@ import { getSearchParam } from '$utils/search-params-utils';
 
 import type { RequestHandler } from './$types';
 
+// TODO comment
+
 export const GET = (async ({ cookies, url }) => {
 	const serviceAccount = await getServiceAccountFromCookies(cookies);
 	const bucket = getSearchParam(

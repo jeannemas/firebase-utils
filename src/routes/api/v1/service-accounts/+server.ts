@@ -10,6 +10,7 @@ import { validateIncomingBody } from '$server/utils/validate-incoming-body';
 import type { RequestHandler } from './$types';
 
 // TODO validate the structure of the JSON
+// TODO comment
 
 // Create a service account
 export const POST = (async ({ request }) => {

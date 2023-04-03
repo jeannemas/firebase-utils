@@ -3,6 +3,8 @@ import { getServiceAccountFromCookies } from '$server/utils/getServiceAccountFro
 
 import type { LayoutServerLoad } from './$types';
 
+// TODO comment
+
 export const load = (async ({ cookies, fetch }) => {
 	const serviceAccounts = await readAll(fetch).then((serviceAccounts) =>
 		serviceAccounts.map(({ id, label }) => ({ id, label })),

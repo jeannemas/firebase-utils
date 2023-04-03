@@ -12,6 +12,7 @@
 </script>
 
 <!-- TODO complete -->
+<!-- TODO comment -->
 {#await data.streamed.functions}
 	<LoadingMessage />
 {:then functions}

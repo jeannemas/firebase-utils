@@ -9,6 +9,8 @@ import { validateIncomingBody } from '$server/utils/validate-incoming-body';
 
 import type { RequestHandler } from './$types';
 
+// TODO comment
+
 // Get a service account by id
 export const GET = (async ({ params }) => {
 	const serviceAccount = await readOne(params.serviceAccountId);

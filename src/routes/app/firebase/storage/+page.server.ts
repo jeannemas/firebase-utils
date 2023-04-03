@@ -7,6 +7,8 @@ import type { GET as APIv1GoogleCloudStorageGetSignedUrlResponse } from '$routes
 
 import type { PageServerLoad } from './$types';
 
+// TODO comment
+
 export const load = (({ fetch, url }) => {
 	const buckets = fetch<APIv1GoogleCloudStorageGetBucketsResponse>(
 		'/api/v1/google-cloud/storage/getBuckets',

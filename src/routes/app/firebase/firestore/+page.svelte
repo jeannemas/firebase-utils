@@ -15,6 +15,7 @@
 	import type { PageServerData } from './$types';
 </script>
 
+<!-- TODO comment -->
 <script lang="ts">
 	export let data: PageServerData;
 

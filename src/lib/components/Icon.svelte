@@ -14,4 +14,6 @@
 	export { className as class };
 </script>
 
+<!-- TODO comment -->
+
 <i class="{classes} {className}"></i>

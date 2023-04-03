@@ -5,6 +5,8 @@ import { getServiceAccountFromCookies } from '$server/utils/getServiceAccountFro
 
 import type { RequestHandler } from './$types';
 
+// TODO comment
+
 export const GET = (async ({ cookies }) => {
 	const serviceAccount = await getServiceAccountFromCookies(cookies);
 	const functions = await listFunctions(serviceAccount).then((functions) =>

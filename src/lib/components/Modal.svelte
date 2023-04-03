@@ -15,6 +15,8 @@
 	}
 </script>
 
+<!-- TODO comment -->
+
 <!-- TODO use portal -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="modal" class:modal-open="{isOpen}" on:click|self="{close}">

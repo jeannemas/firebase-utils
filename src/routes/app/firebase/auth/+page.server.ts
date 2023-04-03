@@ -2,6 +2,8 @@ import type { GET as ListUsersAPIResponse } from '$routes/api/v1/firebase/auth/l
 
 import type { PageServerLoad } from './$types';
 
+// TODO comment
+
 export const load = (({ fetch, url }) => {
 	const response = fetch<ListUsersAPIResponse>(
 		`/api/v1/firebase/auth/listUsers?${url.searchParams.toString()}`,

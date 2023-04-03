@@ -27,6 +27,8 @@
 	}
 </script>
 
+<!-- TODO comment -->
+
 <Navbar root="/app">
 	<svelte:fragment slot="left">
 		{#if availableServiceAccounts.length > 0}

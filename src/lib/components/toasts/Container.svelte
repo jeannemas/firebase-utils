@@ -18,9 +18,11 @@
 	}
 </script>
 
+<!-- TODO comment -->
+
 <div class="toast-end toast-bottom toast">
 	{#each $alerts as alert}
-		<Alert class="{alert.class}" dismissible="{alert.dismissible}" timeout="{alert.timeout}">
+		<Alert class="{alert.type}" dismissible="{alert.dismissible}" timeout="{alert.timeout}">
 			{alert.text}
 		</Alert>
 	{/each}

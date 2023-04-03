@@ -8,6 +8,8 @@
 	export let data: LayoutServerData;
 </script>
 
+<!-- TODO comment -->
+
 <Navbar
 	availableServiceAccounts="{data.serviceAccounts}"
 	selectedServiceAccountId="{data.selectedServiceAccountId}"

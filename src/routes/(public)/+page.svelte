@@ -5,6 +5,8 @@
 <script lang="ts">
 </script>
 
+<!-- TODO comment -->
+
 <div class="hero min-h-[32rem]">
 	<div class="hero-content text-center">
 		<div class="">

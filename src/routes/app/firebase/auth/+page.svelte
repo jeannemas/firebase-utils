@@ -18,6 +18,7 @@
 	import Row from './Row.svelte';
 </script>
 
+<!-- TODO comment -->
 <script lang="ts">
 	export let data: PageServerData;
 

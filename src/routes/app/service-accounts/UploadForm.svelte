@@ -10,6 +10,7 @@
 	};
 </script>
 
+<!-- TODO comment -->
 <script lang="ts">
 	const dispatch = createEventDispatcher<EventMap>();
 	const filelist = field<FileList | null>('filelist', null, [required()], {

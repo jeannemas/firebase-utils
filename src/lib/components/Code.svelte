@@ -17,6 +17,7 @@
 	>;
 </script>
 
+<!-- TODO comment -->
 <script lang="ts">
 	export let value: JSONValue;
 	export let config: Props = {};

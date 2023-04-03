@@ -4,6 +4,7 @@
 	import Icon from '$components/Icon.svelte';
 </script>
 
+<!-- TODO comment -->
 <script lang="ts">
 	export let classes: string | null = null;
 	/** Whether or not the alert can be dismissed */
