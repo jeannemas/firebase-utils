@@ -136,3 +136,5 @@
 		</div>
 	{/await}
 </div>
+
+<!-- TODO investigate this page randomly crashing, maybe because it runs out of memory because of all the JSONEditors? -->

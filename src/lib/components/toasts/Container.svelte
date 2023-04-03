@@ -5,9 +5,11 @@
 	import type { Toast } from '$models/Toast.model';
 </script>
 
+<!-- TODO rework this -->
 <script lang="ts">
-	const alerts = writable<Toast[]>([]);
+	const alerts = writable<Toast[]>([]); // TODO this should be inside it's own store
 
+	// TODO we should name those toasts and not alerts
 	export function unshift(payload: Toast) {
 		alerts.update((alerts) => [payload, ...alerts]);
 	}

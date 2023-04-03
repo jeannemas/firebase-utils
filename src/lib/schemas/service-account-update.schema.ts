@@ -1,7 +1,14 @@
 import { z } from 'zod';
 
+/**
+ * This schema is used to validate the incoming data for updating a service account.
+ */
 export const schema = z.object({
-	label: z.string().trim().min(1).optional(),
+	/** The new service account's label */
+	label: z.string().trim().nonempty().optional(),
 });
 
+/**
+ * This type represents the data that is expected to be received from the client.
+ */
 export type Schema = z.infer<typeof schema>;

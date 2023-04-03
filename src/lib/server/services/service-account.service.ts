@@ -2,6 +2,7 @@ import type { Prisma, ServiceAccount } from '@prisma/client';
 
 import { prisma } from './prisma';
 
+// We define the base orderBy, select and where clauses.
 const orderBy = {
 	label: 'desc',
 } satisfies Prisma.ServiceAccountOrderByWithRelationInput;
@@ -17,23 +18,40 @@ const where = {
 	deletedAt: null,
 } satisfies Prisma.ServiceAccountWhereInput;
 
-export async function create(data: Prisma.ServiceAccountCreateInput) {
-	return await prisma.serviceAccount.create({
+/**
+ * Create a new service account.
+ *
+ * @param data The data to create the service account with.
+ * @returns The created service account.
+ */
+export function create(data: Prisma.ServiceAccountCreateInput) {
+	return prisma.serviceAccount.create({
 		data,
 		select,
 	});
 }
 
-export async function readAll() {
-	return await prisma.serviceAccount.findMany({
+/**
+ * Read all service accounts.
+ *
+ * @returns An array of `ServiceAccount`.
+ */
+export function readAll() {
+	return prisma.serviceAccount.findMany({
 		orderBy,
 		select,
 		where,
 	});
 }
 
-export async function readOne(id: ServiceAccount['id']) {
-	return await prisma.serviceAccount.findFirst({
+/**
+ * Read one service account.
+ *
+ * @param id The ID of the service account to read.
+ * @returns The service account or `null` if it doesn't exist.
+ */
+export function readOne(id: ServiceAccount['id']) {
+	return prisma.serviceAccount.findFirst({
 		select,
 		where: {
 			...where,
@@ -42,6 +60,13 @@ export async function readOne(id: ServiceAccount['id']) {
 	});
 }
 
+/**
+ * Update a service account.
+ *
+ * @param id The ID of the service account to update.
+ * @param data The data to update the service account with.
+ * @returns The updated service account.
+ */
 export async function update(id: ServiceAccount['id'], data: Prisma.ServiceAccountUpdateInput) {
 	// We do this to ensure the record still exists
 	await prisma.serviceAccount.findFirstOrThrow({
@@ -51,13 +76,19 @@ export async function update(id: ServiceAccount['id'], data: Prisma.ServiceAccou
 		},
 	});
 
-	return await prisma.serviceAccount.update({
+	return prisma.serviceAccount.update({
 		data,
 		select,
 		where: { id },
 	});
 }
 
-export async function del(id: ServiceAccount['id']) {
-	return await update(id, { deletedAt: new Date() });
+/**
+ * Soft-delete a service account.
+ *
+ * @param id The ID of the service account to soft-delete.
+ * @returns The soft-deleted service account.
+ */
+export function del(id: ServiceAccount['id']) {
+	return update(id, { deletedAt: new Date() });
 }
