@@ -1,3 +1,4 @@
+import type { DownloadFormat } from '$models/DownloadFormat.model';
 import type { ServiceAccount } from '@prisma/client';
 import { getAuth, type ListUsersResult, type UserRecord } from 'firebase-admin/auth';
 
@@ -41,4 +42,122 @@ export async function listUsers(serviceAccount: ServiceAccount) {
 	} while (result.pageToken);
 
 	return records;
+}
+
+/**
+ * Export users from a Firebase project.
+ * The Firebase project is identified using the given service account.
+ *
+ * @param serviceAccount The service account to use.
+ * @param query The query used to filter users.
+ * @param format The format to use for the export.
+ * TODO
+ */
+export async function exportUsers(
+	serviceAccount: ServiceAccount,
+	query: string,
+	format: DownloadFormat,
+) {
+	const records = await listUsers(serviceAccount);
+
+	console.log({ query, format });
+
+	if (query !== '*') {
+		throw new Error('Not implemented'); // TODO
+	}
+
+	if (format === 'csv') {
+		const headers = [
+			'disabled',
+			'emailVerified',
+			'metadata.creationTime',
+			'metadata.lastSignInTime',
+			'uid',
+			'customClaims',
+			'displayName',
+			'email',
+			'phoneNumber',
+			'photoURL',
+		] as const;
+		const rows: [
+			disabled: boolean,
+			emailVerified: boolean,
+			metadataCreationTime: string,
+			metadataLastSignInTime: string,
+			uid: string,
+			customClaims: string,
+			displayName: string,
+			email: string,
+			phoneNumber: string,
+			photoURL: string,
+		][] = [];
+
+		for (const {
+			disabled,
+			emailVerified,
+			metadata,
+			uid,
+			customClaims,
+			displayName,
+			email,
+			phoneNumber,
+			photoURL,
+		} of records) {
+			rows.push([
+				disabled,
+				emailVerified,
+				JSON.stringify(metadata.creationTime),
+				JSON.stringify(metadata.lastSignInTime),
+				JSON.stringify(uid),
+				JSON.stringify(customClaims),
+				JSON.stringify(displayName ?? ''),
+				JSON.stringify(email ?? ''),
+				JSON.stringify(phoneNumber ?? ''),
+				JSON.stringify(photoURL ?? ''),
+			]);
+		}
+
+		const csv = [headers, ...rows.map((row) => row.join(','))].join('\n');
+
+		return {
+			filename: `${serviceAccount.id}_users_${Date.now()}.csv`,
+			contentType: 'text/csv',
+			content: csv,
+		};
+	} else if (format === 'json') {
+		const json = records.map(
+			({
+				disabled,
+				emailVerified,
+				metadata,
+				uid,
+				customClaims,
+				displayName,
+				email,
+				phoneNumber,
+				photoURL,
+			}) => ({
+				disabled,
+				emailVerified,
+				metadata: {
+					creationTime: metadata.creationTime,
+					lastSignInTime: metadata.lastSignInTime,
+				},
+				uid,
+				customClaims,
+				displayName,
+				email,
+				phoneNumber,
+				photoURL,
+			}),
+		);
+
+		return {
+			filename: `${serviceAccount.id}_users_${Date.now()}.json`,
+			contentType: 'application/json',
+			content: JSON.stringify(json),
+		};
+	} else {
+		throw new Error('Invalid export format');
+	}
 }

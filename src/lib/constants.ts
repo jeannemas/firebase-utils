@@ -11,6 +11,7 @@ export const STORAGE_FILE_PATH_QUERY_PARAM = 'file';
 /** The toasts dismissible default timeout value (in milliseconds) */
 export const TOASTS_DISMISSIBLE_DEFAULT_TIMEOUT = 10000;
 
+/** The pagination */
 export const PAGINATION = {
 	/** The pagination current page */
 	CURRENT_PAGE: {

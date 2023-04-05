@@ -1,10 +1,12 @@
 <script context="module" lang="ts">
 	import { page } from '$app/stores';
+	import { download } from '$client/services/auth.service';
 	import Dropdown from '$components/Dropdown.svelte';
 	import Icon from '$components/Icon.svelte';
 	import LoadingMessage from '$components/LoadingMessage.svelte';
 	import Pagination from '$components/Pagination.svelte';
 	import { PAGINATION } from '$lib/constants';
+	import type { DownloadFormat } from '$models/DownloadFormat.model';
 	import { navigateQueryParams } from '$utils/navigate-query-params';
 	import { getPaginationParams } from '$utils/pagination';
 
@@ -34,11 +36,11 @@
 	) {
 		navigateQueryParams({ [PAGINATION.RESULTS_PER_PAGE.QUERY_PARAM]: event.currentTarget.value });
 	}
-	function handleExport(exportAs: 'csv' | 'json') {
-		// TODO
+	function handleExport(format: DownloadFormat) {
+		void download('*', format);
 	}
 	function handleCustomExport() {
-		// TODO
+		alert('This feature is not yet implemented.'); // TODO
 	}
 </script>
 
@@ -61,12 +63,20 @@
 					<ul class="shadow border border-base-200 rounded-lg bg-base-100">
 						<li>
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
-							<span on:click|preventDefault="{() => handleExport('csv')}">CSV</span>
+							<span on:click|preventDefault="{() => handleExport('csv')}">
+								<Icon name="file-csv" style="solid" />
+
+								CSV
+							</span>
 						</li>
 
 						<li>
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
-							<span on:click|preventDefault="{() => handleExport('json')}">JSON</span>
+							<span on:click|preventDefault="{() => handleExport('json')}">
+								<Icon name="file-code" style="solid" />
+
+								JSON
+							</span>
 						</li>
 					</ul>
 				</li>
