@@ -12,13 +12,14 @@ import { getServiceAccountJSON } from '$server/utils/getServiceAccountJSON';
  */
 function getGoogleCloudFunctions(serviceAccount: ServiceAccount) {
 	// We first parse the service account JSON.
-	const { client_email, private_key } = getServiceAccountJSON(serviceAccount);
+	const { client_email, private_key, project_id } = getServiceAccountJSON(serviceAccount);
 	// We then create the Google Cloud Functions client.
 	const functions = new CloudFunctionsServiceClient({
 		credentials: {
 			client_email,
 			private_key,
 		},
+		projectId: project_id,
 	});
 
 	return functions;
