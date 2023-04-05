@@ -63,7 +63,7 @@
 					<ul class="shadow border border-base-200 rounded-lg bg-base-100">
 						<li>
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
-							<span on:click|preventDefault="{() => handleExport('csv')}">
+							<span on:click="{() => handleExport('csv')}">
 								<Icon name="file-csv" style="solid" />
 
 								CSV
@@ -72,7 +72,7 @@
 
 						<li>
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
-							<span on:click|preventDefault="{() => handleExport('json')}">
+							<span on:click="{() => handleExport('json')}">
 								<Icon name="file-code" style="solid" />
 
 								JSON
@@ -83,7 +83,7 @@
 
 				<li>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<span on:click|preventDefault="{handleCustomExport}"> Custom export </span>
+					<span on:click="{handleCustomExport}"> Custom export </span>
 				</li>
 			</ul>
 		</Dropdown>

@@ -51,7 +51,7 @@ export async function listUsers(serviceAccount: ServiceAccount) {
  * @param serviceAccount The service account to use.
  * @param query The query used to filter users.
  * @param format The format to use for the export.
- * TODO
+ * @returns The exported data.
  */
 export async function exportUsers(
 	serviceAccount: ServiceAccount,
@@ -121,7 +121,6 @@ export async function exportUsers(
 
 		return {
 			filename: `${serviceAccount.id}_users_${Date.now()}.csv`,
-			contentType: 'text/csv',
 			content: csv,
 		};
 	} else if (format === 'json') {
@@ -154,7 +153,6 @@ export async function exportUsers(
 
 		return {
 			filename: `${serviceAccount.id}_users_${Date.now()}.json`,
-			contentType: 'application/json',
 			content: JSON.stringify(json),
 		};
 	} else {

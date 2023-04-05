@@ -3,6 +3,7 @@ import type { GETResponse as ExportUsersAPIResponse } from '$routes/api/v1/fireb
 import type { GETResponse as ListUsersAPIResponse } from '$routes/api/v1/firebase/auth/listUsers/+server';
 import { buildPaginationParams, type PaginationParams } from '$utils/pagination';
 import type { JSONTypedResponse } from '$utils/typed-http';
+
 // TODO comment
 
 export function create(fetch: Fetch) {
@@ -29,7 +30,7 @@ export function update(fetch: Fetch) {
 	throw new Error('Not implemented');
 }
 
-export function remove(fetch: Fetch) {
+export function del(fetch: Fetch) {
 	// TODO
 	throw new Error('Not implemented');
 }
@@ -41,7 +42,7 @@ export async function download(query: string, format: DownloadFormat) {
 	searchParams.set('query', query);
 	searchParams.set('format', format);
 
-	const { content, contentType, filename } = await fetch<JSONTypedResponse<ExportUsersAPIResponse>>(
+	const { content, filename } = await fetch<JSONTypedResponse<ExportUsersAPIResponse>>(
 		`/api/v1/firebase/auth/export?${searchParams.toString()}`,
 	).then((response) => response.json());
 	const blob = new Blob([content], { type: 'octet/stream' });
@@ -53,7 +54,14 @@ export async function download(query: string, format: DownloadFormat) {
 
 	document.body.appendChild(link);
 
-	link.click();
+	// link.click();
+	link.dispatchEvent(
+		new MouseEvent('click', {
+			bubbles: true,
+			cancelable: true,
+			view: window,
+		}),
+	);
 
 	document.body.removeChild(link);
 

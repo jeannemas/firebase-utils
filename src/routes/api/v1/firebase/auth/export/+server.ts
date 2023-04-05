@@ -40,7 +40,7 @@ export const GET = async ({ cookies, url }) => {
 		});
 	}
 
-	const exportedData = await exportUsers(serviceAccount, queryResult.data, formatResult.data); // TODO for now we hardcode the query to '*'
+	const exportedData = await exportUsers(serviceAccount, queryResult.data, formatResult.data);
 
 	return json<GETResponse>(exportedData, {
 		status: 200,

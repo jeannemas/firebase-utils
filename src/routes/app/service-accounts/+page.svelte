@@ -1,12 +1,12 @@
 <script context="module" lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import { create, del, update } from '$client/services/service-account.service';
+	import { push } from '$client/stores/toasts';
 	import { toastError, toastSuccess } from '$client/utils/toasts';
 	import Alert from '$components/Alert.svelte';
 	import Icon from '$components/Icon.svelte';
 	import LoadingMessage from '$components/LoadingMessage.svelte';
 	import Modal from '$components/Modal.svelte';
-	import Container from '$components/toasts/Container.svelte';
 
 	import type { PageServerData } from './$types';
 	import TableRow, { type EventMap as TableRowEventMap } from './TableRow.svelte';
@@ -17,7 +17,6 @@
 <script lang="ts">
 	export let data: PageServerData;
 
-	let toasts: Container;
 	let newServiceAccountModal: Modal;
 
 	async function handleCreate(event: CustomEvent<UploadFormEventMap['submit']>) {
@@ -26,7 +25,7 @@
 
 			newServiceAccountModal.close();
 
-			toasts.push(toastSuccess(`Service account "${label}" uploaded successfully.`));
+			push(toastSuccess(`Service account "${label}" uploaded successfully.`));
 
 			invalidateAll();
 		} catch (error) {
@@ -38,7 +37,7 @@
 			const [id, data] = event.detail;
 			const { label } = await update(fetch, id, data);
 
-			toasts.push(toastSuccess(`Service account "${label}" updated successfully.`));
+			push(toastSuccess(`Service account "${label}" updated successfully.`));
 
 			invalidateAll();
 		} catch (error) {
@@ -49,7 +48,7 @@
 		try {
 			const { label } = await del(fetch, event.detail);
 
-			toasts.push(toastSuccess(`Service account "${label}" deleted successfully.`));
+			push(toastSuccess(`Service account "${label}" deleted successfully.`));
 
 			invalidateAll();
 		} catch (error) {
@@ -59,7 +58,7 @@
 	function handleError(error: Error) {
 		console.error(error);
 
-		toasts.push(
+		push(
 			toastError(
 				'An error occurred while deleting the service account.\nCheck the console for more details.',
 			),
@@ -126,5 +125,3 @@
 <Modal bind:this="{newServiceAccountModal}">
 	<UploadForm on:submit="{handleCreate}" />
 </Modal>
-
-<Container bind:this="{toasts}" />
