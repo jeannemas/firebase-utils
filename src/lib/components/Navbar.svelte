@@ -20,30 +20,22 @@
 >
 	<div class="flex flex-col lg:flex-row items-stretch">
 		<div class="flex grow flex-row items-center justify-between">
-			<a class="text-xl" href="{root}">
+			<a class="text-2xl" href="{root}">
 				<Logo />
 			</a>
 
 			<button
-				class="relative p-4 text-primary-focus lg:hidden"
+				class="swap swap-rotate p-2 text-primary-focus lg:hidden"
+				class:swap-active="{mobileNavbarIsOpen}"
 				type="button"
 				on:click="{() => (mobileNavbarIsOpen = !mobileNavbarIsOpen)}"
 			>
-				<span
-					class="absolute top-0 left-0 w-full h-full -translate-x-1/2 translate-y-1/2 transition-opacity {!mobileNavbarIsOpen &&
-						'opacity-0'}"
-				>
-					<Icon name="xmark" style="solid" modifiers="{['xl']}" />
+				<span class="swap-on">
+					<Icon name="xmark" style="solid" modifiers="{['2xl']}" />
 				</span>
 
-				<!-- TODO fix burger on mobile -->
-				<!-- TODO use swap https://daisyui.com/components/swap/ -->
-
-				<span
-					class="absolute top-0 left-0 w-full h-full -translate-x-1/2 translate-y-1/2 transition-opacity {mobileNavbarIsOpen &&
-						'opacity-0'}"
-				>
-					<Icon name="bars" style="solid" modifiers="{['xl']}" />
+				<span class="swap-off">
+					<Icon name="bars" style="solid" modifiers="{['2xl']}" />
 				</span>
 			</button>
 		</div>
