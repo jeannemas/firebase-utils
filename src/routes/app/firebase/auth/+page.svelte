@@ -1,43 +1,23 @@
 <script context="module" lang="ts">
-	import { derived } from 'svelte/store';
-	import { z } from 'zod';
-
 	import { page } from '$app/stores';
+	import Dropdown from '$components/Dropdown.svelte';
 	import Icon from '$components/Icon.svelte';
 	import LoadingMessage from '$components/LoadingMessage.svelte';
 	import Pagination from '$components/Pagination.svelte';
-	import {
-		AUTH_MAX_RESULTS_DEFAULT_VALUE,
-		AUTH_MAX_RESULTS_QUERY_PARAM,
-		AUTH_SEARCH_QUERY_PARAM,
-	} from '$lib/constants';
+	import { PAGINATION } from '$lib/constants';
 	import { navigateQueryParams } from '$utils/navigate-query-params';
-	import { getSearchParam } from '$utils/search-params-utils';
+	import { getPaginationParams } from '$utils/pagination';
 
-	import type { PageServerData } from './$types';
 	import Row from './Row.svelte';
 </script>
 
 <!-- TODO comment -->
 <script lang="ts">
-	export let data: PageServerData;
+	export let data;
 
 	let searchInput: HTMLInputElement;
 
-	const maxResults = derived(page, ({ url }) =>
-		getSearchParam(
-			url.searchParams,
-			AUTH_MAX_RESULTS_QUERY_PARAM,
-			z
-				.string()
-				.regex(/^\d+$/)
-				.transform((str) => Number.parseInt(str, 10)),
-			AUTH_MAX_RESULTS_DEFAULT_VALUE,
-		),
-	);
-	const search = derived(page, ({ url }) =>
-		getSearchParam(url.searchParams, AUTH_SEARCH_QUERY_PARAM, z.string(), ''),
-	);
+	$: ({ resultsPerPage, search } = getPaginationParams($page.url.searchParams));
 
 	function handleSearchKeyDown(event: KeyboardEvent) {
 		if (event.key === 'Enter') {
@@ -45,14 +25,20 @@
 		}
 	}
 	function handleSearch() {
-		navigateQueryParams({ [AUTH_SEARCH_QUERY_PARAM]: searchInput.value });
+		navigateQueryParams({ [PAGINATION.SEARCH.QUERY_PARAM]: searchInput.value });
 	}
-	function handleMaxResultsInput(
+	function handleResultsPerPageInput(
 		event: Event & {
 			currentTarget: EventTarget & HTMLSelectElement;
 		},
 	) {
-		navigateQueryParams({ [AUTH_MAX_RESULTS_QUERY_PARAM]: event.currentTarget.value });
+		navigateQueryParams({ [PAGINATION.RESULTS_PER_PAGE.QUERY_PARAM]: event.currentTarget.value });
+	}
+	function handleExport(exportAs: 'csv' | 'json') {
+		// TODO
+	}
+	function handleCustomExport() {
+		// TODO
 	}
 </script>
 
@@ -62,51 +48,69 @@
 
 <div class="flex flex-col gap-4">
 	<div class="flex flex-row items-center justify-between gap-2">
-		<div class="input-group">
-			<input
-				class="input input-sm input-bordered w-full md:max-w-xs"
-				placeholder="Search for users..."
-				type="text"
-				value="{$search}"
-				bind:this="{searchInput}"
-				on:keydown="{handleSearchKeyDown}"
-			/>
+		<Dropdown hover>
+			<button class="btn btn-sm btn-secondary" slot="toggle" title="Export"> Export </button>
 
-			<button class="btn btn-sm btn-secondary" on:click="{handleSearch}">
-				<Icon name="magnifying-glass" style="solid" />
-			</button>
+			<ul
+				class="menu shadow border border-base-200 rounded-lg mt-1 bg-base-100 whitespace-nowrap"
+				slot="content"
+			>
+				<li>
+					<span>Export all users</span>
+
+					<ul class="shadow border border-base-200 rounded-lg bg-base-100">
+						<li>
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<span on:click|preventDefault="{() => handleExport('csv')}">CSV</span>
+						</li>
+
+						<li>
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<span on:click|preventDefault="{() => handleExport('json')}">JSON</span>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<span on:click|preventDefault="{handleCustomExport}"> Custom export </span>
+				</li>
+			</ul>
+		</Dropdown>
+
+		<div>
+			<div class="input-group">
+				<input
+					class="input input-sm input-bordered w-full md:max-w-xs"
+					placeholder="Search for users..."
+					type="text"
+					value="{search}"
+					bind:this="{searchInput}"
+					on:keydown="{handleSearchKeyDown}"
+				/>
+
+				<button class="btn btn-sm btn-secondary" title="Search" on:click="{handleSearch}">
+					<Icon name="magnifying-glass" style="solid" />
+				</button>
+			</div>
 		</div>
-
-		<a
-			class="btn btn-sm btn-secondary flex-row gap-2"
-			href="/api/v1/firebase/auth/listUsers?{$page.url.searchParams.toString()}"
-			rel="noreferrer"
-			target="_blank"
-			title="Get data"
-		>
-			<span class="hidden md:inline-block"> Get data </span>
-
-			<Icon name="file-export" style="solid" />
-		</a>
 	</div>
 
 	{#await data.streamed.response}
 		<LoadingMessage />
 	{:then response}
 		<div class="flex flex-col gap-y-2">
-			{#each response.records as record}
-				<Row record="{record}" />
+			{#each response.results as result}
+				<Row record="{result}" />
 			{/each}
 		</div>
 
 		<div class="flex flex-col lg:flex-row items-center justify-between gap-2">
 			<Pagination
-				min="{response.minPage}"
-				current="{response.currentPage}"
-				max="{response.maxPage}"
 				desktopMaxAdjacentPages="{5}"
 				mobileMaxAdjacentPages="{3}"
 				showFirstAndLast="{false}"
+				pagination="{response}"
 			/>
 
 			<div class="my-2 flex flex-row items-center justify-end gap-x-2">
@@ -114,10 +118,10 @@
 
 				<select
 					class="select select-bordered select-sm"
-					id="maxResults"
-					name="maxResults"
-					value="{$maxResults}"
-					on:change="{handleMaxResultsInput}"
+					id="resultsPerPage"
+					name="resultsPerPage"
+					value="{resultsPerPage}"
+					on:change="{handleResultsPerPageInput}"
 				>
 					<option value="{10}"> 10 </option>
 

@@ -1,15 +1,15 @@
 <script context="module" lang="ts">
 	import { page } from '$app/stores';
-	import { PAGINATION_PAGE_QUERY_PARAM } from '$lib/constants';
+	import { PAGINATION } from '$lib/constants';
+	import type { Pagination } from '$utils/pagination';
 </script>
 
 <script lang="ts">
 	export let showFirstAndLast = true;
 	export let desktopMaxAdjacentPages = 3;
 	export let mobileMaxAdjacentPages = 1;
-	export let min: number;
-	export let current: number | null;
-	export let max: number;
+
+	export let pagination: Pagination;
 
 	/* TODO rework the pagination to get the pages from the backend instead of manually calculating them inside the frontend */
 
@@ -24,12 +24,12 @@
 		previousPages = [];
 		nextPages = [];
 
-		if (current) {
-			for (let i = min; i < current; i++) {
+		if (pagination.currentPage) {
+			for (let i = pagination.minimumPage; i < pagination.currentPage; i++) {
 				previousPages.push(i);
 			}
 
-			for (let i = current + 1; i <= max; i++) {
+			for (let i = pagination.currentPage + 1; i <= pagination.maximumPage; i++) {
 				nextPages.push(i);
 			}
 		}
@@ -40,12 +40,12 @@
 		nextAdjacentPagesMobile = nextPages.slice(0, mobileMaxAdjacentPages);
 	}
 
-	if (current) {
-		for (let i = min; i < current; i++) {
+	if (pagination.currentPage) {
+		for (let i = pagination.minimumPage; i < pagination.currentPage; i++) {
 			previousPages.push(i);
 		}
 
-		for (let i = current + 1; i <= max; i++) {
+		for (let i = pagination.currentPage + 1; i <= pagination.maximumPage; i++) {
 			nextPages.push(i);
 		}
 	}
@@ -53,7 +53,7 @@
 	function handlePageChange(pageNumber: number) {
 		const url = new URL($page.url);
 
-		url.searchParams.set(PAGINATION_PAGE_QUERY_PARAM, pageNumber.toString());
+		url.searchParams.set(PAGINATION.CURRENT_PAGE.QUERY_PARAM, pageNumber.toString());
 
 		return url.toString();
 	}
@@ -67,10 +67,10 @@
 </style>
 
 <div class="flex flex-row items-center justify-center gap-2">
-	{#if current && min !== max}
-		{#if showFirstAndLast && !previousAdjacentPagesDesktop.includes(min) && !previousAdjacentPagesMobile.includes(min) && min !== current}
-			<a class="button" href="{handlePageChange(min)}">
-				{min}
+	{#if pagination.currentPage && pagination.minimumPage !== pagination.maximumPage}
+		{#if showFirstAndLast && !previousAdjacentPagesDesktop.includes(pagination.minimumPage) && !previousAdjacentPagesMobile.includes(pagination.minimumPage) && pagination.minimumPage !== pagination.currentPage}
+			<a class="button" href="{handlePageChange(pagination.minimumPage)}">
+				{pagination.minimumPage}
 			</a>
 		{/if}
 
@@ -87,7 +87,7 @@
 		{/each}
 
 		<button class="button btn-secondary btn-active">
-			{current}
+			{pagination.currentPage}
 		</button>
 
 		{#each nextAdjacentPagesMobile as page}
@@ -102,9 +102,9 @@
 			</a>
 		{/each}
 
-		{#if showFirstAndLast && !nextAdjacentPagesDesktop.includes(max) && !nextAdjacentPagesMobile.includes(max) && max !== current}
-			<a class="button" href="{handlePageChange(max)}">
-				{max}
+		{#if showFirstAndLast && !nextAdjacentPagesDesktop.includes(pagination.maximumPage) && !nextAdjacentPagesMobile.includes(pagination.maximumPage) && pagination.maximumPage !== pagination.currentPage}
+			<a class="button" href="{handlePageChange(pagination.maximumPage)}">
+				{pagination.maximumPage}
 			</a>
 		{/if}
 	{/if}

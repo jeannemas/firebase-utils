@@ -1,19 +1,19 @@
 <script context="module" lang="ts">
 	import type { UserRecord } from 'firebase-admin/auth';
-	import { Mode, type JSONValue } from 'svelte-jsoneditor';
+	import { Mode } from 'svelte-jsoneditor';
 
 	import Code from '$components/Code.svelte';
 	import Collapse from '$components/Collapse.svelte';
 </script>
 
 <script lang="ts">
-	export let record: UserRecord & JSONValue;
+	export let record: UserRecord;
 </script>
 
 <!-- TODO comment -->
 
 <div class="rounded-box shadow dark:bg-base-200">
-	<Collapse lazyload="{true}">
+	<Collapse lazyload>
 		<svelte:fragment slot="title">
 			<div>
 				{record.email}
@@ -33,7 +33,7 @@
 				statusBar: false,
 			}}"
 			slot="content"
-			value="{record}"
+			value="{JSON.parse(JSON.stringify(record))}"
 		/>
 	</Collapse>
 </div>

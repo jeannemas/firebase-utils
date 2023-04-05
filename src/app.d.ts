@@ -1,5 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+import '$utils/fetch';
 import '$utils/typed-http';
 
 // TODO comment

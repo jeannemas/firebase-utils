@@ -1,17 +1,14 @@
-import type { GET as ListUsersAPIResponse } from '$routes/api/v1/firebase/auth/listUsers/+server';
-
-import type { PageServerLoad } from './$types';
+import { readAll } from '$client/services/auth.service';
+import { getPaginationParams } from '$utils/pagination.js';
 
 // TODO comment
 
-export const load = (({ fetch, url }) => {
-	const response = fetch<ListUsersAPIResponse>(
-		`/api/v1/firebase/auth/listUsers?${url.searchParams.toString()}`,
-	).then((response) => response.json());
+export const load = ({ fetch, url }) => {
+	const response = readAll(fetch, getPaginationParams(url.searchParams));
 
 	return {
 		streamed: {
 			response,
 		},
 	};
-}) satisfies PageServerLoad;
+};

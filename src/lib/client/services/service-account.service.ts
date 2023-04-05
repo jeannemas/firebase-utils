@@ -1,9 +1,9 @@
 import type { ServiceAccount } from '@prisma/client';
 
 import type {
-	GET as ReadAll,
 	POST as Create,
 	POSTPayload as CreatePayload,
+	GET as ReadAll,
 } from '$routes/api/v1/service-accounts/+server';
 import type {
 	DELETE as Delete,
@@ -11,8 +11,6 @@ import type {
 	PATCH as Update,
 	PATCHPayload as UpdatePayload,
 } from '$routes/api/v1/service-accounts/[serviceAccountId]/+server';
-
-type Fetch = typeof globalThis.fetch;
 
 const BASE_PATH = '/api/v1/service-accounts';
 
