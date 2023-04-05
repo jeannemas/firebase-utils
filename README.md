@@ -6,6 +6,7 @@ TODO:
 - Deploy? (requires auth)
 - Add docs
 - Cut the pages into smaller components
+- Reorganize the API routes to be more RESTful/semantic/consistent/like a CRUD API
 
 # create-svelte
 

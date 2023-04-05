@@ -60,8 +60,6 @@ export async function exportUsers(
 ) {
 	const records = await listUsers(serviceAccount);
 
-	console.log({ query, format });
-
 	if (query !== '*') {
 		throw new Error('Not implemented'); // TODO
 	}
