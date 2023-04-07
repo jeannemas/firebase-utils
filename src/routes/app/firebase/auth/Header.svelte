@@ -2,15 +2,18 @@
 	import { download } from '$client/services/auth.service';
 	import Dropdown from '$components/Dropdown.svelte';
 	import Icon from '$components/Icon.svelte';
+	import Modal from '$components/Modal.svelte';
 	import { PAGINATION } from '$lib/constants';
-	import type { DownloadFormat } from '$models/DownloadFormat.model';
 	import { navigateQueryParams } from '$utils/navigate-query-params';
+
+	import CustomExportForm from './CustomExportForm.svelte';
 </script>
 
 <script lang="ts">
 	export let search: string;
 
 	let searchInput: HTMLInputElement;
+	let customExportModal: Modal;
 
 	function handleSearchKeyDown(event: KeyboardEvent) {
 		if (event.key === 'Enter') {
@@ -20,19 +23,13 @@
 	function handleSearch() {
 		navigateQueryParams({ [PAGINATION.SEARCH.QUERY_PARAM]: searchInput.value });
 	}
-	function handleExport(format: DownloadFormat) {
-		void download('*', format);
-	}
-	function handleCustomExport() {
-		alert('This feature is not yet implemented.'); // TODO
-	}
 </script>
 
 <!-- TODO comment -->
 
 <div class="flex flex-row items-center justify-between gap-2">
 	<Dropdown hover>
-		<button class="btn btn-sm btn-secondary" slot="toggle" title="Export"> Export </button>
+		<button class="btn btn-secondary" slot="toggle" title="Export"> Export </button>
 
 		<ul
 			class="menu shadow border border-base-200 rounded-lg mt-1 bg-base-100 whitespace-nowrap"
@@ -44,7 +41,7 @@
 				<ul class="shadow border border-base-200 rounded-lg bg-base-100">
 					<li>
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<span on:click="{() => handleExport('csv')}">
+						<span on:click="{() => download('*', 'csv')}">
 							<Icon name="file-csv" style="solid" />
 
 							CSV
@@ -53,7 +50,7 @@
 
 					<li>
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<span on:click="{() => handleExport('json')}">
+						<span on:click="{() => download('*', 'json')}">
 							<Icon name="file-code" style="solid" />
 
 							JSON
@@ -64,7 +61,7 @@
 
 			<li>
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
-				<span on:click="{handleCustomExport}"> Custom export </span>
+				<span on:click="{() => customExportModal.open()}"> Custom export </span>
 			</li>
 		</ul>
 	</Dropdown>
@@ -72,17 +69,22 @@
 	<div>
 		<div class="input-group">
 			<input
-				class="input input-sm input-bordered w-full md:max-w-xs"
+				class="input input-bordered w-full md:max-w-xs"
 				placeholder="Search for users..."
-				type="text"
+				type="search"
 				value="{search}"
 				bind:this="{searchInput}"
+				on:focusout="{handleSearch}"
 				on:keydown="{handleSearchKeyDown}"
 			/>
 
-			<button class="btn btn-sm btn-secondary" title="Search" on:click="{handleSearch}">
+			<button class="btn btn-secondary" title="Search" on:click="{handleSearch}">
 				<Icon name="magnifying-glass" style="solid" />
 			</button>
 		</div>
 	</div>
 </div>
+
+<Modal bind:this="{customExportModal}">
+	<CustomExportForm />
+</Modal>

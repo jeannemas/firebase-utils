@@ -62,7 +62,7 @@
 <tr>
 	<td>
 		<input
-			class="input input-sm input-bordered w-full max-w-full"
+			class="input input-bordered w-full max-w-full"
 			class:hidden="{!editMode}"
 			type="text"
 			bind:this="{labelInput}"
@@ -70,7 +70,7 @@
 			on:keydown="{handleLabelInputKeyDown}"
 		/>
 
-		<span class="px-3" class:hidden="{editMode}">
+		<span class="px-4" class:hidden="{editMode}">
 			{serviceAccount.label}
 		</span>
 	</td>
@@ -85,7 +85,7 @@
 
 	<td>
 		{#if editMode}
-			<button class="btn btn-sm btn-info btn-outline" title="Cancel" on:click="{cancel}">
+			<button class="btn btn-info btn-outline" title="Cancel" on:click="{cancel}">
 				<span class="hidden md:inline-block"> Cancel </span>
 
 				<span class="md:hidden">
@@ -94,7 +94,7 @@
 			</button>
 
 			<button
-				class="btn btn-sm btn-success btn-outline"
+				class="btn btn-success btn-outline"
 				disabled="{!$label.valid}"
 				title="Save"
 				on:click="{update}"
@@ -106,7 +106,7 @@
 				</span>
 			</button>
 		{:else}
-			<button class="btn btn-sm btn-warning btn-outline" title="Edit" on:click="{edit}">
+			<button class="btn btn-warning btn-outline" title="Edit" on:click="{edit}">
 				<span class="hidden md:inline-block"> Edit </span>
 
 				<span class="md:hidden">
@@ -115,7 +115,7 @@
 			</button>
 
 			<button
-				class="btn btn-sm btn-error btn-outline"
+				class="btn btn-error btn-outline"
 				title="Delete"
 				on:click="{() => deleteModal.open()}"
 			>

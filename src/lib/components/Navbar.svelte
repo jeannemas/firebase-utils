@@ -20,21 +20,21 @@
 >
 	<div class="flex flex-col lg:flex-row items-stretch">
 		<div class="flex grow flex-row items-center justify-between">
-			<a class="text-2xl" href="{root}">
+			<a class="text-3xl lg:text-2xl" href="{root}">
 				<Logo />
 			</a>
 
 			<button
-				class="swap swap-rotate p-2 text-primary-focus lg:hidden"
+				class="swap swap-rotate p-2 text-primary lg:hidden"
 				class:swap-active="{mobileNavbarIsOpen}"
 				type="button"
 				on:click="{() => (mobileNavbarIsOpen = !mobileNavbarIsOpen)}"
 			>
-				<span class="swap-on">
+				<span class="swap-on duration-150">
 					<Icon name="xmark" style="solid" modifiers="{['2xl']}" />
 				</span>
 
-				<span class="swap-off">
+				<span class="swap-off duration-150">
 					<Icon name="bars" style="solid" modifiers="{['2xl']}" />
 				</span>
 			</button>
@@ -44,7 +44,7 @@
 	</div>
 
 	<ul
-		class="menu menu-compact menu-vertical items-stretch lg:gap-2 overflow-y-hidden transition-[max-height]  lg:menu-horizontal"
+		class="menu lg:menu-compact menu-vertical items-stretch lg:gap-2 overflow-y-hidden transition-[max-height] lg:menu-horizontal"
 		class:max-h-0="{!mobileNavbarIsOpen}"
 		class:max-h-screen="{mobileNavbarIsOpen}"
 		class:lg:max-h-screen="{!mobileNavbarIsOpen}"

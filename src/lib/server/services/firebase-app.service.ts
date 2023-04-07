@@ -1,6 +1,7 @@
-import { getServiceAccountJSON } from '$server/utils/getServiceAccountJSON';
 import type { ServiceAccount } from '@prisma/client';
 import { cert, getApps, initializeApp } from 'firebase-admin/app';
+
+import { getServiceAccountJSON } from '$server/utils/getServiceAccountJSON';
 
 /**
  * Get a Firebase app instance from a given service account.

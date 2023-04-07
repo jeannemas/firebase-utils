@@ -24,4 +24,4 @@ export interface JSONTypedResponse<R> extends Response {
 /** A type guard to check if a response is a JSONTypedResponse. */
 export type GetJSONResponseType<R> = R extends JSONTypedResponse<infer T> ? T : never;
 
-// TODO add support for Zod Schema to validate the response instead of blindly trusting the typing
+// TODO add support for Zod Schema to validate the response instead of blindly trusting the typing => we'll use zod-fetch

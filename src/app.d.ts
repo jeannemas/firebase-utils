@@ -1,7 +1,6 @@
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
-import '$utils/fetch';
-import '$utils/typed-http';
+import '$utils/fetch'; // This module defines the global type Fetch
+import '$utils/typed-http'; // This module defines types for HTTP responses
+import '$utils/utility-types'; // This module defines utility types
 
 // TODO comment
 

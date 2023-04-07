@@ -74,7 +74,7 @@
 	<h1 class="font-bold text-xl">Service Accounts</h1>
 
 	<button
-		class="btn-outline btn-primary btn btn-sm"
+		class="btn btn-secondary"
 		title="Upload a service account"
 		on:click="{() => newServiceAccountModal.open()}"
 	>

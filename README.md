@@ -8,6 +8,8 @@ TODO:
 - Cut the pages into smaller components
 - Reorganize the API routes to be more RESTful/semantic/consistent/like a CRUD API
 - Use Zod Fetch
+- Add metadata back into auth data
+- Convert services back into classes to make them more reusable
 
 # create-svelte
 

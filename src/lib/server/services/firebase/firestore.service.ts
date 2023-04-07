@@ -1,7 +1,7 @@
 import type { ServiceAccount } from '@prisma/client';
 import { getFirestore, type DocumentData, type Firestore } from 'firebase-admin/firestore';
 
-import { getFirebaseApp } from './app.service';
+import { getFirebaseApp } from '../firebase-app.service';
 
 /**
  * Get a Firebase Firestore instance from a Firebase project.

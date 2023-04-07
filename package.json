@@ -46,8 +46,10 @@
 		"postcss": "^8.4.21",
 		"svelte-forms": "^2.3.1",
 		"svelte-jsoneditor": "^0.16.1",
+		"sveltekit-superforms": "^0.6.8",
 		"tailwindcss": "^3.2.7",
 		"zod": "^3.21.4",
+		"zod-fetch": "^0.1.0",
 		"zod-validation-error": "^1.0.1"
 	}
 }

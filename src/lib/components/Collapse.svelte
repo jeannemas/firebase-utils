@@ -21,15 +21,15 @@
 <div class="collapse collapse-arrow" class:collapse-open="{collapseIsOpen}">
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
-		class="collapse-title items-center min-h-fit py-3 flex justify-between text-sm md:text-base cursor-pointer"
+		class="collapse-title flex flex-row items-center justify-between min-h-fit cursor-pointer"
 		on:click|self="{handleToggleCollapse}"
 	>
 		<slot name="title" />
 	</div>
 
-	<div class="collapse-content duration-300">
+	<div class="collapse-content">
 		{#if hasBeenOpened || !lazyload}
-			<slot name="content" />
+			<slot />
 		{/if}
 	</div>
 </div>
