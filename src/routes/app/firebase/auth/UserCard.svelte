@@ -6,6 +6,8 @@
 
 <script lang="ts">
 	export let record: PublicUser;
+
+	let isBeingEdited = false;
 </script>
 
 <!-- TODO comment -->
@@ -22,13 +24,12 @@
 			</code>
 		</svelte:fragment>
 
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-end border-t border-t-base-200">
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 border-t border-t-base-200">
 			<Input
-				class="checkbox-lg checkbox-success checked:checkbox-error"
+				class="checkbox-lg"
 				label="Disabled"
 				name="disabled"
-				readonly
-				required
+				readonly="{!isBeingEdited}"
 				type="checkbox"
 				bind:value="{record.disabled}"
 			/>
@@ -36,18 +37,16 @@
 			<Input
 				label="Display name"
 				name="displayName"
-				readonly
-				required
+				readonly="{!isBeingEdited}"
 				type="text"
 				bind:value="{record.displayName}"
 			/>
 
 			<Input
-				class="checkbox-lg checkbox-error checked:checkbox-success"
+				class="checkbox-lg"
 				label="Email verified"
 				name="emailVerified"
-				readonly
-				required
+				readonly="{!isBeingEdited}"
 				type="checkbox"
 				bind:value="{record.emailVerified}"
 			/>
@@ -55,8 +54,7 @@
 			<Input
 				label="Email"
 				name="email"
-				readonly
-				required
+				readonly="{!isBeingEdited}"
 				type="email"
 				bind:value="{record.email}"
 			/>
@@ -64,8 +62,7 @@
 			<Input
 				label="Phone number"
 				name="phoneNumber"
-				readonly
-				required
+				readonly="{!isBeingEdited}"
 				type="tel"
 				bind:value="{record.phoneNumber}"
 			/>
@@ -73,33 +70,39 @@
 			<Input
 				label="Photo URL"
 				name="photoURL"
-				readonly
-				required
+				readonly="{!isBeingEdited}"
 				type="url"
 				bind:value="{record.photoURL}"
 			/>
 
 			<Input
 				label="Creation time"
-				name="metadata.creationTime"
+				name="creationTime"
 				readonly
-				required
 				type="text"
-				bind:value="{record.metadata.creationTime}"
+				bind:value="{record.creationTime}"
 			/>
 
 			<Input
 				label="Last sign-in time"
-				name="metadata.lastSignInTime"
+				name="lastSignInTime"
 				readonly
-				required
 				type="text"
-				bind:value="{record.metadata.lastSignInTime}"
+				bind:value="{record.lastSignInTime}"
 			/>
 
-			<button class="btn btn-info"> Custom claims </button>
+			<!-- TODO -->
+			<!-- <button class="btn btn-secondary"> Custom claims </button>
 
-			<button class="btn btn-secondary"> Edit </button>
+			{#if isBeingEdited}
+				<div class="grid grid-cols-2 gap-4">
+					<button class="btn btn-success" on:click="{() => (isBeingEdited = false)}"> Save </button>
+
+					<button class="btn btn-info" on:click="{() => (isBeingEdited = false)}"> Cancel </button>
+				</div>
+			{:else}
+				<button class="btn btn-secondary" on:click="{() => (isBeingEdited = true)}"> Edit </button>
+			{/if} -->
 		</div>
 	</Collapse>
 </div>

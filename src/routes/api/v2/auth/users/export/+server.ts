@@ -1,32 +1,23 @@
 import { json } from '@sveltejs/kit';
 import { z } from 'zod';
 
-import { exportUsers, type ExportResult } from '$server/services/firebase-auth.service';
+import { exportConfigSchema, exportUsers } from '$server/services/firebase-auth.service';
 import { getServiceAccountFromCookies } from '$server/utils/getServiceAccountFromCookies';
-import { validateSearchParams } from '$server/utils/validate-search-params';
+import { createEndpointDefiner } from '$utils/typed-endpoints';
+
+import type { RequestEvent } from './$types';
 
 // TODO comment
 
-export type Endpoint = Like<
-	Metadata,
-	{
-		GET: ExportResult;
-	}
->;
+const defineEndpoint = createEndpointDefiner<RequestEvent>();
 
-export const GET = async ({ cookies, url }) => {
+export const POST = defineEndpoint(z.object({}), exportConfigSchema, async ({ body, cookies }) => {
 	const serviceAccount = await getServiceAccountFromCookies(cookies);
-	const { format, query } = await validateSearchParams(
-		url.searchParams,
-		z.object({
-			format: z.union([z.literal('csv'), z.literal('json')]),
-			query: z.string().optional().default('*'),
-		}),
-	);
+	const exportedData = await exportUsers(serviceAccount, body);
 
-	const exportedData = await exportUsers(serviceAccount, query, format);
-
-	return json<Endpoint['GET']>(exportedData, {
+	return json(exportedData, {
 		status: 200,
 	});
-};
+});
+
+export type POST = typeof POST;

@@ -3,6 +3,7 @@
 	import LoadingMessage from '$components/LoadingMessage.svelte';
 	import { getPaginationParams } from '$utils/pagination';
 
+	import type { PageServerData } from './$types';
 	import Footer from './Footer.svelte';
 	import Header from './Header.svelte';
 	import UserCard from './UserCard.svelte';
@@ -10,7 +11,7 @@
 
 <!-- TODO comment -->
 <script lang="ts">
-	export let data;
+	export let data: PageServerData;
 
 	$: ({ resultsPerPage, search } = getPaginationParams($page.url.searchParams));
 </script>

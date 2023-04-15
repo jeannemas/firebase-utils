@@ -5,6 +5,9 @@ import '$utils/utility-types'; // This module defines utility types
 // TODO comment
 
 declare global {
+	// Fixes the missing type inference for the provided keys
+	type Omit<T, K extends keyof T> = { [P in Exclude<keyof T, K>]: T[P] };
+
 	namespace App {
 		// interface Error {}
 		// interface Locals {}

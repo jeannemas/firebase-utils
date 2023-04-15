@@ -1,5 +1,5 @@
 import { fail } from '@sveltejs/kit';
-import type { ZodType } from 'zod';
+import type { infer as ZodInfer, ZodType } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 
 /**
@@ -12,7 +12,7 @@ import { fromZodError } from 'zod-validation-error';
 export async function validateIncomingBody<S extends ZodType>(
 	request: Request,
 	schema: S,
-): Promise<S['_output']> {
+): Promise<ZodInfer<S>> {
 	// We first parse the body of the request.
 	const body = await request.json();
 	// We then validate the body against the schema.

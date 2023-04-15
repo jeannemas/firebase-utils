@@ -1,4 +1,4 @@
-import type { ZodType } from 'zod';
+import type { infer as ZodInfer, ZodType } from 'zod';
 
 type ExpandToPrimitive<T> = T extends string
 	? string
@@ -25,7 +25,7 @@ type ExpandToPrimitive<T> = T extends string
  * @param defaultValue The default value to return if the param is not found or invalid
  * @returns The value of the param or the default value
  */
-export function getSearchParam<V extends ZodType, D extends V['_output'] | null>(
+export function getSearchParam<V extends ZodType, D extends ZodInfer<V> | null>(
 	searchParams: URLSearchParams,
 	key: string,
 	validator: V,

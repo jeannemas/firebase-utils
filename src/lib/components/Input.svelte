@@ -1,5 +1,4 @@
 <script context="module" lang="ts">
-	import { readonlyCheckbox } from '$client/actions/readonly-checkbox.action';
 </script>
 
 <script lang="ts">
@@ -15,6 +14,12 @@
 
 	let input: HTMLInputElement;
 
+	function handleClick(event: MouseEvent) {
+		if (input.readOnly && input.type === 'checkbox') {
+			event.preventDefault();
+			event.stopPropagation();
+		}
+	}
 	function handleInput() {
 		switch (type) {
 			case 'number':
@@ -31,6 +36,8 @@
 	}
 </script>
 
+<!-- TODO comment -->
+
 <div class="form-control">
 	{#if label}
 		<label class="label" for="{name}">
@@ -44,7 +51,7 @@
 		checked="{typeof value === 'boolean' ? value : null}"
 		class="{type === 'checkbox'
 			? 'checkbox'
-			: 'input input-bordered read-only:input-ghost'} {classes}"
+			: 'input [&:not(:read-only)]:input-bordered read-only:input-ghost'} {classes}"
 		id="{name}"
 		name="{name}"
 		readonly="{readonly}"
@@ -52,7 +59,7 @@
 		type="{type}"
 		value="{value}"
 		bind:this="{input}"
+		on:click="{handleClick}"
 		on:input="{handleInput}"
-		use:readonlyCheckbox
 	/>
 </div>

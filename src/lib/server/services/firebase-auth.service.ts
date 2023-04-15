@@ -1,5 +1,14 @@
 import type { ServiceAccount } from '@prisma/client';
 import { getAuth, type ListUsersResult, type UserRecord } from 'firebase-admin/auth';
+import {
+	z,
+	type ZodBoolean,
+	type ZodDefault,
+	type infer as ZodInfer,
+	type ZodObject,
+	type ZodOptional,
+	type ZodString,
+} from 'zod';
 
 import type { DownloadFormat } from '$models/DownloadFormat.model';
 import { getServiceAccountJSON } from '$server/utils/getServiceAccountJSON';
@@ -12,11 +21,84 @@ export type PublicUser = ReturnType<typeof extractFieldsFromUserRecord>;
 export type ExportResult = {
 	/** The exported users */
 	content: string;
+	/** The content type of the exported users */
+	contentType: string;
 	/** The filename of the exported users */
 	filename: string;
 	/** The format of the exported users */
 	format: DownloadFormat;
 };
+
+// TODO comment
+
+const includeSchema = z.boolean().optional().default(true);
+const nameSchema = z.string().nonempty();
+export const exportConfigSchema = z.object({
+	fields: z.object({
+		creationTime: z.object({
+			include: includeSchema,
+			name: nameSchema.default('creationTime'),
+		}),
+		customClaims: z.object({
+			include: includeSchema,
+			name: nameSchema.default('customClaims'),
+		}),
+		disabled: z.object({
+			include: includeSchema,
+			name: nameSchema.default('disabled'),
+		}),
+		displayName: z.object({
+			include: includeSchema,
+			name: nameSchema.default('displayName'),
+		}),
+		email: z.object({
+			include: includeSchema,
+			name: nameSchema.default('email'),
+		}),
+		emailVerified: z.object({
+			include: includeSchema,
+			name: nameSchema.default('emailVerified'),
+		}),
+		lastSignInTime: z.object({
+			include: includeSchema,
+			name: nameSchema.default('lastSignInTime'),
+		}),
+		phoneNumber: z.object({
+			include: includeSchema,
+			name: nameSchema.default('phoneNumber'),
+		}),
+		photoURL: z.object({
+			include: includeSchema,
+			name: nameSchema.default('photoURL'),
+		}),
+		uid: z.object({
+			include: includeSchema,
+			name: nameSchema.default('uid'),
+		}),
+	}),
+
+	format: z.union([z.literal('csv'), z.literal('json')]),
+}) satisfies ZodObject<{
+	fields: ZodObject<{
+		[K in keyof PublicUser]: ZodObject<{
+			include: ZodDefault<ZodOptional<ZodBoolean>>;
+			name: ZodDefault<ZodString>;
+		}>;
+	}>;
+}>;
+export const fieldsWithLabels = {
+	creationTime: 'Creation time',
+	customClaims: 'Custom claims',
+	disabled: 'Disabled',
+	displayName: 'Display name',
+	email: 'Email',
+	emailVerified: 'Email verified',
+	lastSignInTime: 'Last sign-in time',
+	phoneNumber: 'Phone number',
+	photoURL: 'Photo URL',
+	uid: 'UID',
+} satisfies { [K in keyof PublicUser]: string };
+export const fieldNames = Object.keys(fieldsWithLabels).sort() as (keyof typeof fieldsWithLabels)[];
 
 /**
  * Extract the public fields from a Firebase Auth user record.
@@ -39,15 +121,13 @@ function extractFieldsFromUserRecord(userRecord: UserRecord) {
 	const { creationTime, lastSignInTime } = metadata;
 
 	return {
+		creationTime,
 		customClaims,
 		disabled,
 		displayName,
 		email,
 		emailVerified,
-		metadata: {
-			creationTime,
-			lastSignInTime,
-		},
+		lastSignInTime,
 		phoneNumber,
 		photoURL,
 		uid,
@@ -99,26 +179,23 @@ export async function listUsers(serviceAccount: ServiceAccount) {
  * The Firebase project is identified using the given service account.
  *
  * @param serviceAccount The service account to use.
- * @param query The query used to filter users.
- * @param format The format to use for the export.
+ * @param config The export configuration.
  * @returns The exported data.
  */
 export async function exportUsers(
 	serviceAccount: ServiceAccount,
-	query: string,
-	format: DownloadFormat,
+	config: ZodInfer<typeof exportConfigSchema>,
 ): Promise<ExportResult> {
+	const { format } = config;
 	const records = await listUsers(serviceAccount);
-
-	if (query !== '*') {
-		throw new Error('Not implemented'); // TODO
-	}
-
 	const { project_id } = getServiceAccountJSON(serviceAccount);
 	const filename = `${project_id}_${serviceAccount.id}_users_${Date.now()}`;
 
+	// TODO implement query logic
+
 	if (format === 'csv') {
-		const rows: string[] = [];
+		// TODO
+		const rows: string[][] = [];
 		const keysSet = new Set<keyof PublicUser>();
 
 		for (const record of records) {
@@ -133,22 +210,33 @@ export async function exportUsers(
 			const row: string[] = [];
 
 			for (const key of headers) {
-				row.push(JSON.stringify(record[key]));
+				const value = record[key];
+
+				if (typeof value === 'object' && value !== null) {
+					// We might have an object or an array that may contain commas that would break the CSV format.
+					// We therefore stringify the value twice.
+					row.push(JSON.stringify(JSON.stringify(value)));
+
+					continue;
+				}
+
+				row.push(JSON.stringify(value));
 			}
 
-			rows.push(row.join(','));
+			rows.push(row);
 		}
 
-		const csv = [headers.join(','), ...rows].join('\n');
-
 		return {
-			content: csv,
+			content: [headers.join(','), ...rows.map((row) => row.join(','))].join('\n'),
+			contentType: 'text/csv',
 			filename: `${filename}.csv`,
 			format,
 		};
 	} else if (format === 'json') {
+		// TODO
 		return {
 			content: JSON.stringify(records),
+			contentType: 'application/json',
 			filename: `${filename}.json`,
 			format,
 		};

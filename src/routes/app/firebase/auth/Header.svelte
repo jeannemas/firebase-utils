@@ -2,18 +2,14 @@
 	import { download } from '$client/services/auth.service';
 	import Dropdown from '$components/Dropdown.svelte';
 	import Icon from '$components/Icon.svelte';
-	import Modal from '$components/Modal.svelte';
 	import { PAGINATION } from '$lib/constants';
 	import { navigateQueryParams } from '$utils/navigate-query-params';
-
-	import CustomExportForm from './CustomExportForm.svelte';
 </script>
 
 <script lang="ts">
 	export let search: string;
 
 	let searchInput: HTMLInputElement;
-	let customExportModal: Modal;
 
 	function handleSearchKeyDown(event: KeyboardEvent) {
 		if (event.key === 'Enter') {
@@ -60,8 +56,7 @@
 			</li>
 
 			<li>
-				<!-- svelte-ignore a11y-click-events-have-key-events -->
-				<span on:click="{() => customExportModal.open()}"> Custom export </span>
+				<a href="/app/firebase/auth/export"> Custom export </a>
 			</li>
 		</ul>
 	</Dropdown>
@@ -84,7 +79,3 @@
 		</div>
 	</div>
 </div>
-
-<Modal bind:this="{customExportModal}">
-	<CustomExportForm />
-</Modal>

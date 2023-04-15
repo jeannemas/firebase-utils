@@ -10,6 +10,8 @@ TODO:
 - Use Zod Fetch
 - Add metadata back into auth data
 - Convert services back into classes to make them more reusable
+- Optimize/cache firestore reads to save bandwidth
+- add route metadata to the API routes
 
 # create-svelte
 

@@ -3,6 +3,7 @@
 
 <script lang="ts">
 	export let lazyload = false;
+	export let title: string | null = null;
 
 	let collapseIsOpen = false;
 	let hasBeenOpened = false;
@@ -24,7 +25,13 @@
 		class="collapse-title flex flex-row items-center justify-between min-h-fit cursor-pointer"
 		on:click|self="{handleToggleCollapse}"
 	>
-		<slot name="title" />
+		<slot name="title">
+			{#if title}
+				<span class="select-none">
+					{title}
+				</span>
+			{/if}
+		</slot>
 	</div>
 
 	<div class="collapse-content">
