@@ -1,26 +1,35 @@
-import type { BodyOf, Endpoint, PathOf, QueryOf, ResponseOf } from '$utils/endpoints';
-import type { ParamsOf } from '$utils/firebase-types';
+import type { Endpoint } from '$utils/endpoints';
+// import type { ParamsOf } from '$utils/firebase-types';
 
 // TODO comment
 
-type Body<E extends Endpoint> = unknown extends BodyOf<E>
-	? { body?: undefined }
-	: { body: BodyOf<E> };
-type Params<E extends Endpoint> = Record<string, string> extends ParamsOf<PathOf<E>>
+type ConfigOf<E> = E extends Endpoint<infer C> ? C : never;
+type RouteOf<E> = Exclude<ConfigOf<E>['request']['event']['route']['id'], null>;
+type QueryOf<E> = ConfigOf<E>['request']['query'];
+type BodyOf<E> = ConfigOf<E>['request']['body'];
+type ResponseOf<E> = ConfigOf<E>['response']['body'];
+type Body<E> = unknown extends BodyOf<E> ? { body?: undefined } : { body: BodyOf<E> };
+type Params<E> = /* Record<string, string> extends ParamsOf<RouteOf<E>>
 	? { params?: undefined }
-	: { params: ParamsOf<PathOf<E>> };
-type Query<E extends Endpoint> = Record<string, string> extends QueryOf<E>
+	: { params: ParamsOf<RouteOf<E>> }; */ ConfigOf<E>['request']['event']['params'] extends Record<
+	string,
+	string
+>
+	? { params?: undefined }
+	: { params: ConfigOf<E>['request']['event']['params'] };
+type Query<E> = Record<string, string> extends QueryOf<E>
 	? { query?: undefined }
 	: { query: QueryOf<E> };
-type JsonRequestInit<E extends Endpoint> = Omit<RequestInit, 'body' | 'method'> & {
+type JsonRequestInit<E> = Omit<RequestInit, 'body' | 'method'> & {
 	method: Uppercase<string>;
 } & Body<E> &
 	Params<E> &
 	Query<E>;
 
-export async function fetchJson<E extends Endpoint>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchJson<E extends Endpoint<any>>(
 	fetch = globalThis.fetch,
-	path: PathOf<E>,
+	path: RouteOf<E>,
 	init: JsonRequestInit<E>,
 ): Promise<Awaited<ReturnType<ResponseOf<E>['json']>>> {
 	const { body, params, query } = init;

@@ -9,26 +9,20 @@ import { validateSearchParams } from '$utils/validate-search-params';
 
 type Query = ZodObject<ZodRawShape>;
 type Body = ZodType;
-type Config<TQuery extends Query, TBody extends Body> = {
-	query?: TQuery;
-	body?: TBody;
-};
-
-export type PathOf<E> = E extends Endpoint<infer P> ? P : never;
-export type QueryOf<E> = E extends Endpoint<never, infer Q> ? Q : never;
-export type BodyOf<E> = E extends Endpoint<never, never, infer B> ? B : never;
-export type ResponseOf<E> = E extends Endpoint<never, never, never, infer R> ? R : never;
 
 export interface Endpoint<
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	TPath extends string = string,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	TQuery extends ZodInfer<Query> = Record<string, string>,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	TBody extends ZodInfer<Body> = unknown,
-	TResponse extends Response = Response,
+	TConfig extends {
+		request: {
+			event: RequestEvent;
+			query: ZodInfer<Query>;
+			body: ZodInfer<Body>;
+		};
+		response: {
+			body: Response;
+		};
+	},
 > {
-	(event: RequestEvent): MaybePromise<TResponse>;
+	(event: RequestEvent): MaybePromise<TConfig['response']['body']>;
 }
 
 export function createEndpointDefiner<TRequestEvent extends RequestEvent>() {
@@ -37,19 +31,26 @@ export function createEndpointDefiner<TRequestEvent extends RequestEvent>() {
 		TBody extends Body,
 		TResponse extends Response,
 	>(
-		config: Config<TQuery, TBody> = {},
+		config: {
+			query?: TQuery;
+			body?: TBody;
+		} = {},
 		endpointHandler: (
 			event: TRequestEvent & {
 				query: ZodInfer<TQuery>;
 				body: ZodInfer<TBody>;
 			},
 		) => MaybePromise<TResponse>,
-	): Endpoint<
-		NonNullable<TRequestEvent['route']['id']>,
-		ZodInfer<TQuery>,
-		ZodInfer<TBody>,
-		TResponse
-	> {
+	): Endpoint<{
+		request: {
+			event: TRequestEvent;
+			query: ZodInfer<TQuery>;
+			body: ZodInfer<TBody>;
+		};
+		response: {
+			body: TResponse;
+		};
+	}> {
 		return async function handler(event: TRequestEvent) {
 			const [query, body] = await Promise.all([
 				validateSearchParams(event.url.searchParams, config.query || z.object({})),
