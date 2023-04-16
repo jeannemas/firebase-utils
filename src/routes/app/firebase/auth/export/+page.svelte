@@ -27,7 +27,7 @@
 
 	<div class="form-control">
 		<label class="label" for="format">
-			<span class="label-text">Export format</span>
+			<span class="label-text">Format</span>
 		</label>
 
 		<select
@@ -125,10 +125,10 @@
 	</div>
 
 	<button class="btn btn-secondary" disabled="{$submitting}" type="submit">
-		{#if $delayed}
+		<span class:hidden="{!$delayed}">
 			<Icon modifiers="{['spin', '2xl']}" name="spinner" style="solid" />
-		{:else}
-			Export
-		{/if}
+		</span>
+
+		<span class:hidden="{$delayed}">Export</span>
 	</button>
 </form>

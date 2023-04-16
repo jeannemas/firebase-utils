@@ -186,7 +186,7 @@ export async function exportUsers(
 	serviceAccount: ServiceAccount,
 	config: ZodInfer<typeof exportConfigSchema>,
 ): Promise<ExportResult> {
-	const { format } = config;
+	const { fields, format } = config;
 	const records = await listUsers(serviceAccount);
 	const { project_id } = getServiceAccountJSON(serviceAccount);
 	const filename = `${project_id}_${serviceAccount.id}_users_${Date.now()}`;
@@ -233,9 +233,27 @@ export async function exportUsers(
 			format,
 		};
 	} else if (format === 'json') {
+		const values: Record<string, unknown>[] = [];
+
+		for (const record of records) {
+			const entries: [key: string, value: unknown][] = [];
+
+			for (const [key, value] of Object.entries(record)) {
+				const field = fields[key as keyof PublicUser];
+
+				if (!field.include) {
+					continue;
+				}
+
+				entries.push([field.name, value]);
+			}
+
+			values.push(Object.fromEntries(entries));
+		}
+
 		// TODO
 		return {
-			content: JSON.stringify(records),
+			content: JSON.stringify(values),
 			contentType: 'application/json',
 			filename: `${filename}.json`,
 			format,

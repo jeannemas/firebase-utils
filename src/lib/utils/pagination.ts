@@ -3,6 +3,15 @@ import { z } from 'zod';
 import { PAGINATION } from '$lib/constants';
 import { getSearchParam } from '$utils/search-params-utils';
 
+type P = {
+	results: unknown[];
+	limit: number;
+	skip: number;
+	total: number;
+};
+
+// TODO rework
+
 export type Pagination<T = unknown> = {
 	/** The minimum possible page. */
 	minimumPage: typeof PAGINATION.CURRENT_PAGE.MINIMUM_VALUE;

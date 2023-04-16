@@ -5,7 +5,7 @@ import {
 	type Schema as PATCHPayload,
 } from '$schemas/service-account-update.schema';
 import { del, readOne, update } from '$server/services/service-account.service';
-import { validateIncomingBody } from '$server/utils/validate-incoming-body';
+import { validateIncomingBody } from '$utils/validate-incoming-body';
 
 import type { RequestHandler } from './$types';
 

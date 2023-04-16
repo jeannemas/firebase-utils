@@ -13,8 +13,17 @@ export async function validateIncomingBody<S extends ZodType>(
 	request: Request,
 	schema: S,
 ): Promise<ZodInfer<S>> {
-	// We first parse the body of the request.
-	const body = await request.json();
+	const text = await request.text();
+
+	let body: unknown;
+
+	try {
+		// We first parse the body of the request.
+		body = JSON.parse(text);
+	} catch {
+		body = null;
+	}
+
 	// We then validate the body against the schema.
 	const result = schema.safeParse(body);
 

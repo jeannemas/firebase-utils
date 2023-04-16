@@ -1,24 +1,22 @@
 import { json } from '@sveltejs/kit';
+import { z } from 'zod';
 
-import { listUsers, type PublicUser } from '$server/services/firebase-auth.service';
+import { listUsers } from '$server/services/firebase-auth.service';
 import { getServiceAccountFromCookies } from '$server/utils/getServiceAccountFromCookies';
-import { getPaginationParams, paginate, type Pagination } from '$utils/pagination';
+import { createEndpointDefiner } from '$utils/endpoints';
+import { getPaginationParams, paginate } from '$utils/pagination';
 
-import type { RequestHandler } from './$types';
+import type { RequestEvent } from './$types';
 
 // TODO comment
 
-export type Endpoint = Like<
-	Metadata,
-	{
-		GET: Pagination<PublicUser>;
-	}
->;
+const defineEndpoint = createEndpointDefiner<RequestEvent>();
 
-export const GET = (async ({ cookies, url }) => {
-	const serviceAccount = await getServiceAccountFromCookies(cookies);
+export const GET = defineEndpoint(z.object({}), z.unknown(), async ({ cookies, url }) => {
 	const { currentPage, resultsPerPage, search } = getPaginationParams(url.searchParams);
-	const users = await listUsers(serviceAccount);
+	const users = await getServiceAccountFromCookies(cookies).then((serviceAccount) =>
+		listUsers(serviceAccount),
+	);
 	const filteredUsers = search
 		? users.filter(
 				({ uid, email, displayName }) =>
@@ -29,7 +27,7 @@ export const GET = (async ({ cookies, url }) => {
 		: users;
 	const pagination = paginate(filteredUsers, currentPage, resultsPerPage);
 
-	return json<Endpoint['GET']>(pagination, {
+	return json(pagination, {
 		status: 200,
 	});
-}) satisfies RequestHandler;
+});

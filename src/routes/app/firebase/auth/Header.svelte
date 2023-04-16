@@ -1,6 +1,4 @@
 <script context="module" lang="ts">
-	import { download } from '$client/services/auth.service';
-	import Dropdown from '$components/Dropdown.svelte';
 	import Icon from '$components/Icon.svelte';
 	import { PAGINATION } from '$lib/constants';
 	import { navigateQueryParams } from '$utils/navigate-query-params';
@@ -24,43 +22,6 @@
 <!-- TODO comment -->
 
 <div class="flex flex-row items-center justify-between gap-2">
-	<Dropdown hover>
-		<button class="btn btn-secondary" slot="toggle" title="Export"> Export </button>
-
-		<ul
-			class="menu shadow border border-base-200 rounded-lg mt-1 bg-base-100 whitespace-nowrap"
-			slot="content"
-		>
-			<li>
-				<span>Export all users</span>
-
-				<ul class="shadow border border-base-200 rounded-lg bg-base-100">
-					<li>
-						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<span on:click="{() => download('*', 'csv')}">
-							<Icon name="file-csv" style="solid" />
-
-							CSV
-						</span>
-					</li>
-
-					<li>
-						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<span on:click="{() => download('*', 'json')}">
-							<Icon name="file-code" style="solid" />
-
-							JSON
-						</span>
-					</li>
-				</ul>
-			</li>
-
-			<li>
-				<a href="/app/firebase/auth/export"> Custom export </a>
-			</li>
-		</ul>
-	</Dropdown>
-
 	<div>
 		<div class="input-group">
 			<input
@@ -78,4 +39,8 @@
 			</button>
 		</div>
 	</div>
+
+	<a href="/app/firebase/auth/export">
+		<button class="btn btn-secondary" title="Export"> Export </button>
+	</a>
 </div>

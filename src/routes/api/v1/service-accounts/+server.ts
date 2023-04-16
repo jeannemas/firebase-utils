@@ -5,7 +5,7 @@ import {
 	type Schema as POSTPayload,
 } from '$schemas/service-account-create.schema';
 import { create, readAll } from '$server/services/service-account.service';
-import { validateIncomingBody } from '$server/utils/validate-incoming-body';
+import { validateIncomingBody } from '$utils/validate-incoming-body';
 
 import type { RequestHandler } from './$types';
 

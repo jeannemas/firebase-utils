@@ -1,11 +1,13 @@
 import { fail } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 
+import type { POST } from '$routes/api/v2/auth/users/export/+server';
 import {
 	exportConfigSchema,
 	fieldNames,
 	fieldsWithLabels,
 } from '$server/services/firebase-auth.service';
+import { fetchJson } from '$utils/endpoints/json';
 
 import type { Actions, PageServerLoad } from './$types';
 
@@ -42,7 +44,11 @@ export const actions = {
 			return fail(400, { form });
 		}
 
-		// TODO: Do something with the validated data
+		const exportResult = await fetchJson<typeof POST>(event.fetch, '/api/v2/auth/users/export', {
+			body: form.data,
+			method: 'POST',
+		});
+		// TODO
 
 		return {
 			form,
