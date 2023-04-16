@@ -21,7 +21,7 @@ const BASE_PATH = '/api/v1/service-accounts';
  * @param data The data to send to the API; in this case, the service account's JSON as well as it's label.
  * @returns The newly created service account.
  */
-export async function create(fetch: Fetch, data: CreatePayload) {
+export async function create(fetch: typeof globalThis.fetch, data: CreatePayload) {
 	const response = await fetch<Create>(`${BASE_PATH}`, {
 		body: JSON.stringify(data),
 		headers: {
@@ -46,7 +46,7 @@ export async function create(fetch: Fetch, data: CreatePayload) {
  * @param id The ID of the service account to read.
  * @returns The service account with the given ID.
  */
-export async function readOne(fetch: Fetch, id: ServiceAccount['id']) {
+export async function readOne(fetch: typeof globalThis.fetch, id: ServiceAccount['id']) {
 	const response = await fetch<ReadOne>(`${BASE_PATH}/${id}`, {
 		headers: {
 			Accept: 'application/json',
@@ -68,7 +68,7 @@ export async function readOne(fetch: Fetch, id: ServiceAccount['id']) {
  * @param fetch The fetch function to use.
  * @returns All service accounts.
  */
-export async function readAll(fetch: Fetch) {
+export async function readAll(fetch: typeof globalThis.fetch) {
 	const response = await fetch<ReadAll>(`${BASE_PATH}`, {
 		headers: {
 			Accept: 'application/json',
@@ -92,7 +92,11 @@ export async function readAll(fetch: Fetch) {
  * @param data The data to send to the API; in this case, the service account's label.
  * @returns The updated service account.
  */
-export async function update(fetch: Fetch, id: ServiceAccount['id'], data: UpdatePayload) {
+export async function update(
+	fetch: typeof globalThis.fetch,
+	id: ServiceAccount['id'],
+	data: UpdatePayload,
+) {
 	const response = await fetch<Update>(`${BASE_PATH}/${id}`, {
 		body: JSON.stringify(data),
 		headers: {
@@ -117,7 +121,7 @@ export async function update(fetch: Fetch, id: ServiceAccount['id'], data: Updat
  * @param id The ID of the service account to delete.
  * @returns The deleted service account.
  */
-export async function del(fetch: Fetch, id: ServiceAccount['id']) {
+export async function del(fetch: typeof globalThis.fetch, id: ServiceAccount['id']) {
 	const response = await fetch<Delete>(`${BASE_PATH}/${id}`, {
 		headers: {
 			Accept: 'application/json',

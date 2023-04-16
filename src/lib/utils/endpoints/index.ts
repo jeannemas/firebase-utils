@@ -1,6 +1,6 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import type { MaybePromise } from '@sveltejs/kit/types/private';
-import type { infer as ZodInfer, ZodObject, ZodRawShape, ZodType } from 'zod';
+import { z, type infer as ZodInfer, type ZodObject, type ZodRawShape, type ZodType } from 'zod';
 
 import { validateIncomingBody } from '$utils/validate-incoming-body';
 import { validateSearchParams } from '$utils/validate-search-params';
@@ -9,6 +9,10 @@ import { validateSearchParams } from '$utils/validate-search-params';
 
 type Query = ZodObject<ZodRawShape>;
 type Body = ZodType;
+type Config<TQuery extends Query, TBody extends Body> = {
+	query?: TQuery;
+	body?: TBody;
+};
 
 export type PathOf<E> = E extends Endpoint<infer P> ? P : never;
 export type QueryOf<E> = E extends Endpoint<never, infer Q> ? Q : never;
@@ -33,8 +37,7 @@ export function createEndpointDefiner<TRequestEvent extends RequestEvent>() {
 		TBody extends Body,
 		TResponse extends Response,
 	>(
-		querySchema: TQuery,
-		bodySchema: TBody,
+		config: Config<TQuery, TBody> = {},
 		endpointHandler: (
 			event: TRequestEvent & {
 				query: ZodInfer<TQuery>;
@@ -49,8 +52,8 @@ export function createEndpointDefiner<TRequestEvent extends RequestEvent>() {
 	> {
 		return async function handler(event: TRequestEvent) {
 			const [query, body] = await Promise.all([
-				validateSearchParams(event.url.searchParams, querySchema),
-				validateIncomingBody(event.request, bodySchema),
+				validateSearchParams(event.url.searchParams, config.query || z.object({})),
+				validateIncomingBody(event.request, config.body || z.unknown()),
 			]);
 
 			return endpointHandler({
