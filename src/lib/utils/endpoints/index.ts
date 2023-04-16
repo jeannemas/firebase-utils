@@ -9,17 +9,6 @@ import { validateSearchParams } from '$utils/validate-search-params';
 
 type Query = ZodObject<ZodRawShape>;
 type Body = ZodType;
-type Handler<
-	TRequestEvent extends RequestEvent,
-	TQuery extends Query,
-	TBody extends Body,
-	TResponse extends Response,
-> = (
-	event: TRequestEvent & {
-		query: ZodInfer<TQuery>;
-		body: ZodInfer<TBody>;
-	},
-) => MaybePromise<TResponse>;
 
 export type PathOf<E> = E extends Endpoint<infer P> ? P : never;
 export type QueryOf<E> = E extends Endpoint<never, infer Q> ? Q : never;
@@ -46,7 +35,12 @@ export function createEndpointDefiner<TRequestEvent extends RequestEvent>() {
 	>(
 		querySchema: TQuery,
 		bodySchema: TBody,
-		endpointHandler: Handler<TRequestEvent, TQuery, TBody, TResponse>,
+		endpointHandler: (
+			event: TRequestEvent & {
+				query: ZodInfer<TQuery>;
+				body: ZodInfer<TBody>;
+			},
+		) => MaybePromise<TResponse>,
 	): Endpoint<
 		NonNullable<TRequestEvent['route']['id']>,
 		ZodInfer<TQuery>,
