@@ -4,7 +4,7 @@ import {
 	schema as patchPayload,
 	type Schema as PATCHPayload,
 } from '$schemas/service-account-update.schema';
-import { del, readOne, update } from '$server/services/service-account.service';
+import { readOne, remove, update } from '$server/services/service-account.service';
 import { validateIncomingBody } from '$utils/validate-incoming-body';
 
 import type { RequestHandler } from './$types';
@@ -30,7 +30,7 @@ export const PATCH = (async ({ params, request }) => {
 }) satisfies RequestHandler;
 // Delete a service account by id
 export const DELETE = (async ({ params }) => {
-	const serviceAccount = await del(params.serviceAccountId);
+	const serviceAccount = await remove(params.serviceAccountId);
 
 	return json(serviceAccount, {
 		status: 200,

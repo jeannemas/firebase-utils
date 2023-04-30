@@ -86,10 +86,10 @@
 			</li>
 		{/if}
 
-		<li>
+		<!-- <li>
 			<NavbarLink href="/docs" title="Documentation">
 				<Icon name="book" style="solid" />
 			</NavbarLink>
-		</li>
+		</li> -->
 	</svelte:fragment>
 </Navbar>

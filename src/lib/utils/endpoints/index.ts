@@ -5,19 +5,21 @@ import { z, type infer as ZodInfer, type ZodObject, type ZodRawShape, type ZodTy
 import { validateIncomingBody } from '$utils/validate-incoming-body';
 import { validateSearchParams } from '$utils/validate-search-params';
 
-// TODO comment
-
-type Query = ZodObject<ZodRawShape>;
-type Body = ZodType;
-
+/** A wrapper type representing and endpoint. */
 export interface Endpoint<
 	TConfig extends {
+		/** The request */
 		request: {
+			/** The request event */
 			event: RequestEvent;
-			query: ZodInfer<Query>;
-			body: ZodInfer<Body>;
+			/** The query parameters */
+			query: Record<string, unknown>;
+			/** The request body */
+			body: unknown;
 		};
+		/** The response */
 		response: {
+			/** The response body */
 			body: Response;
 		};
 	},
@@ -25,10 +27,22 @@ export interface Endpoint<
 	(event: RequestEvent): MaybePromise<TConfig['response']['body']>;
 }
 
+/**
+ * Creates a function that can be used to define an endpoint.
+ *
+ * @returns A function that can be used to define an endpoint.
+ */
 export function createEndpointDefiner<TRequestEvent extends RequestEvent>() {
-	return function defineEndpoint<
-		TQuery extends Query,
-		TBody extends Body,
+	/**
+	 * Defines an endpoint.
+	 *
+	 * @param config The configuration for the endpoint.
+	 * @param endpointHandler The handler for the endpoint.
+	 * @returns The endpoint.
+	 */
+	function defineEndpoint<
+		TQuery extends ZodObject<ZodRawShape>,
+		TBody extends ZodType,
 		TResponse extends Response,
 	>(
 		config: {
@@ -41,17 +55,13 @@ export function createEndpointDefiner<TRequestEvent extends RequestEvent>() {
 				body: ZodInfer<TBody>;
 			},
 		) => MaybePromise<TResponse>,
-	): Endpoint<{
-		request: {
-			event: TRequestEvent;
-			query: ZodInfer<TQuery>;
-			body: ZodInfer<TBody>;
-		};
-		response: {
-			body: TResponse;
-		};
-	}> {
-		return async function handler(event: TRequestEvent) {
+	) {
+		/**
+		 * The endpoint.
+		 *
+		 * @param event The request event.
+		 */
+		async function handler(event: TRequestEvent) {
 			const [query, body] = await Promise.all([
 				validateSearchParams(event.url.searchParams, config.query || z.object({})),
 				validateIncomingBody(event.request, config.body || z.unknown()),
@@ -62,7 +72,19 @@ export function createEndpointDefiner<TRequestEvent extends RequestEvent>() {
 				query,
 				body,
 			});
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		} as any;
-	};
+		}
+
+		return handler as Endpoint<{
+			request: {
+				event: TRequestEvent;
+				query: ZodInfer<TQuery>;
+				body: ZodInfer<TBody>;
+			};
+			response: {
+				body: TResponse;
+			};
+		}>;
+	}
+
+	return defineEndpoint;
 }

@@ -11,7 +11,7 @@ import type { RequestEvent } from './$types';
 const defineEndpoint = createEndpointDefiner<RequestEvent>();
 
 export const POST = defineEndpoint({ body: exportConfigSchema }, async ({ body, cookies }) => {
-	const exportedData = getServiceAccountFromCookies(cookies).then((servceAccount) =>
+	const exportedData = await getServiceAccountFromCookies(cookies).then((servceAccount) =>
 		exportUsers(servceAccount, body),
 	);
 

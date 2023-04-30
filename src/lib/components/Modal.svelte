@@ -1,20 +1,32 @@
 <script context="module" lang="ts">
+	import { createEventDispatcher } from 'svelte';
+
 	import { portal } from '$client/actions/portal.action';
 </script>
 
 <script lang="ts">
 	export let bottom = false;
 
+	const dispatch = createEventDispatcher<{ open: void; close: void }>();
+
 	let isOpen = false;
 
-	export function open() {
+	export function openModal() {
 		isOpen = true;
+
+		dispatch('open');
 	}
-	export function close() {
+	export function closeModal() {
 		isOpen = false;
+
+		setTimeout(() => dispatch('close'), 200);
 	}
-	export function toggle() {
-		isOpen = !isOpen;
+	export function toggleModal() {
+		if (isOpen) {
+			closeModal();
+		} else {
+			openModal();
+		}
 	}
 </script>
 
@@ -22,10 +34,10 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-	class="modal"
+	class="modal duration-200"
 	class:modal-bottom="{bottom}"
 	class:modal-open="{isOpen}"
-	on:click|self="{close}"
+	on:click|self="{closeModal}"
 	use:portal="{document.body}"
 >
 	<div class="modal-box">

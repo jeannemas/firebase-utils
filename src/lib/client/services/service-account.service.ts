@@ -1,18 +1,15 @@
 import type { ServiceAccount } from '@prisma/client';
 
 import type {
-	POST as Create,
-	POSTPayload as CreatePayload,
-	GET as ReadAll,
-} from '$routes/api/v1/service-accounts/+server';
+	GET as GET_APIv2ServiceAccounts,
+	POST as POST_APIv2ServiceAccounts,
+} from '$routes/api/v2/service-accounts/+server';
 import type {
-	DELETE as Delete,
-	GET as ReadOne,
-	PATCH as Update,
-	PATCHPayload as UpdatePayload,
-} from '$routes/api/v1/service-accounts/[serviceAccountId]/+server';
-
-const BASE_PATH = '/api/v1/service-accounts';
+	DELETE as DELETE_APIv2ServiceAccountsServiceAccountId,
+	GET as GET_APIv2ServiceAccountsServiceAccountId,
+	PATCH as PATCH_APIv2ServiceAccountsServiceAccountId,
+} from '$routes/api/v2/service-accounts/[serviceAccountId]/+server';
+import { fetchJson, type BodyOf } from '$utils/endpoints/json';
 
 /**
  * Perform the necessary API calls to create a new service account.
@@ -21,22 +18,14 @@ const BASE_PATH = '/api/v1/service-accounts';
  * @param data The data to send to the API; in this case, the service account's JSON as well as it's label.
  * @returns The newly created service account.
  */
-export async function create(fetch: typeof globalThis.fetch, data: CreatePayload) {
-	const response = await fetch<Create>(`${BASE_PATH}`, {
-		body: JSON.stringify(data),
-		headers: {
-			Acceot: 'application/json',
-			// TODO in the future, we'll pass the bearer token here.
-			'Content-Type': 'application/json',
-		},
+export function create(
+	fetch: typeof globalThis.fetch,
+	data: BodyOf<typeof POST_APIv2ServiceAccounts>,
+) {
+	return fetchJson<typeof POST_APIv2ServiceAccounts>(fetch, '/api/v2/service-accounts', {
+		body: data,
 		method: 'POST',
 	});
-
-	if (!response.ok) {
-		throw response;
-	}
-
-	return response.json();
 }
 
 /**
@@ -46,20 +35,17 @@ export async function create(fetch: typeof globalThis.fetch, data: CreatePayload
  * @param id The ID of the service account to read.
  * @returns The service account with the given ID.
  */
-export async function readOne(fetch: typeof globalThis.fetch, id: ServiceAccount['id']) {
-	const response = await fetch<ReadOne>(`${BASE_PATH}/${id}`, {
-		headers: {
-			Accept: 'application/json',
-			// TODO in the future, we'll pass the bearer token here.
+export function readOne(fetch: typeof globalThis.fetch, id: ServiceAccount['id']) {
+	return fetchJson<typeof GET_APIv2ServiceAccountsServiceAccountId>(
+		fetch,
+		'/api/v2/service-accounts/[serviceAccountId]',
+		{
+			method: 'GET',
+			params: {
+				serviceAccountId: id,
+			},
 		},
-		method: 'GET',
-	});
-
-	if (!response.ok) {
-		throw response;
-	}
-
-	return response.json();
+	);
 }
 
 /**
@@ -68,20 +54,10 @@ export async function readOne(fetch: typeof globalThis.fetch, id: ServiceAccount
  * @param fetch The fetch function to use.
  * @returns All service accounts.
  */
-export async function readAll(fetch: typeof globalThis.fetch) {
-	const response = await fetch<ReadAll>(`${BASE_PATH}`, {
-		headers: {
-			Accept: 'application/json',
-			// TODO in the future, we'll pass the bearer token here.
-		},
+export function readAll(fetch: typeof globalThis.fetch) {
+	return fetchJson<typeof GET_APIv2ServiceAccounts>(fetch, '/api/v2/service-accounts', {
 		method: 'GET',
 	});
-
-	if (!response.ok) {
-		throw response;
-	}
-
-	return response.json();
 }
 
 /**
@@ -92,26 +68,22 @@ export async function readAll(fetch: typeof globalThis.fetch) {
  * @param data The data to send to the API; in this case, the service account's label.
  * @returns The updated service account.
  */
-export async function update(
+export function update(
 	fetch: typeof globalThis.fetch,
 	id: ServiceAccount['id'],
-	data: UpdatePayload,
+	data: BodyOf<typeof PATCH_APIv2ServiceAccountsServiceAccountId>,
 ) {
-	const response = await fetch<Update>(`${BASE_PATH}/${id}`, {
-		body: JSON.stringify(data),
-		headers: {
-			Accept: 'application/json',
-			// TODO in the future, we'll pass the bearer token here.
-			'Content-Type': 'application/json',
+	return fetchJson<typeof PATCH_APIv2ServiceAccountsServiceAccountId>(
+		fetch,
+		'/api/v2/service-accounts/[serviceAccountId]',
+		{
+			body: data,
+			method: 'PATCH',
+			params: {
+				serviceAccountId: id,
+			},
 		},
-		method: 'PATCH',
-	});
-
-	if (!response.ok) {
-		throw response;
-	}
-
-	return response.json();
+	);
 }
 
 /**
@@ -121,21 +93,15 @@ export async function update(
  * @param id The ID of the service account to delete.
  * @returns The deleted service account.
  */
-export async function del(fetch: typeof globalThis.fetch, id: ServiceAccount['id']) {
-	const response = await fetch<Delete>(`${BASE_PATH}/${id}`, {
-		headers: {
-			Accept: 'application/json',
-			// TODO in the future, we'll pass the bearer token here.
+export function remove(fetch: typeof globalThis.fetch, id: ServiceAccount['id']) {
+	return fetchJson<typeof DELETE_APIv2ServiceAccountsServiceAccountId>(
+		fetch,
+		'/api/v2/service-accounts/[serviceAccountId]',
+		{
+			method: 'DELETE',
+			params: {
+				serviceAccountId: id,
+			},
 		},
-		method: 'DELETE',
-	});
-
-	if (!response.ok) {
-		throw response;
-	}
-
-	return response.json();
+	);
 }
-
-// We need to export those types so that we can consume them easily from the client.
-export { CreatePayload, UpdatePayload };

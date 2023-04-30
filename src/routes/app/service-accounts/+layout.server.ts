@@ -1,10 +1,10 @@
 import { readAll } from '$client/services/service-account.service';
 
-import type { PageServerLoad } from './$types';
+import type { LayoutServerLoad } from './$types';
 
 // TODO comment
 
-export const load = (({ fetch }) => {
+export const load = (async ({ fetch }) => {
 	const serviceAccounts = readAll(fetch);
 
 	return {
@@ -12,4 +12,4 @@ export const load = (({ fetch }) => {
 			serviceAccounts,
 		},
 	};
-}) satisfies PageServerLoad;
+}) satisfies LayoutServerLoad;

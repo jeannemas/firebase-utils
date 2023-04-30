@@ -89,6 +89,6 @@ export async function update(id: ServiceAccount['id'], data: Prisma.ServiceAccou
  * @param id The ID of the service account to soft-delete.
  * @returns The soft-deleted service account.
  */
-export function del(id: ServiceAccount['id']) {
+export function remove(id: ServiceAccount['id']) {
 	return update(id, { deletedAt: new Date() });
 }
