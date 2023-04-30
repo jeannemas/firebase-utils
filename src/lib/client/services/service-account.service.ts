@@ -8,7 +8,7 @@ import type {
 	DELETE as DELETE_APIv2ServiceAccountsServiceAccountId,
 	GET as GET_APIv2ServiceAccountsServiceAccountId,
 	PATCH as PATCH_APIv2ServiceAccountsServiceAccountId,
-} from '$routes/api/v2/service-accounts/[serviceAccountId]/+server';
+} from '$routes/api/v2/service-accounts/[serviceAccountId=uuid_v4]/+server';
 import { fetchJson, type BodyOf } from '$utils/endpoints/json';
 
 /**
@@ -38,7 +38,7 @@ export function create(
 export function readOne(fetch: typeof globalThis.fetch, id: ServiceAccount['id']) {
 	return fetchJson<typeof GET_APIv2ServiceAccountsServiceAccountId>(
 		fetch,
-		'/api/v2/service-accounts/[serviceAccountId]',
+		'/api/v2/service-accounts/[serviceAccountId=uuid_v4]',
 		{
 			method: 'GET',
 			params: {
@@ -75,7 +75,7 @@ export function update(
 ) {
 	return fetchJson<typeof PATCH_APIv2ServiceAccountsServiceAccountId>(
 		fetch,
-		'/api/v2/service-accounts/[serviceAccountId]',
+		'/api/v2/service-accounts/[serviceAccountId=uuid_v4]',
 		{
 			body: data,
 			method: 'PATCH',
@@ -96,7 +96,7 @@ export function update(
 export function remove(fetch: typeof globalThis.fetch, id: ServiceAccount['id']) {
 	return fetchJson<typeof DELETE_APIv2ServiceAccountsServiceAccountId>(
 		fetch,
-		'/api/v2/service-accounts/[serviceAccountId]',
+		'/api/v2/service-accounts/[serviceAccountId=uuid_v4]',
 		{
 			method: 'DELETE',
 			params: {

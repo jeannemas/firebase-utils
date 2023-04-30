@@ -1,11 +1,10 @@
 <script context="module" lang="ts">
 	import { page } from '$app/stores';
 	import Alert from '$components/Alert.svelte';
+	import Async from '$components/Async.svelte';
 	import Icon from '$components/Icon.svelte';
-	import LoadingMessage from '$components/LoadingMessage.svelte';
 
 	import type { LayoutServerData } from './$types';
-	import ServiceAccountTableRow from './ServiceAccountTableRow.svelte';
 </script>
 
 <!-- TODO comment -->
@@ -27,30 +26,27 @@
 	</a>
 </div>
 
-{#await data.streamed.serviceAccounts}
-	<LoadingMessage />
-{:then serviceAccounts}
+<Async let:awaited="{serviceAccounts}" promise="{data.streamed.serviceAccounts}">
 	{#if serviceAccounts.length}
-		<!-- TODO fix table overflowing on mobile when there is long labels -->
-		<table class="table table-compact w-full shadow-md rounded-md overflow-hidden">
-			<thead>
-				<tr>
-					<th class="w-2/3 md:w-1/4">Label</th>
+		<div class="divide-y divide-slate-200 shadow-lg rounded-lg border border-slate-100">
+			{#each serviceAccounts as serviceAccount}
+				<div class="flex flex-row p-2 gap-2 items-center justify-between">
+					<div>
+						{serviceAccount.label}
+					</div>
 
-					<th class="hidden md:table-cell md:w-1/4">Created</th>
+					<a href="{$page.url.pathname}/{serviceAccount.id}">
+						<button class="btn btn-info btn-outline" title="View">
+							<span class="hidden md:inline-block">View</span>
 
-					<th class="hidden md:table-cell md:w-1/4">Updated</th>
-
-					<th class="w-1/3 md:w-1/4">Actions</th>
-				</tr>
-			</thead>
-
-			<tbody>
-				{#each serviceAccounts as serviceAccount}
-					<ServiceAccountTableRow serviceAccount="{serviceAccount}" />
-				{/each}
-			</tbody>
-		</table>
+							<span class="md:hidden">
+								<Icon name="search" style="solid" />
+							</span>
+						</button>
+					</a>
+				</div>
+			{/each}
+		</div>
 	{:else}
 		<div class="flex items-center flex-row justify-center">
 			<Alert class="alert-warning">
@@ -58,6 +54,6 @@
 			</Alert>
 		</div>
 	{/if}
-{/await}
+</Async>
 
 <slot />

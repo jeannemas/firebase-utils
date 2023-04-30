@@ -26,7 +26,7 @@ export async function fetchJson<E extends Endpoint<any>>(
 	let pathname: string = path;
 
 	for (const [key, value] of Object.entries(params ?? {})) {
-		pathname = path.replace(`[${key}]`, String(value));
+		pathname = String(path).replace(new RegExp(`\\[${key}(=\\w+)?\\]`), String(value));
 	}
 
 	const url = `${pathname}?${searchParams.toString()}`;

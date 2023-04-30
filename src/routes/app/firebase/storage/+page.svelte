@@ -4,9 +4,9 @@
 
 	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Async from '$components/Async.svelte';
 	import Code from '$components/Code.svelte';
 	import Icon from '$components/Icon.svelte';
-	import LoadingMessage from '$components/LoadingMessage.svelte';
 	import { STORAGE_BUCKET_QUERY_PARAM, STORAGE_FILE_PATH_QUERY_PARAM } from '$lib/constants';
 	import { getSearchParam } from '$utils/search-params-utils';
 
@@ -36,9 +36,10 @@
 <!-- TODO fix page not working -->
 
 <div class="flex flex-col gap-4">
-	{#await Promise.all([data.streamed.buckets, data.streamed.defaultBucket])}
-		<LoadingMessage />
-	{:then [buckets, defaultBucket]}
+	<Async
+		let:awaited="{[buckets, defaultBucket]}"
+		promise="{Promise.all([data.streamed.buckets, data.streamed.defaultBucket])}"
+	>
 		{@const bucket = getSearchParam(
 			$page.url.searchParams,
 			STORAGE_BUCKET_QUERY_PARAM,
@@ -62,11 +63,16 @@
 				{/each}
 			</select>
 		</div>
-	{/await}
+	</Async>
 
-	{#await Promise.all([data.streamed.files, data.streamed.signedUrl, data.streamed.fileMetadata])}
-		<LoadingMessage />
-	{:then [files, signedUrl, fileMetadata]}
+	<Async
+		let:awaited="{[files, signedUrl, fileMetadata]}"
+		promise="{Promise.all([
+			data.streamed.files,
+			data.streamed.signedUrl,
+			data.streamed.fileMetadata,
+		])}"
+	>
 		{#if $page.url.searchParams.has(STORAGE_FILE_PATH_QUERY_PARAM)}
 			<div class="rounded-box p-2 border border-base-200 before:content-['/']">
 				{$page.url.searchParams.get(STORAGE_FILE_PATH_QUERY_PARAM)}
@@ -104,7 +110,7 @@
 				{/each}
 			</ul>
 		{/if}
-	{/await}
+	</Async>
 
 	<!-- TODO add pagination -->
 </div>

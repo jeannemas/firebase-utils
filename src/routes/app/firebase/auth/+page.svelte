@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import { page } from '$app/stores';
-	import LoadingMessage from '$components/LoadingMessage.svelte';
+	import Async from '$components/Async.svelte';
 	import { getPaginationParams } from '$utils/pagination';
 
 	import type { PageServerData } from './$types';
@@ -23,9 +23,7 @@
 <div class="flex flex-col gap-4">
 	<Header search="{search}" />
 
-	{#await data.streamed.response}
-		<LoadingMessage />
-	{:then response}
+	<Async let:awaited="{response}" promise="{data.streamed.response}">
 		<div class="flex flex-col gap-y-2">
 			{#each response.results as result}
 				<UserCard record="{result}" />
@@ -33,7 +31,7 @@
 		</div>
 
 		<Footer pagination="{response}" resultsPerPage="{resultsPerPage}" />
-	{/await}
+	</Async>
 </div>
 
 <!-- TODO investigate this page randomly crashing, maybe because it runs out of memory because of all the JSONEditors? -->

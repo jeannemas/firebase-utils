@@ -5,9 +5,9 @@
 
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Async from '$components/Async.svelte';
 	import Code from '$components/Code.svelte';
 	import Icon from '$components/Icon.svelte';
-	import LoadingMessage from '$components/LoadingMessage.svelte';
 	import { FIRESTORE_PATH_DEFAULT_VALUE, FIRESTORE_PATH_QUERY_PARAM } from '$lib/constants';
 	import { navigateQueryParams } from '$utils/navigate-query-params';
 	import { getSearchParam } from '$utils/search-params-utils';
@@ -122,9 +122,7 @@
 		</a>
 	</div>
 
-	{#await data.streamed.response}
-		<LoadingMessage />
-	{:then response}
+	<Async let:awaited="{response}" promise="{data.streamed.response}">
 		<div class="flex flex-col rounded-box shadow-lg overflow-hidden border border-base-200">
 			{#if response.collections?.length || response.documents?.length}
 				<div class="flex flex-col gap-2 m-4">
@@ -227,7 +225,7 @@
 				/>
 			{/if}
 		</div>
-	{/await}
+	</Async>
 </div>
 
 <!-- TODO remove duplicate "go back" button while we have both a document and sub-collections -->

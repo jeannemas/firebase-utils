@@ -1,8 +1,8 @@
 <script context="module" lang="ts">
 	import { Mode } from 'svelte-jsoneditor';
 
+	import Async from '$components/Async.svelte';
 	import Code from '$components/Code.svelte';
-	import LoadingMessage from '$components/LoadingMessage.svelte';
 
 	import type { PageServerData } from './$types';
 </script>
@@ -13,9 +13,7 @@
 
 <!-- TODO complete -->
 <!-- TODO comment -->
-{#await data.streamed.functions}
-	<LoadingMessage />
-{:then functions}
+<Async let:awaited="{functions}" promise="{data.streamed.functions}">
 	<Code
 		config="{{
 			mainMenuBar: false,
@@ -26,4 +24,4 @@
 		}}"
 		value="{functions.map((func) => func ?? null)}"
 	/>
-{/await}
+</Async>
