@@ -13,6 +13,7 @@
 <script lang="ts">
 	export let data: PageServerData;
 
+	let formElement: HTMLFormElement;
 	let modal: Modal;
 
 	onMount(() => queueMicrotask(() => modal.openModal()));
@@ -28,21 +29,26 @@
 </svelte:head>
 
 <Modal bind:this="{modal}" on:close="{() => goto(`${$page.url.pathname}/..`)}">
-	<form class="flex flex-col items-center justify-center gap-4" method="POST" use:enhance>
-		<input type="hidden" name="json" bind:value="{$form.json}" />
-
+	<form
+		class="flex flex-col items-center justify-center gap-4"
+		method="POST"
+		bind:this="{formElement}"
+		use:enhance
+	>
 		<h2 class="text-2xl">Select a service account file to upload</h2>
 
 		<p>Use the Firebase's project settings page to download the service account file.</p>
 
-		<div class="form-control w-full max-w-xs">
+		<div class="form-control w-full">
 			<label class="label" for="jsonProxy">
 				<span class="label-text"> Service Account </span>
 			</label>
 
+			<input type="hidden" name="json" bind:value="{$form.json}" />
+
 			<input
 				accept=".json,application/json"
-				class="file-input-bordered file-input-ghost file-input w-full max-w-xs"
+				class="file-input-bordered file-input-ghost file-input"
 				id="jsonProxy"
 				type="file"
 				data-invalid="{$errors.json}"
@@ -88,13 +94,13 @@
 			{/if}
 		</div>
 
-		<div class="form-control w-full max-w-xs">
+		<div class="form-control w-full">
 			<label class="label" for="label">
 				<span class="label-text"> Label </span>
 			</label>
 
 			<input
-				class="input-bordered input w-full max-w-xs"
+				class="input-bordered input"
 				id="label"
 				name="label"
 				placeholder="Ex: My Service Account"
@@ -114,13 +120,20 @@
 				</ul>
 			{/if}
 		</div>
+	</form>
 
-		<button class="btn-primary btn w-full max-w-xs" disabled="{$submitting}" type="submit">
+	<svelte:fragment slot="action">
+		<button
+			class="btn btn-primary"
+			disabled="{$submitting}"
+			type="submit"
+			on:click|preventDefault="{() => formElement.requestSubmit()}"
+		>
 			<span class:hidden="{!$delayed}">
 				<Icon modifiers="{['spin', '2xl']}" name="spinner" style="solid" />
 			</span>
 
 			<span class:hidden="{$delayed}">Upload</span>
 		</button>
-	</form>
+	</svelte:fragment>
 </Modal>

@@ -28,7 +28,7 @@
 
 <Async let:awaited="{serviceAccounts}" promise="{data.streamed.serviceAccounts}">
 	{#if serviceAccounts.length}
-		<div class="divide-y divide-slate-200 shadow-lg rounded-lg border border-slate-100">
+		<div class="divide-y divide-base-200 shadow-lg rounded-lg border border-base-100">
 			{#each serviceAccounts as serviceAccount}
 				<div class="flex flex-row p-2 gap-2 items-center justify-between">
 					<div>
@@ -36,13 +36,7 @@
 					</div>
 
 					<a href="{$page.url.pathname}/{serviceAccount.id}">
-						<button class="btn btn-info btn-outline" title="View">
-							<span class="hidden md:inline-block">View</span>
-
-							<span class="md:hidden">
-								<Icon name="search" style="solid" />
-							</span>
-						</button>
+						<button class="btn btn-info"> View </button>
 					</a>
 				</div>
 			{/each}

@@ -5,9 +5,12 @@
 </script>
 
 <script lang="ts">
-	export let bottom = false;
+	interface $$Events {
+		open: CustomEvent<void>;
+		close: CustomEvent<void>;
+	}
 
-	const dispatch = createEventDispatcher<{ open: void; close: void }>();
+	const dispatch = createEventDispatcher();
 
 	let isOpen = false;
 
@@ -34,8 +37,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-	class="modal duration-200"
-	class:modal-bottom="{bottom}"
+	class="modal modal-bottom md:modal-middle duration-200"
 	class:modal-open="{isOpen}"
 	on:click|self="{closeModal}"
 	use:portal="{document.body}"

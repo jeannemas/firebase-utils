@@ -9,7 +9,7 @@
 
 	export let promise: PromiseLike<T>;
 
-	const wrapped = new Promise<T>((resolve) =>
+	$: wrapped = new Promise<T>((resolve) =>
 		promise.then((data) => setTimeout(() => resolve(data), 250)),
 	);
 </script>

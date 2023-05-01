@@ -1,5 +1,6 @@
-import { readOne } from '$client/services/service-account.service';
 import { redirect } from '@sveltejs/kit';
+
+import { readOne } from '$client/services/service-account.service';
 
 import type { PageServerLoad } from './$types';
 
