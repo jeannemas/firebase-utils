@@ -6,6 +6,7 @@
 	import { page } from '$app/stores';
 	import Icon from '$components/Icon.svelte';
 	import Modal from '$components/Modal.svelte';
+	import InputText from '$components/forms/InputText.svelte';
 
 	import type { PageServerData } from './$types';
 </script>
@@ -18,10 +19,12 @@
 
 	onMount(() => queueMicrotask(() => modal.openModal()));
 
-	const { constraints, delayed, enhance, errors, form, submitting } = superForm(data.form, {
+	const form = superForm(data.form, {
 		multipleSubmits: 'prevent',
 		taintedMessage: null,
 	});
+
+	const { delayed, enhance, submitting } = form;
 </script>
 
 <svelte:head>
@@ -32,32 +35,7 @@
 	<form class="flex flex-col gap-4" method="POST" bind:this="{formElement}" use:enhance>
 		<h2 class="text-2xl font-bold truncate">Update service account</h2>
 
-		<div class="form-control w-full">
-			<label class="label" for="label">
-				<span class="label-text">Label</span>
-			</label>
-
-			<input
-				class="input input-bordered"
-				id="label"
-				name="label"
-				placeholder="Label"
-				type="text"
-				bind:value="{$form.label}"
-				data-invalid="{$errors.label}"
-				{...$constraints.label}
-			/>
-
-			{#if $errors.label}
-				<ul class="text-error">
-					{#each $errors.label as error}
-						<li>
-							{error}
-						</li>
-					{/each}
-				</ul>
-			{/if}
-		</div>
+		<InputText field="label" form="{form}" label="Label" />
 	</form>
 
 	<svelte:fragment slot="action">

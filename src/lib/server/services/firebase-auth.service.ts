@@ -1,4 +1,5 @@
 import type { ServiceAccount } from '@prisma/client';
+import { stringify } from 'csv';
 import { getAuth, type ListUsersResult, type UserRecord } from 'firebase-admin/auth';
 import {
 	z,
@@ -10,7 +11,6 @@ import {
 	type ZodString,
 } from 'zod';
 
-import type { DownloadFormat } from '$models/DownloadFormat.model';
 import { getServiceAccountJSON } from '$server/utils/getServiceAccountJSON';
 
 import { getFirebaseApp } from './firebase-app.service';
@@ -25,14 +25,15 @@ export type ExportResult = {
 	contentType: string;
 	/** The filename of the exported users */
 	filename: string;
-	/** The format of the exported users */
-	format: DownloadFormat;
 };
+export type DownloadFormat = ZodInfer<typeof formatSchema>;
 
 // TODO comment
 
 const includeSchema = z.boolean().optional().default(true);
-const nameSchema = z.string().nonempty();
+const nameSchema = z.string().trim().nonempty();
+
+export const formatSchema = z.union([z.literal('csv'), z.literal('json')]);
 export const exportConfigSchema = z.object({
 	fields: z.object({
 		creationTime: z.object({
@@ -77,7 +78,7 @@ export const exportConfigSchema = z.object({
 		}),
 	}),
 
-	format: z.union([z.literal('csv'), z.literal('json')]),
+	format: formatSchema,
 }) satisfies ZodObject<{
 	fields: ZodObject<{
 		[K in keyof PublicUser]: ZodObject<{
@@ -121,13 +122,13 @@ function extractFieldsFromUserRecord(userRecord: UserRecord) {
 	const { creationTime, lastSignInTime } = metadata;
 
 	return {
-		creationTime,
+		creationTime: new Date(creationTime),
 		customClaims,
 		disabled,
 		displayName,
 		email,
 		emailVerified,
-		lastSignInTime,
+		lastSignInTime: new Date(lastSignInTime),
 		phoneNumber,
 		photoURL,
 		uid,
@@ -187,59 +188,61 @@ export async function exportUsers(
 	config: ZodInfer<typeof exportConfigSchema>,
 ): Promise<ExportResult> {
 	const { fields, format } = config;
-	const records = await listUsers(serviceAccount);
+	const users = await listUsers(serviceAccount);
 	const { project_id } = getServiceAccountJSON(serviceAccount);
-	const filename = `${project_id}_${serviceAccount.id}_users_${Date.now()}`;
+	const filename = `${project_id}_${serviceAccount.id}_users_export_${Date.now()}`;
 
 	// TODO implement query logic
 
 	if (format === 'csv') {
-		// TODO
-		const rows: string[][] = [];
-		const keysSet = new Set<keyof PublicUser>();
+		return exportToCSV();
+	} else if (format === 'json') {
+		return exportToJSON();
+	} else {
+		throw new Error('Invalid export format');
+	}
 
-		for (const record of records) {
-			for (const key of Object.keys(record) as (keyof PublicUser)[]) {
-				keysSet.add(key);
-			}
-		}
-
-		const headers = [...keysSet.values()].sort();
-
-		for (const record of records) {
-			const row: string[] = [];
-
-			for (const key of headers) {
-				const value = record[key];
-
-				if (typeof value === 'object' && value !== null) {
-					// We might have an object or an array that may contain commas that would break the CSV format.
-					// We therefore stringify the value twice.
-					row.push(JSON.stringify(JSON.stringify(value)));
-
-					continue;
-				}
-
-				row.push(JSON.stringify(value));
-			}
-
-			rows.push(row);
-		}
+	async function exportToCSV(): Promise<ExportResult> {
+		const content = await new Promise<string>((resolve, reject) =>
+			stringify(
+				users,
+				{
+					cast: {
+						boolean: (value) => JSON.stringify(value),
+						date: (value) => value.toISOString(),
+						object: (value) => JSON.stringify(value),
+					},
+					columns: Object.entries(fields)
+						.map(([key, { include, name }]) =>
+							include
+								? {
+										key,
+										header: name,
+								  }
+								: null,
+						)
+						.filter((option): option is NonNullable<typeof option> => option !== null),
+					header: true,
+				},
+				(error, output) => (error ? reject(error) : resolve(output)),
+			),
+		);
 
 		return {
-			content: [headers.join(','), ...rows.map((row) => row.join(','))].join('\n'),
+			content,
 			contentType: 'text/csv',
 			filename: `${filename}.csv`,
-			format,
 		};
-	} else if (format === 'json') {
+	}
+
+	function exportToJSON(): ExportResult {
 		const values: Record<string, unknown>[] = [];
 
-		for (const record of records) {
+		for (const user of users) {
 			const entries: [key: string, value: unknown][] = [];
 
-			for (const [key, value] of Object.entries(record)) {
-				const field = fields[key as keyof PublicUser];
+			for (const [key, value] of Object.entries(user) as [keyof PublicUser, unknown][]) {
+				const field = fields[key];
 
 				if (!field.include) {
 					continue;
@@ -256,9 +259,6 @@ export async function exportUsers(
 			content: JSON.stringify(values),
 			contentType: 'application/json',
 			filename: `${filename}.json`,
-			format,
 		};
-	} else {
-		throw new Error('Invalid export format');
 	}
 }

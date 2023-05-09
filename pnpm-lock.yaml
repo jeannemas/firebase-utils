@@ -10,9 +10,6 @@ dependencies:
   '@prisma/client':
     specifier: ^4.11.0
     version: 4.11.0(prisma@4.11.0)
-  '@sveltejs/svelte-virtual-list':
-    specifier: ^3.0.1
-    version: 3.0.1
   '@tailwindcss/forms':
     specifier: ^0.5.3
     version: 0.5.3(tailwindcss@3.2.7)
@@ -25,6 +22,9 @@ dependencies:
   cookie:
     specifier: ^0.5.0
     version: 0.5.0
+  csv:
+    specifier: ^6.2.12
+    version: 6.2.12
   daisyui:
     specifier: ^2.51.3
     version: 2.51.3(autoprefixer@10.4.13)(postcss@8.4.21)
@@ -34,24 +34,18 @@ dependencies:
   postcss:
     specifier: ^8.4.21
     version: 8.4.21
-  svelte-forms:
-    specifier: ^2.3.1
-    version: 2.3.1
   svelte-jsoneditor:
     specifier: ^0.16.1
     version: 0.16.1(@lezer/common@1.0.2)
   sveltekit-superforms:
-    specifier: ^0.6.8
-    version: 0.6.8(@sveltejs/kit@1.15.9)(svelte@3.55.1)(zod@3.21.4)
+    specifier: ^0.8.4
+    version: 0.8.4(@sveltejs/kit@1.15.9)(svelte@3.55.1)(zod@3.21.4)
   tailwindcss:
     specifier: ^3.2.7
     version: 3.2.7(postcss@8.4.21)
   zod:
     specifier: ^3.21.4
     version: 3.21.4
-  zod-fetch:
-    specifier: ^0.1.0
-    version: 0.1.0
   zod-validation-error:
     specifier: ^1.0.1
     version: 1.0.1(zod@3.21.4)
@@ -800,10 +794,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@sveltejs/svelte-virtual-list@3.0.1:
-    resolution: {integrity: sha512-aF9TptS7NKKS7/TqpsxQBSDJ9Q0XBYzBehCeIC5DzdMEgrJZpIYao9LRLnyyo6SVodpapm2B7FE/Lj+FSA5/SQ==}
-    dev: false
-
   /@sveltejs/vite-plugin-svelte@2.1.1(svelte@3.55.1)(vite@4.1.4):
     resolution: {integrity: sha512-7YeBDt4us0FiIMNsVXxyaP4Hwyn2/v9x3oqStkHU3ZdIc5O22pGwUwH33wUqYo+7Itdmo8zxJ45Qvfm3H7UUjQ==}
     engines: {node: ^14.18.0 || >= 16}
@@ -1405,6 +1395,28 @@ packages:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
     hasBin: true
+    dev: false
+
+  /csv-generate@4.2.6:
+    resolution: {integrity: sha512-VtnYqhWLcsUocA346ewFOk+rrqcoT663j11vXzD2uelXq9WguQ3QzDeVD8ISso7hhVtkDSHcWl9psdemeiEHDA==}
+    dev: false
+
+  /csv-parse@5.3.10:
+    resolution: {integrity: sha512-cTXY6iy0gN5Ha/cGILeDgQE+nKiKDU2m0DjSRdJhr86BN3cM7oefBsTk2aH0LQeaYtL7Z7HvW+jYoadmdhzeDA==}
+    dev: false
+
+  /csv-stringify@6.3.4:
+    resolution: {integrity: sha512-/VVkafziBS1WyiQWYQ/krnBW1lJbr0RbanP7mMrFwy9V/sG8Xk6bacMS9IjUN0x3Jpp2iowpz9Lofd/KJIZ1qA==}
+    dev: false
+
+  /csv@6.2.12:
+    resolution: {integrity: sha512-Q1+8O4MKIM9U9OqYc2+A6U0ijGrxzs1YqNDUWlqoS98dx9/Kln6dCuazhau8v7Gi5pUEpRcTtlBisy7AFGFr2A==}
+    engines: {node: '>= 0.1.90'}
+    dependencies:
+      csv-generate: 4.2.6
+      csv-parse: 5.3.10
+      csv-stringify: 6.3.4
+      stream-transform: 3.2.6
     dev: false
 
   /daisyui@2.51.3(autoprefixer@10.4.13)(postcss@8.4.21):
@@ -2126,10 +2138,6 @@ packages:
     resolution: {integrity: sha512-Fd4gABb+ycGAmKou8eMftCupSir5lRxqf4aD/vd0cD2qc4HL07OjCeuHMr8Ro4CoMaeCKDB0/ECBOVWjTwUvPQ==}
     engines: {node: '>=8'}
     dev: true
-
-  /is-promise@4.0.0:
-    resolution: {integrity: sha512-hvpoI6korhJMnej285dSg6nu1+e6uxs7zG3BYAm5byqDsgJNWwxzM6z6iZiAgQR4TJ30JmBTOwqZUw3WlyH3AQ==}
-    dev: false
 
   /is-stream-ended@0.1.4:
     resolution: {integrity: sha512-xj0XPvmr7bQFTvirqnFr50o0hQIh6ZItDqloxt5aJrR4NQsYeSsyFQERYGCAzfindAcnKjINnwEEgLx4IqVzQw==}
@@ -3069,6 +3077,10 @@ packages:
     resolution: {integrity: sha512-AiisoFqQ0vbGcZgQPY1cdP2I76glaVA/RauYR4G4thNFgkTqr90yXTo4LYX60Jl+sIlPNHHdGSwo01AvbKUSVQ==}
     dev: false
 
+  /stream-transform@3.2.6:
+    resolution: {integrity: sha512-/pyOvaCQFqYTmrFhmMbnAEVo3SsTx1H39eUVPOtYeAgbEUc+rDo7GoP8LbHJgU83mKtzJe/7Nq/ipaAnUOHgJQ==}
+    dev: false
+
   /streamsearch@1.1.0:
     resolution: {integrity: sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==}
     engines: {node: '>=10.0.0'}
@@ -3163,12 +3175,6 @@ packages:
     dependencies:
       '@floating-ui/core': 1.2.5
       '@floating-ui/dom': 1.2.5
-    dev: false
-
-  /svelte-forms@2.3.1:
-    resolution: {integrity: sha512-ExX9PM0JgvdOWlHl2ztD7XzLNPOPt9U5hBKV8sUAisMfcYWpPRnyz+6EFmh35BOBGJJmuhTDBGm5/7seLjOTIA==}
-    dependencies:
-      is-promise: 4.0.0
     dev: false
 
   /svelte-hmr@0.15.1(svelte@3.55.1):
@@ -3281,8 +3287,8 @@ packages:
     resolution: {integrity: sha512-S+87/P0Ve67HxKkEV23iCdAh/SX1xiSfjF1HOglno/YTbSTW7RniICMCofWGdJJbdjw3S+0PfFb1JtGfTXE0oQ==}
     engines: {node: '>= 8'}
 
-  /sveltekit-superforms@0.6.8(@sveltejs/kit@1.15.9)(svelte@3.55.1)(zod@3.21.4):
-    resolution: {integrity: sha512-/ZejVGMjXw7CSoVtyh3ClB/XgylHUbddc3pa4q4cQ4c4IhCzFpoPyn6c5I2MHpmjQauXEylb8xpq4DqnjSdOlA==}
+  /sveltekit-superforms@0.8.4(@sveltejs/kit@1.15.9)(svelte@3.55.1)(zod@3.21.4):
+    resolution: {integrity: sha512-nmxIzo7FMh7YmImHbPj4NZc97WSqOuaQyI9ec/xCfx89yjKulC4JmhfX0po5LIIlyIpzGF8KH7oF/swXLFDIqA==}
     peerDependencies:
       '@sveltejs/kit': 1.x
       svelte: 3.x
@@ -3621,10 +3627,6 @@ packages:
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
-
-  /zod-fetch@0.1.0:
-    resolution: {integrity: sha512-+1M/rSG7ogaewYhaPhoZWAG19H3cjNyiM/4xVOYyYUYrSXlkeCXQauMtEnCmC6wSpJlRiV4G3vWOxeC3148O2A==}
-    dev: false
 
   /zod-validation-error@1.0.1(zod@3.21.4):
     resolution: {integrity: sha512-QRk2AtHLJg8sCZAbEjXSs7E0n4/mSdX5caoh6eOUvDSdcIQz03i0xoNN1Qx6UZT+ADVHRK6+ZXRtldzW6nnltA==}

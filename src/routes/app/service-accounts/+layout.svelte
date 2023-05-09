@@ -36,7 +36,7 @@
 					</div>
 
 					<a href="{$page.url.pathname}/{serviceAccount.id}">
-						<button class="btn btn-info"> View </button>
+						<button class="btn btn-info"> Details </button>
 					</a>
 				</div>
 			{/each}

@@ -1,19 +1,34 @@
 <script context="module" lang="ts">
 	import { superForm } from 'sveltekit-superforms/client';
 
+	import { downloadBlob } from '$client/utils/download-blob';
 	import Icon from '$components/Icon.svelte';
 
-	import type { PageServerData } from './$types';
+	import type { ActionData, PageServerData } from './$types';
 </script>
 
 <script lang="ts">
 	export let data: PageServerData;
+	export let form: ActionData;
 
-	const { constraints, delayed, enhance, errors, form, submitting } = superForm(data.form, {
+	const {
+		constraints,
+		delayed,
+		enhance,
+		errors,
+		form: suprForm,
+		submitting,
+	} = superForm(data.form, {
 		dataType: 'json',
 		multipleSubmits: 'prevent',
 		taintedMessage: null,
 	});
+
+	$: if (form?.exportResult) {
+		const { content, contentType, filename } = form.exportResult;
+
+		downloadBlob(new Blob([content], { type: contentType }), filename);
+	}
 </script>
 
 <svelte:head>
@@ -36,7 +51,7 @@
 			name="format"
 			data-invalid="{$errors.format}"
 			{...$constraints.format}
-			bind:value="{$form.format}"
+			bind:value="{$suprForm.format}"
 		>
 			<option value="csv"> CSV </option>
 
@@ -44,7 +59,7 @@
 		</select>
 
 		{#if $errors.format}
-			<ul class="text-error">
+			<ul class="text-[orangered]">
 				{#each $errors.format as error}
 					<li>
 						{error}
@@ -70,7 +85,7 @@
 						type="checkbox"
 						data-invalid="{errors.include}"
 						{...constraints.include}
-						bind:checked="{$form.fields[key].include}"
+						bind:checked="{$suprForm.fields[key].include}"
 					/>
 
 					<span class="label-text">
@@ -79,7 +94,7 @@
 				</label>
 
 				{#if errors.include}
-					<ul class="text-error">
+					<ul class="text-[orangered]">
 						{#each errors.include ?? [] as error}
 							<li>
 								{error}
@@ -102,17 +117,17 @@
 			<div class="col-span-5 lg:col-span-4">
 				<input
 					class="input input-bordered w-full"
-					disabled="{!$form.fields[key].include}"
+					disabled="{!$suprForm.fields[key].include}"
 					id="{name}"
 					name="{name}"
 					type="text"
 					data-invalid="{errors.name}"
 					{...constraints.name}
-					bind:value="{$form.fields[key].name}"
+					bind:value="{$suprForm.fields[key].name}"
 				/>
 
 				{#if errors.name}
-					<ul class="text-error">
+					<ul class="text-[orangered]">
 						{#each errors.name ?? [] as error}
 							<li>
 								{error}

@@ -14,8 +14,8 @@ import type { Actions, PageServerLoad } from './$types';
 // TODO comment
 
 export const actions = {
-	default: async (event) => {
-		const form = await superValidate(event, exportConfigSchema);
+	default: async ({ fetch, request }) => {
+		const form = await superValidate(request, exportConfigSchema);
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -44,13 +44,13 @@ export const actions = {
 			return fail(400, { form });
 		}
 
-		const exportResult = await fetchJson<typeof POST>(event.fetch, '/api/v2/auth/users/export', {
+		const exportResult = await fetchJson<typeof POST>(fetch, '/api/v2/auth/users/export', {
 			body: form.data,
 			method: 'POST',
-		});
-		// TODO
+		}).then((response) => response.json());
 
 		return {
+			exportResult,
 			form,
 		};
 	},

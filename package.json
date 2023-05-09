@@ -36,20 +36,18 @@
 		"@google-cloud/functions": "^2.3.1",
 		"@google-cloud/storage": "^6.9.4",
 		"@prisma/client": "^4.11.0",
-		"@sveltejs/svelte-virtual-list": "^3.0.1",
 		"@tailwindcss/forms": "^0.5.3",
 		"@tailwindcss/typography": "^0.5.9",
 		"autoprefixer": "^10.4.13",
 		"cookie": "^0.5.0",
+		"csv": "^6.2.12",
 		"daisyui": "^2.51.3",
 		"firebase-admin": "^11.5.0",
 		"postcss": "^8.4.21",
-		"svelte-forms": "^2.3.1",
 		"svelte-jsoneditor": "^0.16.1",
-		"sveltekit-superforms": "^0.6.8",
+		"sveltekit-superforms": "^0.8.4",
 		"tailwindcss": "^3.2.7",
 		"zod": "^3.21.4",
-		"zod-fetch": "^0.1.0",
 		"zod-validation-error": "^1.0.1"
 	}
 }

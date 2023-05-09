@@ -25,7 +25,7 @@ export function create(
 	return fetchJson<typeof POST_APIv2ServiceAccounts>(fetch, '/api/v2/service-accounts', {
 		body: data,
 		method: 'POST',
-	});
+	}).then((response) => response.json());
 }
 
 /**
@@ -45,7 +45,7 @@ export function readOne(fetch: typeof globalThis.fetch, id: ServiceAccount['id']
 				serviceAccountId: id,
 			},
 		},
-	);
+	).then((response) => response.json());
 }
 
 /**
@@ -57,7 +57,7 @@ export function readOne(fetch: typeof globalThis.fetch, id: ServiceAccount['id']
 export function readAll(fetch: typeof globalThis.fetch) {
 	return fetchJson<typeof GET_APIv2ServiceAccounts>(fetch, '/api/v2/service-accounts', {
 		method: 'GET',
-	});
+	}).then((response) => response.json());
 }
 
 /**
@@ -83,7 +83,7 @@ export function update(
 				serviceAccountId: id,
 			},
 		},
-	);
+	).then((response) => response.json());
 }
 
 /**
@@ -103,5 +103,5 @@ export function remove(fetch: typeof globalThis.fetch, id: ServiceAccount['id'])
 				serviceAccountId: id,
 			},
 		},
-	);
+	).then((response) => response.json());
 }

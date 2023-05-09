@@ -1,15 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Endpoint } from '$utils/endpoints';
 
 // TODO comment
 
-export type ConfigOf<E> = E extends Endpoint<infer C> ? C : never;
-export type RouteOf<E> = Exclude<ConfigOf<E>['request']['event']['route']['id'], null>;
-export type QueryOf<E> = ConfigOf<E>['request']['query'];
-export type BodyOf<E> = ConfigOf<E>['request']['body'];
-export type ResponseOf<E> = ConfigOf<E>['response']['body'];
+export type ConfigOf<E extends Endpoint<any>> = E extends Endpoint<infer C> ? C : never;
+export type RouteOf<E extends Endpoint<any>> = Exclude<
+	ConfigOf<E>['request']['event']['route']['id'],
+	null
+>;
+export type QueryOf<E extends Endpoint<any>> = ConfigOf<E>['request']['query'];
+export type BodyOf<E extends Endpoint<any>> = ConfigOf<E>['request']['body'];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchJson<E extends Endpoint<any>>(
+export function fetchJson<E extends Endpoint<any>>(
 	fetch = globalThis.fetch,
 	path: RouteOf<E>,
 	init: Omit<RequestInit, 'body' | 'method'> & {
@@ -19,9 +21,11 @@ export async function fetchJson<E extends Endpoint<any>>(
 			? { params?: undefined }
 			: { params: ConfigOf<E>['request']['event']['params'] }) &
 		(Record<string, string> extends QueryOf<E> ? { query?: undefined } : { query: QueryOf<E> }),
-): Promise<Awaited<ReturnType<ResponseOf<E>['json']>>> {
+): Promise<Awaited<ReturnType<E>>> {
 	const { body, params, query } = init;
 	const searchParams = new URLSearchParams(query ?? {});
+
+	searchParams.set(crypto.randomUUID(), Date.now().toString()); // Make sure the request is not cached
 
 	let pathname: string = path;
 
@@ -29,16 +33,8 @@ export async function fetchJson<E extends Endpoint<any>>(
 		pathname = String(path).replace(new RegExp(`\\[${key}(=\\w+)?\\]`), String(value));
 	}
 
-	const url = `${pathname}?${searchParams.toString()}`;
-	const response = await fetch(url, {
+	return fetch(`${pathname}?${searchParams.toString()}`, {
 		...init,
 		body: body ? JSON.stringify(body) : null,
 	});
-
-	if (!response.ok) {
-		throw response;
-	}
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	return response.json() as any;
 }
