@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
 	import { superForm } from 'sveltekit-superforms/client';
 
+	import { page } from '$app/stores';
 	import { downloadBlob } from '$client/utils/download-blob';
 	import Icon from '$components/Icon.svelte';
 
@@ -38,7 +39,15 @@
 <!-- TOOD comment -->
 
 <form class="flex flex-col gap-4" method="POST" use:enhance>
-	<h1 class="text-2xl">Export users</h1>
+	<div class="breadcrumbs">
+		<ul>
+			<li>
+				<a href="{$page.url.pathname}/.."> Authentication </a>
+			</li>
+
+			<li>Export users</li>
+		</ul>
+	</div>
 
 	<div class="form-control">
 		<label class="label" for="format">
@@ -59,7 +68,7 @@
 		</select>
 
 		{#if $errors.format}
-			<ul class="text-[orangered]">
+			<ul class="text-error">
 				{#each $errors.format as error}
 					<li>
 						{error}
@@ -94,7 +103,7 @@
 				</label>
 
 				{#if errors.include}
-					<ul class="text-[orangered]">
+					<ul class="text-error">
 						{#each errors.include ?? [] as error}
 							<li>
 								{error}
@@ -127,7 +136,7 @@
 				/>
 
 				{#if errors.name}
-					<ul class="text-[orangered]">
+					<ul class="text-error">
 						{#each errors.name ?? [] as error}
 							<li>
 								{error}

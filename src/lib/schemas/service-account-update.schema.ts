@@ -5,7 +5,7 @@ import { z } from 'zod';
  */
 export const schema = z.object({
 	/** The new service account's label */
-	label: z.string().trim().nonempty().optional(),
+	label: z.string().trim().nonempty(),
 });
 
 /**

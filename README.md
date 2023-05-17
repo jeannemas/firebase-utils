@@ -12,6 +12,7 @@ TODO:
 - Convert services back into classes to make them more reusable
 - Optimize/cache firestore reads to save bandwidth
 - add route metadata to the API routes
+- Get rid of Prisma to instead store service accounts inside localStorage, which will reduce the need for an external database
 
 # create-svelte
 

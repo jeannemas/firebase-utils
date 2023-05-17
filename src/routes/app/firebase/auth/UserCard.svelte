@@ -7,13 +7,13 @@
 <script lang="ts">
 	export let record: PublicUser;
 
-	let isBeingEdited = false;
+	let collapse: Collapse;
 </script>
 
 <!-- TODO comment -->
 
 <div class="rounded-box border border-base-200 shadow dark:bg-base-200">
-	<Collapse lazyload>
+	<Collapse bind:this="{collapse}">
 		<svelte:fragment slot="title">
 			<div class="cursor-text text-sm md:text-base">
 				{record.email}
@@ -29,58 +29,46 @@
 				class="checkbox-lg"
 				label="Disabled"
 				name="disabled"
-				readonly="{!isBeingEdited}"
+				readonly
 				type="checkbox"
-				bind:value="{record.disabled}"
+				value="{record.disabled}"
 			/>
 
 			<Input
 				label="Display name"
 				name="displayName"
-				readonly="{!isBeingEdited}"
+				readonly
 				type="text"
-				bind:value="{record.displayName}"
+				value="{record.displayName}"
 			/>
 
 			<Input
 				class="checkbox-lg"
 				label="Email verified"
 				name="emailVerified"
-				readonly="{!isBeingEdited}"
+				readonly
 				type="checkbox"
-				bind:value="{record.emailVerified}"
+				value="{record.emailVerified}"
 			/>
 
-			<Input
-				label="Email"
-				name="email"
-				readonly="{!isBeingEdited}"
-				type="email"
-				bind:value="{record.email}"
-			/>
+			<Input label="Email" name="email" readonly type="email" value="{record.email}" />
 
 			<Input
 				label="Phone number"
 				name="phoneNumber"
-				readonly="{!isBeingEdited}"
+				readonly
 				type="tel"
-				bind:value="{record.phoneNumber}"
+				value="{record.phoneNumber}"
 			/>
 
-			<Input
-				label="Photo URL"
-				name="photoURL"
-				readonly="{!isBeingEdited}"
-				type="url"
-				bind:value="{record.photoURL}"
-			/>
+			<Input label="Photo URL" name="photoURL" readonly type="url" value="{record.photoURL}" />
 
 			<Input
 				label="Creation time"
 				name="creationTime"
 				readonly
 				type="text"
-				bind:value="{record.creationTime}"
+				value="{new Date(record.creationTime).toLocaleString()}"
 			/>
 
 			<Input
@@ -88,21 +76,11 @@
 				name="lastSignInTime"
 				readonly
 				type="text"
-				bind:value="{record.lastSignInTime}"
+				value="{new Date(record.lastSignInTime).toLocaleString()}"
 			/>
 
 			<!-- TODO -->
-			<!-- <button class="btn btn-secondary"> Custom claims </button>
-
-			{#if isBeingEdited}
-				<div class="grid grid-cols-2 gap-4">
-					<button class="btn btn-success" on:click="{() => (isBeingEdited = false)}"> Save </button>
-
-					<button class="btn btn-info" on:click="{() => (isBeingEdited = false)}"> Cancel </button>
-				</div>
-			{:else}
-				<button class="btn btn-secondary" on:click="{() => (isBeingEdited = true)}"> Edit </button>
-			{/if} -->
+			<button class="btn btn-secondary"> Custom claims </button>
 		</div>
 	</Collapse>
 </div>

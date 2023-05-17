@@ -2,7 +2,17 @@
 module.exports = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
-		extend: {},
+		extend: {
+			colors: {
+				error: 'orangered',
+			},
+			scale: {
+				101: '1.01',
+			},
+			transitionProperty: {
+				'max-height': 'max-height',
+			},
+		},
 	},
 	plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography'), require('daisyui')],
 

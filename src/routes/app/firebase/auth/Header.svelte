@@ -34,13 +34,13 @@
 				on:keydown="{handleSearchKeyDown}"
 			/>
 
-			<button class="btn btn-secondary" title="Search" on:click="{handleSearch}">
+			<button class="btn btn-primary" title="Search" on:click="{handleSearch}">
 				<Icon name="magnifying-glass" style="solid" />
 			</button>
 		</div>
 	</div>
 
 	<a href="/app/firebase/auth/export">
-		<button class="btn btn-secondary" title="Export"> Export </button>
+		<button class="btn btn-primary" title="Export"> Export </button>
 	</a>
 </div>

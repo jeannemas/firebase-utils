@@ -151,6 +151,13 @@ function getFirebaseAuth(serviceAccount: ServiceAccount) {
 	return auth;
 }
 
+export async function readOne(serviceAccount: ServiceAccount, uid: string) {
+	// We first get the Firebase Auth instance.
+	const auth = getFirebaseAuth(serviceAccount);
+
+	return auth.getUser(uid);
+}
+
 /**
  * List all auth users from a Firebase project.
  * The Firebase project is identified using the given service account.

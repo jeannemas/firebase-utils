@@ -28,17 +28,20 @@
 
 <Async let:awaited="{serviceAccounts}" promise="{data.streamed.serviceAccounts}">
 	{#if serviceAccounts.length}
-		<div class="divide-y divide-base-200 shadow-lg rounded-lg border border-base-100">
+		<div class="divide-y-2 divide-base-200 shadow-lg rounded-lg bg-base-100">
 			{#each serviceAccounts as serviceAccount}
-				<div class="flex flex-row p-2 gap-2 items-center justify-between">
-					<div>
-						{serviceAccount.label}
-					</div>
+				{@const isActive = $page.url.pathname.includes(serviceAccount.id)}
 
-					<a href="{$page.url.pathname}/{serviceAccount.id}">
-						<button class="btn btn-info"> Details </button>
-					</a>
-				</div>
+				<a
+					class="block p-4 text-xl transition-all duration-200 hover:bg-primary hover:text-primary-content hover:scale-x-101 hover:rounded-lg"
+					class:bg-primary="{isActive}"
+					class:text-primary-content="{isActive}"
+					class:scale-x-101="{isActive}"
+					class:rounded-lg="{isActive}"
+					href="{$page.url.pathname}/{serviceAccount.id}"
+				>
+					{serviceAccount.label}
+				</a>
 			{/each}
 		</div>
 	{:else}

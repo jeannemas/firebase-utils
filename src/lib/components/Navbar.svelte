@@ -44,7 +44,7 @@
 	</div>
 
 	<ul
-		class="menu lg:menu-compact menu-vertical items-stretch lg:gap-2 overflow-y-hidden transition-[max-height] lg:menu-horizontal"
+		class="menu lg:menu-compact menu-vertical items-stretch lg:gap-2 overflow-y-hidden transition-max-height lg:menu-horizontal"
 		class:max-h-0="{!mobileNavbarIsOpen}"
 		class:max-h-screen="{mobileNavbarIsOpen}"
 		class:lg:max-h-screen="{!mobileNavbarIsOpen}"

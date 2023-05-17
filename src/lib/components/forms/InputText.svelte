@@ -1,7 +1,6 @@
 <script context="module" lang="ts">
 	import type { FieldPath, UnwrapEffects } from 'sveltekit-superforms';
-	import type { SuperForm } from 'sveltekit-superforms/client';
-	import { formFieldProxy } from 'sveltekit-superforms/client';
+	import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client';
 	import type { AnyZodObject, infer as ZodInfer } from 'zod';
 </script>
 
@@ -19,7 +18,10 @@
 
 <div class="form-control w-full">
 	<label class="label" for="{fieldname}">
-		<span class="label-text">
+		<span
+			class="label-text after:content-['_*'] after:text-error"
+			class:after:hidden="{!$constraints?.required}"
+		>
 			{label}
 		</span>
 	</label>
@@ -38,7 +40,7 @@
 
 	{#if $errors}
 		<label class="label" for="{fieldname}">
-			<ul class="label-text-alt text-[orangered]">
+			<ul class="label-text-alt text-error">
 				{#each $errors as error}
 					<li>
 						{error}

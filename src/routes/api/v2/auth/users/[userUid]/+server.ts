@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 
-import { exportConfigSchema, exportUsers } from '$server/services/firebase-auth.service';
+import { readOne } from '$server/services/firebase-auth.service';
 import { getServiceAccountFromCookies } from '$server/utils/getServiceAccountFromCookies';
 import { createEndpointDefiner } from '$utils/endpoints';
 
@@ -10,12 +10,12 @@ import type { RequestEvent } from './$types';
 
 const defineEndpoint = createEndpointDefiner<RequestEvent>();
 
-export const POST = defineEndpoint({ body: exportConfigSchema }, async ({ body, cookies }) => {
-	const exportedData = await getServiceAccountFromCookies(cookies).then((serviceAccount) =>
-		exportUsers(serviceAccount, body),
+export const GET = defineEndpoint({}, async ({ cookies, params }) => {
+	const user = await getServiceAccountFromCookies(cookies).then((serviceAccount) =>
+		readOne(serviceAccount, params.userUid),
 	);
 
-	return json(exportedData, {
+	return json(user, {
 		status: 200,
 	});
 });

@@ -1,7 +1,7 @@
 import { fail } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 
-import type { POST } from '$routes/api/v2/auth/users/export/+server';
+import type { POST as POST_ApiV2AuthUsersExport } from '$routes/api/v2/auth/users/export/+server';
 import {
 	exportConfigSchema,
 	fieldNames,
@@ -44,10 +44,14 @@ export const actions = {
 			return fail(400, { form });
 		}
 
-		const exportResult = await fetchJson<typeof POST>(fetch, '/api/v2/auth/users/export', {
-			body: form.data,
-			method: 'POST',
-		}).then((response) => response.json());
+		const exportResult = await fetchJson<typeof POST_ApiV2AuthUsersExport>(
+			fetch,
+			'/api/v2/auth/users/export',
+			{
+				body: form.data,
+				method: 'POST',
+			},
+		).then((response) => response.json());
 
 		return {
 			exportResult,
@@ -56,8 +60,8 @@ export const actions = {
 	},
 } satisfies Actions;
 
-export const load = (async (event) => {
-	const form = await superValidate(event, exportConfigSchema);
+export const load = (async ({ request }) => {
+	const form = await superValidate(request, exportConfigSchema);
 
 	return {
 		fields: fieldsWithLabels,

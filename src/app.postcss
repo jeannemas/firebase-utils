@@ -2,7 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Fix for the DaisyUI select size small to prevent overflow */
-select.select.select-sm {
-	@apply py-0;
+html,
+body {
+	@apply h-full bg-gray-50 dark:bg-inherit;
+}
+
+select.select {
+	&.select-sm {
+		/* Fix for the DaisyUI select size small to prevent overflow */
+		@apply py-0;
+	}
+}
+
+.btn {
+	&:hover {
+		@apply scale-101;
+	}
+}
+
+.fb-tooltip {
+	@apply relative;
+
+	&.fb-tooltip-position {
+		&-bottom {
+			&::after {
+				@apply bottom-0 translate-y-[125%];
+			}
+		}
+	}
+
+	&::after {
+		@apply bg-gray-800 dark:bg-slate-50 text-sm text-slate-50 dark:text-gray-800 font-normal absolute normal-case hidden rounded-box whitespace-nowrap select-none p-2;
+
+		content: attr(data-tooltip);
+		z-index: 99999;
+	}
+
+	&:hover {
+		&::after {
+			@apply block;
+		}
+	}
 }

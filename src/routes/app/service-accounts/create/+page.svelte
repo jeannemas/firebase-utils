@@ -84,7 +84,7 @@
 
 			{#if $errors.json}
 				<label class="label" for="jsonProxy">
-					<ul class="label-text-alt text-[orangered]">
+					<ul class="label-text-alt text-error">
 						{#each $errors.json as error}
 							<li>
 								{error}
