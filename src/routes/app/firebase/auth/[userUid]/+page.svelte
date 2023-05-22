@@ -10,6 +10,6 @@
 
 <!-- TODO comment -->
 
-<Async let:awaited="{userRecord}" promise="{data.streamed.user}">
+<Async let:awaited="{userRecord}" promise="{data.streamed.userRecord}">
 	<pre><code>{JSON.stringify(userRecord, null, 2)}</code></pre>
 </Async>

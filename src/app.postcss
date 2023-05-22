@@ -19,28 +19,3 @@ select.select {
 		@apply scale-101;
 	}
 }
-
-.fb-tooltip {
-	@apply relative;
-
-	&.fb-tooltip-position {
-		&-bottom {
-			&::after {
-				@apply bottom-0 translate-y-[125%];
-			}
-		}
-	}
-
-	&::after {
-		@apply bg-gray-800 dark:bg-slate-50 text-sm text-slate-50 dark:text-gray-800 font-normal absolute normal-case hidden rounded-box whitespace-nowrap select-none p-2;
-
-		content: attr(data-tooltip);
-		z-index: 99999;
-	}
-
-	&:hover {
-		&::after {
-			@apply block;
-		}
-	}
-}

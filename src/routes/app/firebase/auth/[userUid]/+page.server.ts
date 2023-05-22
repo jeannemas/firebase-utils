@@ -7,7 +7,7 @@ import type { PageServerLoad } from './$types';
 export const load = (({ fetch, params }) => {
 	return {
 		streamed: {
-			user: readOne(fetch, params.userUid),
+			userRecord: readOne(fetch, params.userUid),
 		},
 	};
 }) satisfies PageServerLoad;

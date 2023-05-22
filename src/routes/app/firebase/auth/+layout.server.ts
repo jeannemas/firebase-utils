@@ -1,6 +1,6 @@
 import { readAll } from '$client/services/auth.service';
 
-import type { PageServerLoad } from './$types';
+import type { LayoutServerLoad } from './$types';
 
 // TODO comment
 
@@ -12,4 +12,4 @@ export const load = (({ fetch }) => {
 			response,
 		},
 	};
-}) satisfies PageServerLoad;
+}) satisfies LayoutServerLoad;
